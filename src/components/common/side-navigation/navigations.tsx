@@ -1,0 +1,30 @@
+enum NavigationRoutes {
+  home = '/',
+  dashboard = '/dashboard',
+  changePassword = '/change-password',
+  historyReimburse = '/history',
+  profile = '/profile',
+  onboarding = '/onboarding',
+  login = 'login',
+  //crud
+  reimburses = '/reimburses',
+  createReimburse = '/reimburses/create',
+  detailReimburse = '/reimburses/[id]',
+  stationaries = '/stationeries',
+  createStationery = '/stationeries/create',
+  detailStationery = '/stationeries/[id]',
+  users = '/users',
+  createUser = '/users/create',
+  detailUser = '/users/[id]',
+  itineraries = '/itineraries',
+  createItinerary = '/itineraries/create',
+  detailItinerary = '/itineraries/[id]',
+  teams = '/teams',
+  createTeam = '/teams/create',
+  viewTeam = '/teams/[id]',
+  accounts = '/accounts',
+  createAccount = '/accounts/create',
+  detailAccount = '/accounts/[id]',
+}
+
+export default NavigationRoutes;
