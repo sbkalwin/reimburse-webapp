@@ -181,11 +181,11 @@ export default function Home() {
         <User size={24} weight="bold" />
         <Title order={6}>Hello, {user?.nama ?? 'World'}</Title>
       </Flex>
-      <Flex direction="column" gap={16} mt={16}>
+      {/* <Flex direction="column" gap={16} mt={16}>
         {accountStatistics}
         {employeeStatistics}
         {reimburseStatistics}
-      </Flex>
+      </Flex> */}
       {isAdmin && (
         <SimpleGrid cols={2} my={24}>
           {adminLinks}
