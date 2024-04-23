@@ -60,21 +60,21 @@ export const userNavigationItems: NavigationItemType[] = [
     label: 'Riwayat Reimburse',
     icon: Books,
   },
-  {
-    link: NavigationRoutes.itineraries,
-    label: 'Perjalanan',
-    icon: PaperPlaneTilt,
-  },
-  {
-    link: NavigationRoutes.profile,
-    label: 'Profil',
-    icon: User,
-  },
-  {
-    link: NavigationRoutes.changePassword,
-    label: 'Ganti Password',
-    icon: Lock,
-  },
+  // {
+  //   link: NavigationRoutes.itineraries,
+  //   label: 'Perjalanan',
+  //   icon: PaperPlaneTilt,
+  // },
+  // {
+  //   link: NavigationRoutes.profile,
+  //   label: 'Profil',
+  //   icon: User,
+  // },
+  // {
+  //   link: NavigationRoutes.changePassword,
+  //   label: 'Ganti Password',
+  //   icon: Lock,
+  // },
 ];
 
 export default function Home() {
@@ -199,7 +199,7 @@ export default function Home() {
       {!user && (
         <Flex w="100%" my={24} gap={24}>
           {loginUser}
-          {loginAdmin}
+          {/* {loginAdmin} */}
         </Flex>
       )}
     </>
