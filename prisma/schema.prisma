@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Team {
+  id            String    @id
+  nama          String
+  nipLeader     String?   @unique @map("nip_leader")
+  tanggalDibuat DateTime  @default(now()) @map("tanggal_dibuat") @db.Timestamptz(6)
+  tanggalDiubah DateTime  @updatedAt @map("tanggal_diubah") @db.Timestamptz(6)
+  Pegawai       Pegawai[]
+
+  @@map("team")
+}
+
+model Pegawai {
+  nip             String             @id
+  status          EmployeeStatusEnum
+  peran           EmployeeRoleEnum
+  kataSandi       String             @map("kata_sandi")
+  nomorRekening   String             @map("nomor_rekening")
+  tanggalDibuat   DateTime           @default(now()) @map("tanggal_dibuat") @db.Timestamptz(6)
+  tanggalDiubah   DateTime           @updatedAt @map("tanggal_diubah") @db.Timestamptz(6)
+  teamId          String             @map("team_id")
+  Team            Team               @relation(fields: [teamId], references: [id])
+  Pengembalian    Pengembalian[]
+  PengembalianPic Pengembalian[]     @relation("PengembalianPic")
+
+  @@index([teamId])
+  @@map("pegawai")
+}
+
+model Perjalanan {
+  id             String         @id
+  nama           String
+  deskripsi      String
+  tanggalDibuat  DateTime       @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah  DateTime       @updatedAt @map("tanggal_diubah")
+  tanggalMulai   DateTime       @default(now()) @map("tanggal_mulai") @db.Timestamptz(6)
+  tanggalSelesai DateTime       @updatedAt @map("tanggal_selesai") @db.Timestamptz(6)
+  Pengembalian   Pengembalian[]
+
+  @@map("perjalanan")
+}
+
+model PeralatanKantor {
+  id                 String               @id
+  nama               String
+  harga              Float
+  fileUrl            String               @map("file_url")
+  tanggalDibuat      DateTime             @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah      DateTime             @updatedAt @map("tanggal_diubah")
+  DetailPengembalian DetailPengembalian[]
+
+  @@map("peralatan_kantor")
+}
+
+model Kas {
+  id            String      @id
+  nama          String
+  deskripsi     String
+  tanggalDibuat DateTime    @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah DateTime    @updatedAt @map("tanggal_diubah")
+  KasDetail     KasDetail[]
+
+  @@map("kas")
+}
+
+model KasDetail {
+  id             String        @id
+  deskripsi      String
+  jenis          String
+  total          Float
+  kasId          String        @map("kas_id")
+  pengembalianId String?       @map("pengembalian_id")
+  tanggalDibuat  DateTime      @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah  DateTime      @updatedAt @map("tanggal_diubah")
+  kas            Kas           @relation(fields: [kasId], references: [id])
+  pengembalian   Pengembalian? @relation(fields: [pengembalianId], references: [id])
+
+  @@index([kasId])
+  @@index([pengembalianId])
+  @@map("kas_detail")
+}
+
+model Pengembalian {
+  id                 String               @id
+  nama               String
+  jenis              ReimburseTypeEnum
+  status             ReimburseStatusEnum
+  deskripsiPenolakan String?              @map("deskripsi_penolakan")
+  nipPemohon         String               @map("nip_pemohon")
+  nipPic             String               @map("nip_pic")
+  perjalananId       String?              @map("perjalanan_id")
+  tanggalDibuat      DateTime             @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah      DateTime             @updatedAt @map("tanggal_diubah")
+  tanggalPelunasan   DateTime?            @map("tanggal_pelunasan")
+  tanggalPenolakan   DateTime?            @map("tanggal_penolakan")
+  totalPelunasan     Float?               @map("total_pelunasan")
+  pemohon            Pegawai              @relation(fields: [nipPemohon], references: [nip])
+  pic                Pegawai              @relation("PengembalianPic", fields: [nipPic], references: [nip])
+  Perjalanan         Perjalanan?          @relation(fields: [perjalananId], references: [id])
+  DetailPengembalian DetailPengembalian[]
+  KasDetail          KasDetail[]
+
+  @@index([nipPemohon])
+  @@index([nipPic])
+  @@index([perjalananId])
+  @@map("pengembalian")
+}
+
+model DetailPengembalian {
+  id                String                @id
+  nama              String
+  deskripsi         String
+  subtotal          Float
+  jenis             AccountDetailTypeEnum
+  fileUrl           String                @map("file_url")
+  pengembalianId    String                @map("pengembalian_id")
+  peralatanKantorId String?               @map("pengembalian_kantor_id")
+  tanggalDibuat     DateTime              @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah     DateTime              @updatedAt @map("tanggal_diubah")
+  pengembalian      Pengembalian          @relation(fields: [pengembalianId], references: [id])
+  peralatanKantor   PeralatanKantor?      @relation(fields: [peralatanKantorId], references: [id])
+
+  @@index([peralatanKantorId])
+  @@index([pengembalianId])
+  @@map("detail_pengembalian")
+}
+
+enum AccountDetailTypeEnum {
+  outcome
+  income
+}
+
+enum ReimburseStatusEnum {
+  pending
+  finished
+  rejected
+}
+
+enum ReimburseTypeEnum {
+  itinerary
+  stationery
+}
+
+enum EmployeeStatusEnum {
+  active
+  inactive
+}
+
+enum EmployeeRoleEnum {
+  admin
+  user
+}

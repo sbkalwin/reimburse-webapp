@@ -20,11 +20,15 @@
     "@mantine/modals": "^7.6.2",
     "@mantine/notifications": "^7.6.2",
     "@phosphor-icons/react": "2.0.8",
+    "@prisma/client": "^5.13.0",
     "@tanstack/react-query": "^5.28.6",
+    "@types/humps": "^2.0.6",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
     "google": "link:@next/font/google",
+    "humps": "^2.0.1",
+    "nanoid": "^5.0.7",
     "next": "14.0.4",
     "next-pwa": "^5.6.0",
     "numeral": "^2.0.6",
@@ -54,6 +58,7 @@
     "husky": "^8.0.3",
     "postcss": "^8.4.21",
     "prettier": "^3.2.2",
+    "prisma": "^5.13.0",
     "tailwindcss": "^3.2.7",
     "typescript": "4.9.5"
   }
