@@ -1,0 +1,83 @@
+import { decamelizeKeys } from 'humps';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getDate, parseValidationError } from 'utils/server';
+import * as Yup from 'yup';
+
+import prisma from '../../../../prisma';
+
+const perjalananSchema = Yup.object({
+  nama: Yup.string().required(),
+  deskripsi: Yup.string().default(''),
+  tanggal_mulai: Yup.date().default(new Date()),
+  tanggal_selesai: Yup.date().default(new Date()),
+});
+
+export default async function handler(
+  request: NextApiRequest,
+  response: NextApiResponse,
+) {
+  const id = request.query.id as string;
+  const body = request.body;
+
+  try {
+    const currentPerjalanan = await prisma.perjalanan.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        Pengembalian: true,
+      },
+    });
+
+    if (!currentPerjalanan) {
+      return response
+        .status(404)
+        .json({ message: 'Perjalanan tidak dapat ditemukan' });
+    }
+
+    if (request.method === 'PUT') {
+      await perjalananSchema.validate(body, {
+        abortEarly: false,
+      });
+
+      const perjalanan = perjalananSchema.cast(body);
+
+      const updatePerjalanan = await prisma.perjalanan.update({
+        data: {
+          nama: perjalanan.nama,
+          deskripsi: perjalanan.deskripsi,
+          tanggalMulai: getDate(perjalanan.tanggal_mulai),
+          tanggalSelesai: getDate(perjalanan.tanggal_selesai),
+        },
+        where: {
+          id,
+        },
+      });
+
+      return response.status(200).json({
+        data: decamelizeKeys(updatePerjalanan),
+        message: 'Perjalanan berhasil diubah',
+      });
+    }
+
+    if (request.method === 'GET') {
+      return response
+        .status(200)
+        .json({ data: decamelizeKeys(currentPerjalanan) });
+    }
+
+    if (request.method === 'DELETE') {
+      await prisma.perjalanan.delete({ where: { id } });
+      return response.status(200).json({
+        message: 'Perjalanan berhasil dihapus',
+      });
+    }
+  } catch (e) {
+    const validationError = JSON.stringify(e);
+    const errors = parseValidationError(validationError);
+    return response.status(500).json({
+      message: e.message,
+      errors,
+    });
+  }
+}

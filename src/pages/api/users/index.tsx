@@ -1,9 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../../prisma';
-import { generateId, parseValidationError } from 'utils/server';
 import { EmployeeRoleEnum, EmployeeStatusEnum } from '@prisma/client';
-import * as Yup from 'yup';
 import { decamelizeKeys } from 'humps';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { generateId, parseValidationError } from 'utils/server';
+import * as Yup from 'yup';
+
+import prisma from '../../../../prisma';
 
 const employeeSchema = Yup.object({
   // nip: Yup.string().default(''),
@@ -60,10 +61,10 @@ export default async function handler(
           },
         })
       ).map(({ kataSandi, ...rest }) => {
-        return decamelizeKeys(rest);
+        return rest;
       });
 
-      return response.status(200).json({ data: users });
+      return response.status(200).json({ data: decamelizeKeys(users) });
     }
   } catch (e) {
     const validationError = JSON.stringify(e);

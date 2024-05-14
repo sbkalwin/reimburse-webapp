@@ -30,16 +30,14 @@ export default async function handler(
       });
       return response.status(200).json({
         data: decamelizeKeys(newTeam),
-        message: 'Pegawai Berhasil Dibuat',
+        message: 'Team Berhasil Dibuat',
       });
     }
 
     if (request.method === 'GET') {
-      const teams = (await prisma.team.findMany({})).map((team) => {
-        return decamelizeKeys(team);
-      });
+      const teams = await prisma.team.findMany({});
 
-      return response.status(200).json({ data: teams });
+      return response.status(200).json({ data: decamelizeKeys(teams) });
     }
   } catch (e) {
     const validationError = JSON.stringify(e);
