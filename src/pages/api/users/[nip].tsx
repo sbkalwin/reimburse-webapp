@@ -1,10 +1,10 @@
 import { EmployeeRoleEnum, EmployeeStatusEnum } from '@prisma/client';
-import { NextApiRequest, NextApiResponse } from 'next';
-
-import * as Yup from 'yup';
-import prisma from '../../../../prisma';
-import { parseValidationError } from 'utils/server';
 import { decamelizeKeys } from 'humps';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { parseValidationError } from 'utils/server';
+import * as Yup from 'yup';
+
+import prisma from '../../../../prisma';
 
 const employeeSchema = Yup.object({
   // nip: Yup.string().default(''),
