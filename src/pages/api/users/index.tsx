@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
 
-const employeeSchema = Yup.object({
+const pegawaiSchema = Yup.object({
   // nip: Yup.string().default(''),
   nama: Yup.string().required(),
   team_id: Yup.string().default(''),
@@ -30,9 +30,9 @@ export default async function handler(
   try {
     if (request.method === 'POST') {
       const nip = generateId(5);
-      const user = await employeeSchema.validate(body);
+      const user = await pegawaiSchema.validate(body);
 
-      const newUser = await prisma.pegawai.create({
+      const newPegawai = await prisma.pegawai.create({
         data: {
           kataSandi: user.kata_sandi,
           nip,
@@ -42,7 +42,7 @@ export default async function handler(
           teamId: user.team_id,
         },
       });
-      const { kataSandi, ...rest } = newUser;
+      const { kataSandi, ...rest } = newPegawai;
       return response.status(200).json({
         data: decamelizeKeys(rest),
         message: 'Pegawai Berhasil Dibuat',

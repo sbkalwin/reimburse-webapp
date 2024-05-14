@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
 
-const employeeSchema = Yup.object({
+const karyawanSchema = Yup.object({
   // nip: Yup.string().default(''),
   nama: Yup.string().required(),
   team_id: Yup.string().default(''),
@@ -27,7 +27,7 @@ export default async function handler(
   const body = request.body;
 
   try {
-    const currentUser = await prisma.pegawai.findUnique({
+    const currentKaryawan = await prisma.pegawai.findUnique({
       where: {
         nip,
       },
@@ -38,20 +38,20 @@ export default async function handler(
       },
     });
 
-    if (!currentUser) {
+    if (!currentKaryawan) {
       return response
         .status(404)
         .json({ message: 'Pegawai tidak dapat ditemukan' });
     }
 
     if (request.method === 'PUT') {
-      await employeeSchema.validate(body, {
+      await karyawanSchema.validate(body, {
         abortEarly: false,
       });
 
-      const user = employeeSchema.cast(body);
+      const user = karyawanSchema.cast(body);
 
-      const updateUser = await prisma.pegawai.update({
+      const updateKaryawan = await prisma.pegawai.update({
         data: {
           ...user,
         },
@@ -60,7 +60,7 @@ export default async function handler(
         },
       });
 
-      const { kataSandi, ...rest } = updateUser;
+      const { kataSandi, ...rest } = updateKaryawan;
       return response.status(200).json({
         data: decamelizeKeys(rest),
         message: 'Pegawai berhasil diubah',
@@ -68,7 +68,7 @@ export default async function handler(
     }
 
     if (request.method === 'GET') {
-      const { kataSandi, ...rest } = currentUser;
+      const { kataSandi, ...rest } = currentKaryawan;
       return response.status(200).json({ data: decamelizeKeys(rest) });
     }
 
