@@ -30,7 +30,7 @@ export default async function handler(
       });
       return response.status(200).json({
         data: decamelizeKeys(newTeam),
-        message: 'Team Berhasil Dibuat',
+        message: 'Team Berhasil Ditambah',
       });
     }
 

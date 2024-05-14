@@ -45,7 +45,7 @@ export default async function handler(
       const { kataSandi, ...rest } = newPegawai;
       return response.status(200).json({
         data: decamelizeKeys(rest),
-        message: 'Pegawai Berhasil Dibuat',
+        message: 'Pegawai Berhasil Ditambah',
       });
     }
 

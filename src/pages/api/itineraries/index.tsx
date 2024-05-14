@@ -42,7 +42,7 @@ export default async function handler(
       });
       return response.status(200).json({
         data: decamelizeKeys(newPerjalanan),
-        message: 'Perjalanan Berhasil Dibuat',
+        message: 'Perjalanan Berhasil Ditambah',
       });
     }
 

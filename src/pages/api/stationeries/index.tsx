@@ -5,9 +5,12 @@ import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
 
-const kasFormSchema = Yup.object({
+const peralatanKantorFormSchema = Yup.object({
   nama: Yup.string().required(),
   deskripsi: Yup.string().default(''),
+  tanggal_diperbarui: Yup.date().default(new Date()),
+  harga: Yup.number().required(),
+  file_url: Yup.string().default(''),
 });
 
 export default async function handler(
@@ -17,29 +20,30 @@ export default async function handler(
   const body = request.body;
   try {
     if (request.method === 'GET') {
-      const kass = await prisma.kas.findMany({
+      const peralatanKantor = await prisma.peralatanKantor.findMany({
         include: {
-          KasDetail: true,
+          DetailPengembalian: true,
         },
       });
       return response.status(200).json({
-        data: decamelizeKeys(kass),
+        data: decamelizeKeys(peralatanKantor),
       });
     }
 
     if (request.method === 'POST') {
-      const kas = await kasFormSchema.validate(body);
+      const peralatanKantor = await peralatanKantorFormSchema.validate(body);
       const id = generateId();
-      const newAccount = await prisma.kas.create({
+      const newAccount = await prisma.peralatanKantor.create({
         data: {
-          deskripsi: kas.deskripsi,
-          nama: kas.nama,
+          fileUrl: peralatanKantor.file_url,
+          harga: peralatanKantor.harga,
+          nama: peralatanKantor.nama,
           id,
         },
       });
       return response.status(200).json({
         data: decamelizeKeys(newAccount),
-        message: 'Kas berhasil Ditambah',
+        message: 'Peralatan Kantor berhasil Ditambah',
       });
     }
   } catch (e) {
