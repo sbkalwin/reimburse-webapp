@@ -1,5 +1,3 @@
-import { itinenaries } from 'modules/itinenary/components/itinenary-form-type';
-import { employees } from 'modules/user/components/user-form-type';
 import * as Yup from 'yup';
 
 export enum ReimburseStatusEnum {
@@ -69,96 +67,6 @@ export type ReimburseFormType = Yup.InferType<
 > & {
   data?: ReimburseModel;
 };
-
-export const reimbursesDetail: ReimburseDetailModel[] = [
-  {
-    deskripsi: '',
-    file_url: '',
-    id: '1',
-    nama: 'Tiket Pesawat',
-    subtotal: 1200000,
-    peralatan_kantor_id: null,
-  },
-  {
-    deskripsi:
-      'Duis ullamco ad excepteur id quis do aliqua et sint velit quis dolor.',
-    file_url: '',
-    id: '2',
-    nama: 'Hotel',
-    subtotal: 1200000,
-    peralatan_kantor_id: null,
-  },
-  {
-    deskripsi:
-      'Duis ullamco ad excepteur id quis do aliqua et sint velit quis dolor.',
-    file_url: '',
-    id: '3',
-    nama: 'Transportasi',
-    subtotal: 1200000,
-    peralatan_kantor_id: null,
-  },
-  {
-    deskripsi:
-      'Duis ullamco ad excepteur id quis do aliqua et sint velit quis dolor.',
-    file_url: '',
-    id: '4',
-    nama: 'Konsumsi',
-    subtotal: 1200000,
-    peralatan_kantor_id: null,
-  },
-];
-
-export const reimburses: ReimburseModel[] = [
-  {
-    deskripsi: 'Pending',
-    id: '1',
-    jenis: ReimburseTypeEnum.itinerary,
-    nip_pemohon: employees[0].nip,
-    nip_pic: null,
-    perjalanan_id: itinenaries[0].id,
-    status: ReimburseStatusEnum.pending,
-    details: reimbursesDetail,
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    deskripsi_penolakan: null,
-    tanggal_pelunasan: null,
-    total_pelunasan: null,
-    tanggal_penolakan: null,
-  },
-  {
-    deskripsi: 'Finished',
-    id: '2',
-    jenis: ReimburseTypeEnum.itinerary,
-    nip_pemohon: employees[1].nip,
-    nip_pic: employees[1].nip,
-    perjalanan_id: itinenaries[0].id,
-    status: ReimburseStatusEnum.finished,
-    details: reimbursesDetail,
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    tanggal_pelunasan: new Date(),
-    deskripsi_penolakan: null,
-    total_pelunasan: 4900000,
-    tanggal_penolakan: null,
-  },
-  {
-    deskripsi: 'Rejected',
-    id: '3',
-    jenis: ReimburseTypeEnum.itinerary,
-    nip_pemohon: employees[1].nip,
-    nip_pic: employees[1].nip,
-    perjalanan_id: itinenaries[0].id,
-    status: ReimburseStatusEnum.rejected,
-    details: reimbursesDetail,
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    tanggal_pelunasan: null,
-    total_pelunasan: null,
-    deskripsi_penolakan:
-      'Dolor aliquip amet proident ullamco id duis officia ea amet dolore sit.',
-    tanggal_penolakan: new Date(),
-  },
-];
 
 export const ReimburseFinishFormSchema = () =>
   Yup.object({

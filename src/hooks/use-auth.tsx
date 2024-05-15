@@ -1,19 +1,17 @@
-import {
-  EmployeeModel,
-  EmployeeRoleEnum,
-} from 'modules/user/components/user-form-type';
+import { EmployeeModel, EmployeeRoleEnum } from 'api-hooks/auth/model';
+import { isWindowUndefined } from 'common/helpers/string';
 import React from 'react';
 
 export const AUTH_KEY = 'auth-key';
 
 export function getAuth(): EmployeeModel | undefined {
-  if (typeof window === 'undefined') return;
+  if (isWindowUndefined) return;
   const result = localStorage.getItem(AUTH_KEY);
   return result ? JSON.parse(result) : undefined;
 }
 
 export function setAuth(value: EmployeeModel | undefined) {
-  if (typeof window === 'undefined') return;
+  if (isWindowUndefined) return;
   if (value === undefined) {
     localStorage.removeItem(AUTH_KEY);
     return;
@@ -47,7 +45,7 @@ export function AuthProvider({ children }) {
 
   //sync when open
   React.useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (isWindowUndefined) return;
     const auth = getAuth();
     setUser(auth);
   }, []);

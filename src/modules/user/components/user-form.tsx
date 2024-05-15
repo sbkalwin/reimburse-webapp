@@ -1,4 +1,6 @@
 import { SegmentedControl } from '@mantine/core';
+import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
+import { EmployeeModel } from 'api-hooks/employee/model';
 import Form from 'components/form';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
@@ -6,17 +8,12 @@ import ReimburseList from 'pages/reimburses';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  EmployeeFormSchema,
-  EmployeeFormType,
-  EmployeeModel,
-  EmployeeRoleEnum,
-  EmployeeStatusEnum,
-} from './user-form-type';
+import { EmployeeFormSchema, EmployeeFormType } from './user-form-type';
 import UserInformationForm from './user-information-form';
 
 interface UserFormProps {
   user?: EmployeeModel;
+  onSubmit: (values: EmployeeFormType) => Promise<void>;
 }
 
 export default function UserForm(props: UserFormProps) {
@@ -24,11 +21,11 @@ export default function UserForm(props: UserFormProps) {
   const [segment, setSegment] = React.useState('Informasi');
   const defaultValues = React.useMemo<EmployeeFormType>(() => {
     return {
-      team_id: user?.team_id ?? '',
-      kata_sandi: user?.kata_sandi ?? '',
+      team_id: user?.teamId ?? '',
+      kata_sandi: '',
       nama: user?.nama ?? '',
       nip: user?.nip ?? '',
-      nomor_rekening: user?.nomor_rekening ?? '',
+      nomor_rekening: user?.nomorRekening ?? '',
       peran: user?.peran ?? EmployeeRoleEnum.user,
       status: user?.status ?? EmployeeStatusEnum.active,
       data: user,
@@ -45,8 +42,14 @@ export default function UserForm(props: UserFormProps) {
   });
 
   const onSubmit = React.useCallback(
-    async (values: EmployeeFormType) => {},
-    [],
+    async (values: EmployeeFormType) => {
+      try {
+        await props.onSubmit(values);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [props],
   );
 
   return (

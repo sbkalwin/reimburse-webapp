@@ -118,7 +118,8 @@ export default function AppLayout(props: AppLayoutProps) {
         </Flex>
       </Card>
       <Card
-        h="calc(100dvh - 55px)"
+        mih="calc(100dvh - 55px)"
+        mah="calc(100dvh - 55px)"
         m="auto"
         style={{
           overflow: 'auto',
@@ -130,6 +131,7 @@ export default function AppLayout(props: AppLayoutProps) {
           style={{
             margin: '0px auto',
             width: '100%',
+            height: '100%',
             maxWidth: 768,
           }}
         >

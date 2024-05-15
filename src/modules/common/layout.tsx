@@ -20,7 +20,7 @@ export function FormLayout({
   isEditable = false,
 }: FormLayoutProps) {
   const { disabled, setDisabled } = useFormState();
-  const { reset, getValues } = useFormContext();
+  const { reset, getValues, formState } = useFormContext();
   const isEdit = !!getValues('data');
   const { isAdmin } = useAuth();
 
@@ -39,7 +39,11 @@ export function FormLayout({
   );
 
   const submitButton = !disabled && (
-    <Button rightSection={<Disc size={16} />} type="submit">
+    <Button
+      rightSection={<Disc size={16} />}
+      type="submit"
+      loading={formState.isLoading}
+    >
       Simpan
     </Button>
   );

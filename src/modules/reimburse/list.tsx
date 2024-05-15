@@ -5,7 +5,6 @@ import useAuth from 'hooks/use-auth';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { reimburses } from './components/reimburse-form-type';
 import ReimburseItem from './components/reimburse-item';
 
 export default function ReimburseList() {
@@ -15,14 +14,16 @@ export default function ReimburseList() {
   const userId = query.id;
   const nip = user?.nip;
 
-  const data = reimburses
-    .filter((reimburse) => {
-      if (userId) {
-        return reimburse.nip_pemohon === userId;
-      }
-      return isAdmin || reimburse.nip_pemohon === nip;
-    })
-    .filter((reimburse) => segment === 'all' || reimburse.status === segment);
+  // const data = reimburses
+  //   .filter((reimburse) => {
+  //     if (userId) {
+  //       return reimburse.nip_pemohon === userId;
+  //     }
+  //     return isAdmin || reimburse.nip_pemohon === nip;
+  //   })
+  //   .filter((reimburse) => segment === 'all' || reimburse.status === segment);
+
+  const data = [];
 
   return (
     <Flex direction="column">

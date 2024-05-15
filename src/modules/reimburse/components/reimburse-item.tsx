@@ -3,7 +3,6 @@ import { string2money } from 'common/helpers/string';
 import ListItem from 'components/common/list-item/list-item';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import { format } from 'date-fns';
-import { employees } from 'modules/user/components/user-form-type';
 import { useRouter } from 'next/router';
 import React from 'react';
 

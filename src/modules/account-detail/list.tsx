@@ -6,7 +6,6 @@ import AccountDetailItem from 'modules/accounts/components/account-detail-item';
 import {
   AccountDetailModel,
   AccountModel,
-  accountDetails,
 } from 'modules/accounts/components/account-form-type';
 import React from 'react';
 
@@ -32,7 +31,7 @@ export default function AccountDetailList(props: { account: AccountModel }) {
             Tambah Transaksi
           </Button>
         </Flex>
-        {accountDetails.map((accountDetail) => {
+        {/* {accountDetails.map((accountDetail) => {
           return (
             <AccountDetailItem
               key={accountDetail.id}
@@ -43,7 +42,7 @@ export default function AccountDetailList(props: { account: AccountModel }) {
               }}
             />
           );
-        })}
+        })} */}
       </Flex>
       <Modal
         onClose={close}

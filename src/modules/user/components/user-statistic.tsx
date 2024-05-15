@@ -5,10 +5,7 @@ import {
   List,
   XCircle,
 } from '@phosphor-icons/react';
-import {
-  ReimburseStatusEnum,
-  reimburses,
-} from 'modules/reimburse/components/reimburse-form-type';
+import { ReimburseStatusEnum } from 'modules/reimburse/components/reimburse-form-type';
 
 export interface UserStatisticProps {
   userId?: string;

@@ -1,7 +1,4 @@
-import {
-  ReimburseModel,
-  reimburses,
-} from 'modules/reimburse/components/reimburse-form-type';
+import { ReimburseModel } from 'modules/reimburse/components/reimburse-form-type';
 import * as Yup from 'yup';
 
 export enum AccountDetailTypeEnum {
@@ -57,69 +54,3 @@ export type AccountDetailFormType = Yup.InferType<
 > & {
   data?: AccountDetailModel;
 };
-
-export const accountDetails: AccountDetailModel[] = [
-  {
-    id: '1',
-    kas_id: '1',
-    deskripsi:
-      'Voluptate deserunt sunt aliquip ullamco nulla occaecat laboris ullamco occaecat qui.',
-    reimburse: null,
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    total: 1200000,
-    jenis: AccountDetailTypeEnum.income,
-  },
-  {
-    id: '2',
-    kas_id: '1',
-    deskripsi:
-      'Voluptate deserunt sunt aliquip ullamco nulla occaecat laboris ullamco occaecat qui.',
-    reimburse: reimburses[0],
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    total: 1300000,
-    jenis: AccountDetailTypeEnum.outcome,
-  },
-  {
-    id: '3',
-    kas_id: '1',
-    deskripsi:
-      'Voluptate deserunt sunt aliquip ullamco nulla occaecat laboris ullamco occaecat qui.',
-    reimburse: null,
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    total: 1400000,
-    jenis: AccountDetailTypeEnum.income,
-  },
-];
-
-export const accounts: AccountModel[] = [
-  {
-    id: '1',
-    nama: 'Kas Kecil',
-    deskripsi:
-      'Aliquip duis anim eu anim amet dolor exercitation qui aute irure duis nostrud est ex.',
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    details: accountDetails,
-  },
-  {
-    id: '2',
-    nama: 'Kas Besar',
-    deskripsi:
-      'Aliquip duis anim eu anim amet dolor exercitation qui aute irure duis nostrud est ex.',
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    details: accountDetails,
-  },
-  {
-    id: '3',
-    nama: 'Kas Biasa',
-    deskripsi:
-      'Aliquip duis anim eu anim amet dolor exercitation qui aute irure duis nostrud est ex.',
-    tanggal_dibuat: new Date(),
-    tanggal_diubah: new Date(),
-    details: accountDetails,
-  },
-];

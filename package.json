@@ -25,11 +25,13 @@
     "@types/humps": "^2.0.6",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
     "google": "link:@next/font/google",
     "humps": "^2.0.1",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^4.0.0",
     "nanoid": "^5.0.7",
     "next": "14.0.4",
     "next-pwa": "^5.6.0",
@@ -45,7 +47,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "20.11.30",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",

@@ -34,7 +34,14 @@ export default async function handler(
       include: {
         Pengembalian: true,
         PengembalianPic: true,
-        Team: true,
+        Team: {
+          select: {
+            id: true,
+            nama: true,
+            tanggalDibuat: true,
+            tanggalDiubah: true,
+          },
+        },
       },
     });
 
@@ -53,7 +60,11 @@ export default async function handler(
 
       const updateKaryawan = await prisma.pegawai.update({
         data: {
-          ...user,
+          nama: user.nama,
+          nomorRekening: user.nomor_rekening,
+          teamId: user.team_id,
+          status: user.status,
+          peran: user.peran,
         },
         where: {
           nip,

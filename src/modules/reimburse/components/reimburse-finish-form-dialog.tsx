@@ -2,7 +2,6 @@ import { Button, Flex, SimpleGrid } from '@mantine/core';
 import Form from 'components/form';
 import Input from 'components/input';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
-import { accounts } from 'modules/accounts/components/account-form-type';
 import React from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 
@@ -60,12 +59,7 @@ export default function ReimburseFinishFormDialog(props: {
           name="kas_id"
           label="Kas"
           placeholder="Pilih Kas"
-          data={accounts.map((account) => {
-            return {
-              label: account.nama,
-              value: account.id,
-            };
-          })}
+          data={[]}
         />
         <Input
           type="text"

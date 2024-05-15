@@ -1,10 +1,13 @@
-import { Flex, Select, SimpleGrid, TextInput } from '@mantine/core';
+import { Flex, Select, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import { EmployeeLiteModel } from 'api-hooks/employee/model';
+import { useGetEmployees } from 'api-hooks/employee/query';
+import colors from 'common/styles/colors';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
+import LoaderView from 'components/loader-view';
 import { ListLayout } from 'modules/common/layout';
 import React from 'react';
 
-import { EmployeeModel, employees } from './components/user-form-type';
 import UserItem from './components/user-item';
 
 export function UserListLayout({ children }) {
@@ -20,16 +23,18 @@ export default function UserList() {
   const [role, setRole] = React.useState<string | null>(null);
 
   const onSearch = React.useCallback(
-    (user: EmployeeModel) => {
+    (user: EmployeeLiteModel) => {
       const label = [user.nama.toLowerCase(), user.nip].join('');
-      console.log(label.includes(search.toLowerCase()));
       return label.includes(search.toLowerCase());
     },
     [search],
   );
+  const queryGetEmployees = useGetEmployees({
+    params: { status: status || undefined, role: role || undefined },
+  });
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" mih="calc(100dvh - 70px)">
       <Flex
         direction="column"
         gap={16}
@@ -64,17 +69,22 @@ export default function UserList() {
           />
         </SimpleGrid>
       </Flex>
-      {employees
-        .filter(onSearch)
-        .filter((employee) => {
-          return employee.status === status || status === null;
-        })
-        .filter((employee) => {
-          return employee.peran === role || role === null;
-        })
-        .map((employee) => {
-          return <UserItem key={employee.nip} {...employee} />;
-        })}
+      <LoaderView query={queryGetEmployees}>
+        {(data) => {
+          return (
+            <>
+              {data.length === 0 && (
+                <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
+                  No Result Found
+                </Text>
+              )}
+              {data.filter(onSearch).map((employee) => {
+                return <UserItem key={employee.nip} {...employee} />;
+              })}
+            </>
+          );
+        }}
+      </LoaderView>
     </Flex>
   );
 }

@@ -2,7 +2,6 @@ import { Flex, Text } from '@mantine/core';
 import Input from 'components/input';
 import { format } from 'date-fns';
 import { itinenaries } from 'modules/itinenary/components/itinenary-form-type';
-import { employees } from 'modules/user/components/user-form-type';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ReimburseFormType, ReimburseTypeEnum } from './reimburse-form-type';
@@ -57,12 +56,7 @@ export default function ReimburseInformationForm() {
       <Input
         type="select"
         name="nip_pemohon"
-        data={employees.map((employee) => {
-          return {
-            value: employee.nip,
-            label: [employee.nip, employee.nama].join(' - '),
-          };
-        })}
+        data={[]}
         label="Pemohon"
         placeholder="Masukkan Pemohon"
         disabled

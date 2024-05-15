@@ -38,6 +38,7 @@ export default async function handler(
   } catch (e) {
     const validationError = JSON.stringify(e);
     const errors = parseValidationError(validationError);
+    console.error(e);
     return response.status(errors ? 400 : 500).json({
       message: e.message,
       errors,

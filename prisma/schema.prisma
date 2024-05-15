@@ -5,13 +5,14 @@ generator client {
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
   relationMode = "prisma"
 }
 
 model Team {
   id            String    @id
   nama          String
-  nipLeader     String?   @unique @map("nip_leader")
+  nipLeader     String?   @map("nip_leader")
   tanggalDibuat DateTime  @default(now()) @map("tanggal_dibuat") @db.Timestamptz(6)
   tanggalDiubah DateTime  @updatedAt @map("tanggal_diubah") @db.Timestamptz(6)
   Pegawai       Pegawai[]
@@ -27,8 +28,9 @@ model Pegawai {
   nomorRekening   String             @map("nomor_rekening")
   tanggalDibuat   DateTime           @default(now()) @map("tanggal_dibuat") @db.Timestamptz(6)
   tanggalDiubah   DateTime           @updatedAt @map("tanggal_diubah") @db.Timestamptz(6)
-  teamId          String             @map("team_id")
-  Team            Team               @relation(fields: [teamId], references: [id])
+  teamId          String?            @map("team_id")
+  nama            String
+  Team            Team?              @relation(fields: [teamId], references: [id])
   Pengembalian    Pengembalian[]
   PengembalianPic Pengembalian[]     @relation("PengembalianPic")
 
@@ -73,16 +75,16 @@ model Kas {
 }
 
 model KasDetail {
-  id             String        @id
+  id             String                @id
   deskripsi      String
-  jenis          String
   total          Float
-  kasId          String        @map("kas_id")
-  pengembalianId String?       @map("pengembalian_id")
-  tanggalDibuat  DateTime      @default(now()) @map("tanggal_dibuat")
-  tanggalDiubah  DateTime      @updatedAt @map("tanggal_diubah")
-  kas            Kas           @relation(fields: [kasId], references: [id])
-  pengembalian   Pengembalian? @relation(fields: [pengembalianId], references: [id])
+  kasId          String                @map("kas_id")
+  pengembalianId String?               @map("pengembalian_id")
+  tanggalDibuat  DateTime              @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah  DateTime              @updatedAt @map("tanggal_diubah")
+  jenis          AccountDetailTypeEnum
+  kas            Kas                   @relation(fields: [kasId], references: [id])
+  pengembalian   Pengembalian?         @relation(fields: [pengembalianId], references: [id])
 
   @@index([kasId])
   @@index([pengembalianId])

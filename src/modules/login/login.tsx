@@ -1,14 +1,19 @@
 import { Box, Button, Card, Flex, Space, Title } from '@mantine/core';
 import { SignIn } from '@phosphor-icons/react';
+import { EmployeeModel } from 'api-hooks/auth/model';
+import { useLogin } from 'api-hooks/auth/mutation';
+import { plainToClass } from 'class-transformer';
+import notification from 'common/helpers/notifications';
+import { setToken } from 'common/helpers/token';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Form from 'components/form';
 import Input from 'components/input';
 import useAuth from 'hooks/use-auth';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
-import { employees } from 'modules/user/components/user-form-type';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { verifyToken } from 'utils/server';
 
 import { LoginFormSchema, LoginFormType } from './form-type';
 
@@ -17,8 +22,8 @@ export default function Login() {
   const { handleUser } = useAuth();
   const defaultValues = React.useMemo<LoginFormType>(() => {
     return {
-      kata_sandi: '',
-      nip: '',
+      kata_sandi: 'superadmin',
+      nip: 'superadmin',
     };
   }, []);
 
@@ -30,12 +35,27 @@ export default function Login() {
     mode: 'onChange',
   });
 
+  const { mutateAsync } = useLogin();
+
   const onSubmit = React.useCallback(
-    async (values) => {
-      handleUser(employees[1]);
-      push(NavigationRoutes.home);
+    async (values: LoginFormType) => {
+      try {
+        const result = await mutateAsync(values);
+        const token = result.data.token;
+        const user = verifyToken(token);
+        if (user) {
+          handleUser(plainToClass(EmployeeModel, user));
+        }
+        setToken(token);
+        push(NavigationRoutes.home);
+      } catch (e) {
+        console.error(e);
+        notification.error({
+          message: e.message,
+        });
+      }
     },
-    [handleUser, push],
+    [handleUser, mutateAsync, push],
   );
 
   return (
@@ -62,6 +82,7 @@ export default function Login() {
           />
           <Space h={16} />
           <Button
+            loading={methods.formState.isSubmitting}
             fullWidth
             type="submit"
             leftSection={<span />}

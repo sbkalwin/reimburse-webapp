@@ -16,10 +16,10 @@ import {
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import useAuth from 'hooks/use-auth';
 import AccountStatistic from 'modules/accounts/components/account-statistic';
-import { employees } from 'modules/user/components/user-form-type';
 import UserStatistic from 'modules/user/components/user-statistic';
 import UsersStatistic from 'modules/user/components/users-statistic';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 export type NavigationItemType = {
@@ -142,15 +142,16 @@ export default function Home() {
       {logoutItem}
     </>
   );
-
+  const { push } = useRouter();
   const loginUser = (
-    <Button color="blue" fullWidth onClick={() => handleUser(employees[0])}>
-      Login User
-    </Button>
-  );
-  const loginAdmin = (
-    <Button color="cyan" fullWidth onClick={() => handleUser(employees[1])}>
-      Login Admin
+    <Button
+      color="blue"
+      fullWidth
+      onClick={() => {
+        push(NavigationRoutes.login);
+      }}
+    >
+      Login
     </Button>
   );
 
@@ -164,14 +165,14 @@ export default function Home() {
   const employeeStatistics = isAdmin && (
     <>
       <Title order={6}>Statistik Karyawan</Title>
-      <UsersStatistic users={employees} />
+      <UsersStatistic users={[]} />
     </>
   );
 
   const reimburseStatistics = (isUser || isAdmin) && (
     <>
       {isAdmin && <Title order={6}>Statistik Reimburse</Title>}
-      <UserStatistic userId={isAdmin ? undefined : user?.nip} />
+      {/* <UserStatistic userId={isAdmin ? undefined : user?.nip} /> */}
     </>
   );
 
@@ -199,7 +200,6 @@ export default function Home() {
       {!user && (
         <Flex w="100%" my={24} gap={24}>
           {loginUser}
-          {loginAdmin}
         </Flex>
       )}
     </>

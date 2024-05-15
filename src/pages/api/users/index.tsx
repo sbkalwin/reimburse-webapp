@@ -40,6 +40,7 @@ export default async function handler(
           peran: user.peran,
           status: user.status,
           teamId: user.team_id,
+          nama: user.nama,
         },
       });
       const { kataSandi, ...rest } = newPegawai;
@@ -57,7 +58,14 @@ export default async function handler(
             status,
           },
           include: {
-            Team: true,
+            Team: {
+              select: {
+                id: true,
+                nama: true,
+                tanggalDibuat: true,
+                tanggalDiubah: true,
+              },
+            },
           },
         })
       ).map(({ kataSandi, ...rest }) => {
