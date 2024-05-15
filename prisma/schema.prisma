@@ -91,20 +91,20 @@ model KasDetail {
 
 model Pengembalian {
   id                 String               @id
-  nama               String
   jenis              ReimburseTypeEnum
   status             ReimburseStatusEnum
   deskripsiPenolakan String?              @map("deskripsi_penolakan")
   nipPemohon         String               @map("nip_pemohon")
-  nipPic             String               @map("nip_pic")
+  nipPic             String?              @map("nip_pic")
   perjalananId       String?              @map("perjalanan_id")
   tanggalDibuat      DateTime             @default(now()) @map("tanggal_dibuat")
   tanggalDiubah      DateTime             @updatedAt @map("tanggal_diubah")
   tanggalPelunasan   DateTime?            @map("tanggal_pelunasan")
   tanggalPenolakan   DateTime?            @map("tanggal_penolakan")
   totalPelunasan     Float?               @map("total_pelunasan")
+  deskripsi          String
   pemohon            Pegawai              @relation(fields: [nipPemohon], references: [nip])
-  pic                Pegawai              @relation("PengembalianPic", fields: [nipPic], references: [nip])
+  pic                Pegawai?             @relation("PengembalianPic", fields: [nipPic], references: [nip])
   Perjalanan         Perjalanan?          @relation(fields: [perjalananId], references: [id])
   DetailPengembalian DetailPengembalian[]
   KasDetail          KasDetail[]
@@ -116,18 +116,18 @@ model Pengembalian {
 }
 
 model DetailPengembalian {
-  id                String                @id
+  id                String            @id
   nama              String
   deskripsi         String
   subtotal          Float
-  jenis             AccountDetailTypeEnum
-  fileUrl           String                @map("file_url")
-  pengembalianId    String                @map("pengembalian_id")
-  peralatanKantorId String?               @map("pengembalian_kantor_id")
-  tanggalDibuat     DateTime              @default(now()) @map("tanggal_dibuat")
-  tanggalDiubah     DateTime              @updatedAt @map("tanggal_diubah")
-  pengembalian      Pengembalian          @relation(fields: [pengembalianId], references: [id])
-  peralatanKantor   PeralatanKantor?      @relation(fields: [peralatanKantorId], references: [id])
+  fileUrl           String            @map("file_url")
+  pengembalianId    String            @map("pengembalian_id")
+  peralatanKantorId String?           @map("pengembalian_kantor_id")
+  tanggalDibuat     DateTime          @default(now()) @map("tanggal_dibuat")
+  tanggalDiubah     DateTime          @updatedAt @map("tanggal_diubah")
+  jenis             ReimburseTypeEnum
+  pengembalian      Pengembalian      @relation(fields: [pengembalianId], references: [id])
+  peralatanKantor   PeralatanKantor?  @relation(fields: [peralatanKantorId], references: [id])
 
   @@index([peralatanKantorId])
   @@index([pengembalianId])

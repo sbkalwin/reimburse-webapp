@@ -21,7 +21,7 @@ export default async function handler(
   const body = request.body;
 
   try {
-    const currentKas = await prisma.peralatanKantor.findUnique({
+    const currentPeralatanKantor = await prisma.peralatanKantor.findUnique({
       where: {
         id,
       },
@@ -30,7 +30,7 @@ export default async function handler(
       },
     });
 
-    if (!currentKas) {
+    if (!currentPeralatanKantor) {
       return response
         .status(404)
         .json({ message: 'Peralatan Kantor tidak dapat ditemukan' });
@@ -61,10 +61,20 @@ export default async function handler(
     }
 
     if (request.method === 'GET') {
-      return response.status(200).json({ data: decamelizeKeys(currentKas) });
+      return response
+        .status(200)
+        .json({ data: decamelizeKeys(currentPeralatanKantor) });
     }
 
     if (request.method === 'DELETE') {
+      const peralatanKantorLength =
+        currentPeralatanKantor.DetailPengembalian.length;
+
+      if (peralatanKantorLength) {
+        return response.status(400).json({
+          message: `Peralatan Kantor ini memiliki ${peralatanKantorLength} pengembalian, peralatan kantor ini tidak dapat dihapus`,
+        });
+      }
       await prisma.peralatanKantor.delete({ where: { id } });
       return response.status(200).json({
         message: 'Peralatan Kantor berhasil dihapus',
@@ -73,7 +83,7 @@ export default async function handler(
   } catch (e) {
     const validationError = JSON.stringify(e);
     const errors = parseValidationError(validationError);
-    return response.status(500).json({
+    return response.status(errors ? 400 : 500).json({
       message: e.message,
       errors,
     });

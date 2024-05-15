@@ -61,6 +61,12 @@ export default async function handler(
 
     if (request.method === 'DELETE') {
       await prisma.team.delete({ where: { id } });
+      await prisma.pegawai.updateMany({
+        where: { teamId: id },
+        data: {
+          teamId: '',
+        },
+      });
       return response.status(200).json({
         message: 'Team berhasil dihapus',
       });
@@ -68,7 +74,7 @@ export default async function handler(
   } catch (e) {
     const validationError = JSON.stringify(e);
     const errors = parseValidationError(validationError);
-    return response.status(500).json({
+    return response.status(errors ? 400 : 500).json({
       message: e.message,
       errors,
     });

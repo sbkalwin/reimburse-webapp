@@ -32,7 +32,7 @@ export type AccountModel = {
 export const AccountDetailFormSchema = () =>
   Yup.object({
     kas_id: Yup.string().default(''),
-    reimburse_id: Yup.string().default(''),
+    pengembalian_id: Yup.string().default(''),
     deskripsi: Yup.string().default(''),
     jenis: Yup.mixed<AccountDetailTypeEnum>()
       .oneOf(Object.values(AccountDetailTypeEnum))

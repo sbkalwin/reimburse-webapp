@@ -73,6 +73,15 @@ export default async function handler(
     }
 
     if (request.method === 'DELETE') {
+      const pengembalianPicLength = currentKaryawan.PengembalianPic.length;
+      const pengembalianLength = currentKaryawan.Pengembalian.length;
+
+      if (pengembalianLength || pengembalianPicLength) {
+        return response.status(400).json({
+          message: `Pegawai ini memiliki ${pengembalianLength} Pengembalian dan ${pengembalianPicLength} Pengembalian sebagai pic, Karayawan ini tidak dapat dihapus`,
+        });
+      }
+
       await prisma.pegawai.delete({ where: { nip } });
       return response.status(200).json({
         message: 'Pegawai berhasil dihapus',
@@ -81,7 +90,7 @@ export default async function handler(
   } catch (e) {
     const validationError = JSON.stringify(e);
     const errors = parseValidationError(validationError);
-    return response.status(500).json({
+    return response.status(errors ? 400 : 500).json({
       message: e.message,
       errors,
     });

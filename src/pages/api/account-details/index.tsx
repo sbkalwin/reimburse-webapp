@@ -1,3 +1,4 @@
+import { AccountDetailTypeEnum } from '@prisma/client';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { generateId, parseValidationError } from 'utils/server';
@@ -5,12 +6,14 @@ import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
 
-const peralatanKantorFormSchema = Yup.object({
-  nama: Yup.string().required(),
+const kasDetailSchema = Yup.object({
+  kas_id: Yup.string().default(''),
+  pengembalian_id: Yup.string().default(''),
   deskripsi: Yup.string().default(''),
-  tanggal_diperbarui: Yup.date().default(new Date()),
-  harga: Yup.number().required(),
-  file_url: Yup.string().default(''),
+  jenis: Yup.mixed<AccountDetailTypeEnum>()
+    .oneOf(Object.values(AccountDetailTypeEnum))
+    .default(AccountDetailTypeEnum.income),
+  total: Yup.number().default(0),
 });
 
 export default async function handler(
@@ -20,30 +23,33 @@ export default async function handler(
   const body = request.body;
   try {
     if (request.method === 'GET') {
-      const peralatanKantor = await prisma.peralatanKantor.findMany({
+      const kasDetail = await prisma.kasDetail.findMany({
         include: {
-          DetailPengembalian: true,
+          pengembalian: true,
+          kas: true,
         },
       });
       return response.status(200).json({
-        data: decamelizeKeys(peralatanKantor),
+        data: decamelizeKeys(kasDetail),
       });
     }
 
     if (request.method === 'POST') {
-      const peralatanKantor = await peralatanKantorFormSchema.validate(body);
+      const kasDetail = await kasDetailSchema.validate(body);
       const id = generateId();
-      const newAccount = await prisma.peralatanKantor.create({
+      const newAccount = await prisma.kasDetail.create({
         data: {
-          fileUrl: peralatanKantor.file_url,
-          harga: peralatanKantor.harga,
-          nama: peralatanKantor.nama,
+          deskripsi: kasDetail.deskripsi,
+          jenis: kasDetail.jenis,
+          total: kasDetail.total,
+          kasId: kasDetail.kas_id,
+          pengembalianId: kasDetail.kas_id,
           id,
         },
       });
       return response.status(200).json({
         data: decamelizeKeys(newAccount),
-        message: 'Peralatan Kantor berhasil Ditambah',
+        message: 'Kas Detail berhasil Ditambah',
       });
     }
   } catch (e) {

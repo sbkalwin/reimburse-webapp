@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
-import prisma from '../../../../prisma';
+import prisma from '../../../../../prisma';
 
 const kasSchema = Yup.object({
   nama: Yup.string().required(),
@@ -70,7 +70,7 @@ export default async function handler(
   } catch (e) {
     const validationError = JSON.stringify(e);
     const errors = parseValidationError(validationError);
-    return response.status(500).json({
+    return response.status(errors ? 400 : 500).json({
       message: e.message,
       errors,
     });

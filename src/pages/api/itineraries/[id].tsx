@@ -67,6 +67,13 @@ export default async function handler(
     }
 
     if (request.method === 'DELETE') {
+      const pengembalianLength = currentPerjalanan.Pengembalian.length;
+      if (pengembalianLength) {
+        return response.status(400).json({
+          message: `Perjalanan ini memiliki ${pengembalianLength} pengembalian, perjalanan ini tidak dapat dihapus`,
+        });
+      }
+
       await prisma.perjalanan.delete({ where: { id } });
       return response.status(200).json({
         message: 'Perjalanan berhasil dihapus',
@@ -75,7 +82,7 @@ export default async function handler(
   } catch (e) {
     const validationError = JSON.stringify(e);
     const errors = parseValidationError(validationError);
-    return response.status(500).json({
+    return response.status(errors ? 400 : 500).json({
       message: e.message,
       errors,
     });

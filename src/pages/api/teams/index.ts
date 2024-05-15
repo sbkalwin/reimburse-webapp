@@ -35,14 +35,13 @@ export default async function handler(
     }
 
     if (request.method === 'GET') {
-      const teams = await prisma.team.findMany({});
-
+      const teams = await prisma.team.findMany();
       return response.status(200).json({ data: decamelizeKeys(teams) });
     }
   } catch (e) {
     const validationError = JSON.stringify(e);
     const errors = parseValidationError(validationError);
-    return response.status(500).json({
+    return response.status(errors ? 400 : 500).json({
       message: e.message,
       errors,
     });

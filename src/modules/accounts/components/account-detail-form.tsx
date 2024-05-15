@@ -29,7 +29,7 @@ export default function AccountDetailForm(props: AccountDetailFormProps) {
       deskripsi: accountDetail?.deskripsi ?? '-',
       jenis: accountDetail?.jenis ?? AccountDetailTypeEnum.income,
       kas_id: account.id,
-      reimburse_id: accountDetail?.reimburse?.id ?? '',
+      pengembalian_id: accountDetail?.reimburse?.id ?? '',
       total: 0,
     };
   }, [account.id, accountDetail]);
