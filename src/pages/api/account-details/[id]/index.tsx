@@ -5,6 +5,7 @@ import { parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../../prisma';
+import { KasDetailResource } from '../../../../../prisma/resources';
 
 const kasDetailSchema = Yup.object({
   kas_id: Yup.string().default(''),
@@ -28,10 +29,7 @@ export default async function handler(
       where: {
         id,
       },
-      include: {
-        pengembalian: true,
-        kas: true,
-      },
+      select: KasDetailResource,
     });
 
     if (!currentKasDetail) {
@@ -64,6 +62,7 @@ export default async function handler(
         where: {
           id,
         },
+        select: KasDetailResource,
       });
 
       return response.status(200).json({

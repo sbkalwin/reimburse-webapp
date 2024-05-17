@@ -5,6 +5,7 @@ import { generateId, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
+import { KasDetailLiteResource } from '../../../../prisma/resources';
 
 const kasDetailSchema = Yup.object({
   kas_id: Yup.string().default(''),
@@ -24,10 +25,7 @@ export default async function handler(
   try {
     if (request.method === 'GET') {
       const kasDetail = await prisma.kasDetail.findMany({
-        include: {
-          pengembalian: true,
-          kas: true,
-        },
+        select: KasDetailLiteResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(kasDetail),
@@ -46,6 +44,7 @@ export default async function handler(
           pengembalianId: kasDetail.kas_id,
           id,
         },
+        select: KasDetailLiteResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(newAccount),

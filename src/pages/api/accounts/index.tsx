@@ -4,6 +4,7 @@ import { generateId, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
+import { KasLiteResource } from '../../../../prisma/resources';
 
 const kasFormSchema = Yup.object({
   nama: Yup.string().required(),
@@ -18,9 +19,7 @@ export default async function handler(
   try {
     if (request.method === 'GET') {
       const kass = await prisma.kas.findMany({
-        include: {
-          KasDetail: true,
-        },
+        select: KasLiteResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(kass),
@@ -36,6 +35,7 @@ export default async function handler(
           nama: kas.nama,
           id,
         },
+        select: KasLiteResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(newAccount),

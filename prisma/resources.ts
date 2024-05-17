@@ -8,25 +8,14 @@ export const PegawaiLiteResource = {
   nomorRekening: true,
 };
 
-export const PegawaiResource = {
+export const PerjalananLiteResource = {
+  id: true,
+  deskripsi: true,
   nama: true,
-  nip: true,
   tanggalDibuat: true,
   tanggalDiubah: true,
-  status: true,
-  peran: true,
-  nomorRekening: true,
-  Pengembalian: true,
-  PengembalianPic: true,
-  Team: {
-    select: {
-      id: true,
-      nama: true,
-      nipLeader: true,
-      tanggalDibuat: true,
-      tanggalDiubah: true,
-    },
-  },
+  tanggalMulai: true,
+  tanggalSelesai: true,
 };
 
 export const TeamLiteResource = {
@@ -35,25 +24,6 @@ export const TeamLiteResource = {
   nipLeader: true,
   tanggalDibuat: true,
   tanggalDiubah: true,
-};
-
-export const TeamResource = {
-  id: true,
-  nama: true,
-  nipLeader: true,
-  tanggalDibuat: true,
-  tanggalDiubah: true,
-  Pegawai: {
-    select: {
-      nama: true,
-      nip: true,
-      tanggalDibuat: true,
-      tanggalDiubah: true,
-      status: true,
-      peran: true,
-      nomorRekening: true,
-    },
-  },
 };
 
 export const PeralatanKantorLiteResource = {
@@ -66,10 +36,17 @@ export const PeralatanKantorLiteResource = {
   tanggalDiubah: true,
 };
 
-export const PeralatanKantorResource = {
-  DetailPengembalian: true, // TODO: CREATE RESOURCE
-  fileUrl: true,
-  harga: true,
+export const KasDetailLiteResource = {
+  id: true,
+  deskripsi: true,
+  jenis: true,
+  kasId: true,
+  pengembalianId: true,
+  tanggalDibuat: true,
+  total: true,
+};
+
+export const KasLiteResource = {
   deskripsi: true,
   id: true,
   nama: true,
@@ -77,14 +54,138 @@ export const PeralatanKantorResource = {
   tanggalDiubah: true,
 };
 
-export const PerjalananLiteResource = {
+export const ReimburseDetailLiteResource = {
+  deskripsi: true,
+  id: true,
+  fileUrl: true,
+  jenis: true,
+  nama: true,
+  pengembalianId: true,
+  peralatanKantorId: true,
+  subtotal: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+};
+
+export const ReimburseLiteResource = {
   id: true,
   deskripsi: true,
+  deskripsiPenolakan: true,
+  jenis: true,
+  nipPemohon: true,
+  nipPic: true,
+  KasDetail: {
+    select: KasDetailLiteResource,
+  },
+  pemohon: {
+    select: PegawaiLiteResource,
+  },
+  perjalananId: true,
+  Perjalanan: {
+    select: PerjalananLiteResource,
+  },
+  pic: {
+    select: PegawaiLiteResource,
+  },
+  status: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  tanggalPelunasan: true,
+  tanggalPenolakan: true,
+  totalPelunasan: true,
+};
+
+export const ReimburseDetailResource = {
+  deskripsi: true,
+  id: true,
+  fileUrl: true,
+  jenis: true,
+  nama: true,
+  pengembalianId: true,
+  peralatanKantorId: true,
+  subtotal: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  peralatanKantor: {
+    select: PeralatanKantorLiteResource,
+  },
+  pengembalian: {
+    select: ReimburseLiteResource,
+  },
+};
+
+export const ReimburseResource = {
+  id: true,
+  deskripsi: true,
+  deskripsiPenolakan: true,
+  jenis: true,
+  nipPemohon: true,
+  nipPic: true,
+  KasDetail: {
+    select: KasDetailLiteResource,
+  },
+  pemohon: {
+    select: PegawaiLiteResource,
+  },
+  perjalananId: true,
+  Perjalanan: {
+    select: PerjalananLiteResource,
+  },
+  pic: {
+    select: PegawaiLiteResource,
+  },
+  status: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  tanggalPelunasan: true,
+  tanggalPenolakan: true,
+  totalPelunasan: true,
+  DetailPengembalian: {
+    select: ReimburseDetailLiteResource,
+  },
+};
+
+export const PegawaiResource = {
+  nama: true,
+  nip: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  status: true,
+  peran: true,
+  nomorRekening: true,
+  Pengembalian: {
+    select: ReimburseLiteResource,
+  },
+  PengembalianPic: {
+    select: ReimburseLiteResource,
+  },
+  Team: {
+    select: TeamLiteResource,
+  },
+};
+
+export const TeamResource = {
+  id: true,
+  nama: true,
+  nipLeader: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  Pegawai: {
+    select: PegawaiLiteResource,
+  },
+};
+
+export const PeralatanKantorResource = {
+  DetailPengembalian: {
+    select: KasDetailLiteResource,
+  },
+  fileUrl: true,
+  harga: true,
+  deskripsi: true,
+  id: true,
   nama: true,
   tanggalDibuat: true,
   tanggalDiubah: true,
-  tanggalMulai: true,
-  tanggalSelesai: true,
 };
 
 export const PerjalananResource = {
@@ -95,5 +196,34 @@ export const PerjalananResource = {
   tanggalDiubah: true,
   tanggalMulai: true,
   tanggalSelesai: true,
-  Pengembalian: true,
+  Pengembalian: {
+    select: ReimburseLiteResource,
+  },
+};
+
+export const KasDetailResource = {
+  id: true,
+  deskripsi: true,
+  jenis: true,
+  kasId: true,
+  pengembalianId: true,
+  tanggalDibuat: true,
+  total: true,
+  kas: {
+    select: KasLiteResource,
+  },
+  pengembalian: {
+    select: ReimburseLiteResource,
+  },
+};
+
+export const KasResource = {
+  deskripsi: true,
+  id: true,
+  nama: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  KasDetail: {
+    select: KasDetailLiteResource,
+  },
 };
