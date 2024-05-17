@@ -1,13 +1,5 @@
+import { TeamModel } from 'api-hooks/team/model';
 import * as Yup from 'yup';
-
-export type TeamModel = {
-  id: string;
-  nama: string;
-  nip_leader: string;
-  nama_leader: string;
-  tanggal_dibuat: Date;
-  tanggal_diubah: Date;
-};
 
 export const TeamSchema = () =>
   Yup.object({

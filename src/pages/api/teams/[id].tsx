@@ -4,6 +4,7 @@ import { parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
+import { PegawaiLiteResource } from '../../../../prisma/resources';
 
 const teamSchema = Yup.object({
   nama: Yup.string().required(),
@@ -23,7 +24,9 @@ export default async function handler(
         id,
       },
       include: {
-        Pegawai: true,
+        Pegawai: {
+          select: PegawaiLiteResource,
+        },
       },
     });
 

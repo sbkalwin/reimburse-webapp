@@ -1,5 +1,5 @@
 import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
-import { TeamMinimalModel } from 'api-hooks/team/model';
+import { TeamLiteModel } from 'api-hooks/team/model';
 import { Expose, Type } from 'class-transformer';
 
 export class EmployeeLiteModel {
@@ -22,8 +22,8 @@ export class EmployeeLiteModel {
   @Expose({ name: 'team_id' })
   teamId: string | null;
 
-  @Type(() => TeamMinimalModel)
-  team: TeamMinimalModel | null;
+  @Type(() => TeamLiteModel)
+  team: TeamLiteModel | null;
 }
 
 export class EmployeeModel extends EmployeeLiteModel {

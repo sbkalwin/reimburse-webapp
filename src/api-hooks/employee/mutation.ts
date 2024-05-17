@@ -50,7 +50,7 @@ export function useDeleteEmployee(
   >,
 ) {
   return useMutation<ApiResult<any>, ApiError, EmployeeDeleteMutationInput>({
-    mutationFn(nip) {
+    mutationFn({ nip }) {
       return callApi({
         url: `${API_LIST.Users}/${nip}`,
         method: 'DELETE',
