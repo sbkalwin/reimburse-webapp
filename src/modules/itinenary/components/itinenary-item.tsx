@@ -1,19 +1,18 @@
 import { Flex, Text, Title } from '@mantine/core';
+import { ItinenaryLiteModel } from 'api-hooks/itinenary/model';
 import ListItem from 'components/common/list-item/list-item';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { ItinenaryModel } from './itinenary-form-type';
-
-export default function ItinenaryItem(props: ItinenaryModel) {
+export default function ItinenaryItem(props: ItinenaryLiteModel) {
   const { prefetch, push } = useRouter();
   const route = `${NavigationRoutes.itineraries}/${props.id}`;
   const dateFormating = (date: Date) => format(date, 'dd MMM yyyy');
   const label = [
-    dateFormating(props.tanggal_mulai),
-    dateFormating(props.tanggal_selesai),
+    dateFormating(props.tanggalMulai),
+    dateFormating(props.tanggalSelesai),
   ].join(' - ');
 
   React.useEffect(() => {

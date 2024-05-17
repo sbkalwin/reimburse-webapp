@@ -4,6 +4,7 @@ import { getDate, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
+import { PerjalananResource } from '../../../../prisma/resources';
 
 const perjalananSchema = Yup.object({
   nama: Yup.string().required(),
@@ -24,9 +25,7 @@ export default async function handler(
       where: {
         id,
       },
-      include: {
-        Pengembalian: true,
-      },
+      select: PerjalananResource,
     });
 
     if (!currentPerjalanan) {

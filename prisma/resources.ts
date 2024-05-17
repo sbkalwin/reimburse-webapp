@@ -76,3 +76,24 @@ export const PeralatanKantorResource = {
   tanggalDibuat: true,
   tanggalDiubah: true,
 };
+
+export const PerjalananLiteResource = {
+  id: true,
+  deskripsi: true,
+  nama: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  tanggalMulai: true,
+  tanggalSelesai: true,
+};
+
+export const PerjalananResource = {
+  id: true,
+  deskripsi: true,
+  nama: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
+  tanggalMulai: true,
+  tanggalSelesai: true,
+  Pengembalian: true,
+};
