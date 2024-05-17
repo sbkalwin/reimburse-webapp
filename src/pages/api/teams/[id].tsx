@@ -45,7 +45,8 @@ export default async function handler(
 
       const updateTeam = await prisma.team.update({
         data: {
-          ...team,
+          nama: team.nama,
+          nipLeader: team.nip_leader,
         },
         where: {
           id,

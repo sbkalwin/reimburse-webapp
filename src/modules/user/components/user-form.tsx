@@ -1,6 +1,7 @@
 import { SegmentedControl } from '@mantine/core';
 import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
 import { EmployeeModel } from 'api-hooks/employee/model';
+import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
@@ -47,6 +48,9 @@ export default function UserForm(props: UserFormProps) {
         await props.onSubmit(values);
       } catch (e) {
         console.error(e);
+        notification.error({
+          message: e.message,
+        });
       }
     },
     [props],

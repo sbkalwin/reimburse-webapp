@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from '@mantine/core';
 import { StationeryModel } from 'api-hooks/stationery/model';
+import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
@@ -42,6 +43,9 @@ export default function StationeryForm(props: StationeryFormProps) {
         await props.onSubmit(values);
       } catch (e) {
         console.error(e);
+        notification.error({
+          message: e.message,
+        });
       }
     },
     [props],
@@ -52,7 +56,7 @@ export default function StationeryForm(props: StationeryFormProps) {
       onSubmit={onSubmit}
       defaultEditable={!props.stationery}
     >
-      <FormLayout>
+      <FormLayout isEditable>
         <Flex direction="column" gap={16}>
           <Input
             type="text"

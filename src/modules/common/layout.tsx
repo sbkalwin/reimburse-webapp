@@ -42,7 +42,7 @@ export function FormLayout({
     <Button
       rightSection={<Disc size={16} />}
       type="submit"
-      loading={formState.isLoading}
+      loading={formState.isSubmitting}
     >
       Simpan
     </Button>

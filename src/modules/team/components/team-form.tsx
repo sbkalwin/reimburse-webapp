@@ -1,5 +1,6 @@
 import { Flex } from '@mantine/core';
 import { TeamModel } from 'api-hooks/team/model';
+import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
@@ -36,6 +37,9 @@ export default function TeamForm(props: TeamFormProps) {
         await props.onSubmit(values);
       } catch (e) {
         console.error(e);
+        notification.error({
+          message: e.message,
+        });
       }
     },
     [props],
