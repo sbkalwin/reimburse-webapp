@@ -5,7 +5,7 @@ import { parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
-import { TeamLiteResource } from '../../../../prisma/resources';
+import { PegawaiResource } from '../../../../prisma/resources';
 
 const karyawanSchema = Yup.object({
   // nip: Yup.string().default(''),
@@ -32,13 +32,7 @@ export default async function handler(
       where: {
         nip,
       },
-      include: {
-        Pengembalian: true,
-        PengembalianPic: true,
-        Team: {
-          select: TeamLiteResource,
-        },
-      },
+      select: PegawaiResource,
     });
 
     if (!currentKaryawan) {
@@ -65,18 +59,19 @@ export default async function handler(
         where: {
           nip,
         },
+        select: PegawaiResource,
       });
 
-      const { kataSandi, ...rest } = updateKaryawan;
       return response.status(200).json({
-        data: decamelizeKeys(rest),
+        data: decamelizeKeys(updateKaryawan),
         message: 'Pegawai berhasil diubah',
       });
     }
 
     if (request.method === 'GET') {
-      const { kataSandi, ...rest } = currentKaryawan;
-      return response.status(200).json({ data: decamelizeKeys(rest) });
+      return response
+        .status(200)
+        .json({ data: decamelizeKeys(currentKaryawan) });
     }
 
     if (request.method === 'DELETE') {

@@ -58,6 +58,7 @@ model PeralatanKantor {
   fileUrl            String               @map("file_url")
   tanggalDibuat      DateTime             @default(now()) @map("tanggal_dibuat")
   tanggalDiubah      DateTime             @updatedAt @map("tanggal_diubah")
+  deskripsi          String
   DetailPengembalian DetailPengembalian[]
 
   @@map("peralatan_kantor")

@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from '@mantine/core';
+import { StationeryModel } from 'api-hooks/stationery/model';
 import Form from 'components/form';
 import Input from 'components/input';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
@@ -9,11 +10,11 @@ import { useForm } from 'react-hook-form';
 import {
   StationeryFormSchema,
   StationeryFormType,
-  StationeryModel,
 } from './stationery-form-type';
 
 interface StationeryFormProps {
   stationery?: StationeryModel;
+  onSubmit: (values: StationeryFormType) => Promise<void>;
 }
 
 export default function StationeryForm(props: StationeryFormProps) {
@@ -22,8 +23,7 @@ export default function StationeryForm(props: StationeryFormProps) {
     return {
       deskripsi: stationery?.deskripsi ?? '',
       nama: stationery?.nama ?? '',
-      tanggal_diperbarui: stationery?.tanggal_diperbarui ?? new Date(),
-      file_url: stationery?.file_url ?? '',
+      file_url: stationery?.fileUrl ?? '',
       harga: (stationery?.harga ?? undefined) as any,
       data: stationery,
     };
@@ -37,8 +37,14 @@ export default function StationeryForm(props: StationeryFormProps) {
   });
 
   const onSubmit = React.useCallback(
-    async (values: StationeryFormType) => {},
-    [],
+    async (values: StationeryFormType) => {
+      try {
+        await props.onSubmit(values);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [props],
   );
   return (
     <Form

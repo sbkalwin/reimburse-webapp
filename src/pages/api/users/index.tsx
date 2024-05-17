@@ -5,6 +5,10 @@ import { generateId, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
+import {
+  PegawaiLiteResource,
+  PegawaiResource,
+} from '../../../../prisma/resources';
 
 const pegawaiSchema = Yup.object({
   // nip: Yup.string().default(''),
@@ -42,34 +46,21 @@ export default async function handler(
           teamId: user.team_id,
           nama: user.nama,
         },
+        select: PegawaiResource,
       });
-      const { kataSandi, ...rest } = newPegawai;
       return response.status(200).json({
-        data: decamelizeKeys(rest),
+        data: decamelizeKeys(newPegawai),
         message: 'Pegawai Berhasil Ditambah',
       });
     }
 
     if (request.method === 'GET') {
-      const users = (
-        await prisma.pegawai.findMany({
-          where: {
-            peran: role,
-            status,
-          },
-          include: {
-            Team: {
-              select: {
-                id: true,
-                nama: true,
-                tanggalDibuat: true,
-                tanggalDiubah: true,
-              },
-            },
-          },
-        })
-      ).map(({ kataSandi, ...rest }) => {
-        return rest;
+      const users = await prisma.pegawai.findMany({
+        where: {
+          peran: role,
+          status,
+        },
+        select: PegawaiLiteResource,
       });
 
       return response.status(200).json({ data: decamelizeKeys(users) });

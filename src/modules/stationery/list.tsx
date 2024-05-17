@@ -1,22 +1,23 @@
 import { Flex, TextInput } from '@mantine/core';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import { StationeryLiteModel } from 'api-hooks/stationery/model';
+import { useGetStationeries } from 'api-hooks/stationery/query';
+import LoaderView from 'components/loader-view';
 import React from 'react';
 
-import {
-  StationeryModel,
-  stationeries,
-} from './components/stationery-form-type';
 import StationeryItem from './components/stationery-item';
 
 export default function StationeryList() {
   const [search, setSearch] = React.useState('');
   const onSearch = React.useCallback(
-    (stationery: StationeryModel) => {
+    (stationery: StationeryLiteModel) => {
       const label = stationery.nama.toLowerCase();
       return label.includes(search.toLowerCase());
     },
     [search],
   );
+
+  const queryGetStationeries = useGetStationeries();
   return (
     <Flex direction="column" w="100%">
       <Flex pos="sticky" bg="white" top={0} p={16} style={{ zIndex: 10 }}>
@@ -28,9 +29,17 @@ export default function StationeryList() {
           w="100%"
         />
       </Flex>
-      {stationeries.filter(onSearch).map((stationery) => {
-        return <StationeryItem key={stationery.id} {...stationery} />;
-      })}
+      <LoaderView query={queryGetStationeries}>
+        {(data) => {
+          return (
+            <>
+              {data.filter(onSearch).map((stationery) => {
+                return <StationeryItem key={stationery.id} {...stationery} />;
+              })}
+            </>
+          );
+        }}
+      </LoaderView>
     </Flex>
   );
 }

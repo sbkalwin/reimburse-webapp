@@ -48,6 +48,7 @@ export default async function handler(
           fileUrl: peralatanKantor.file_url,
           harga: peralatanKantor.harga,
           nama: peralatanKantor.nama,
+          deskripsi: peralatanKantor.deskripsi,
         },
         where: {
           id,
@@ -61,9 +62,8 @@ export default async function handler(
     }
 
     if (request.method === 'GET') {
-      return response
-        .status(200)
-        .json({ data: decamelizeKeys(currentPeralatanKantor) });
+      const { DetailPengembalian, ...rest } = currentPeralatanKantor;
+      return response.status(200).json({ data: decamelizeKeys(rest) });
     }
 
     if (request.method === 'DELETE') {

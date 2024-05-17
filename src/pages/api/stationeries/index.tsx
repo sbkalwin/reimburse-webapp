@@ -4,11 +4,11 @@ import { generateId, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
+import { PeralatanKantorLiteResource } from '../../../../prisma/resources';
 
 const peralatanKantorFormSchema = Yup.object({
   nama: Yup.string().required(),
   deskripsi: Yup.string().default(''),
-  tanggal_diperbarui: Yup.date().default(new Date()),
   harga: Yup.number().required(),
   file_url: Yup.string().default(''),
 });
@@ -21,9 +21,7 @@ export default async function handler(
   try {
     if (request.method === 'GET') {
       const peralatanKantor = await prisma.peralatanKantor.findMany({
-        include: {
-          DetailPengembalian: true,
-        },
+        select: PeralatanKantorLiteResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(peralatanKantor),
@@ -38,6 +36,7 @@ export default async function handler(
           fileUrl: peralatanKantor.file_url,
           harga: peralatanKantor.harga,
           nama: peralatanKantor.nama,
+          deskripsi: peralatanKantor.deskripsi,
           id,
         },
       });
