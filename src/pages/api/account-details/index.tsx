@@ -22,10 +22,14 @@ export default async function handler(
   response: NextApiResponse,
 ) {
   const body = request.body;
+  const kas_id = request.query.kas_id as string | undefined;
   try {
     if (request.method === 'GET') {
       const kasDetail = await prisma.kasDetail.findMany({
         select: KasDetailLiteResource,
+        where: {
+          kasId: kas_id,
+        },
       });
       return response.status(200).json({
         data: decamelizeKeys(kasDetail),

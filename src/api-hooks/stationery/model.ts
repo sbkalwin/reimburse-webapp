@@ -1,4 +1,5 @@
 import { CommonModel } from 'api-hooks/common/model';
+import { ReimburseDetailLiteModel } from 'api-hooks/reimburse/model';
 import { Expose } from 'class-transformer';
 
 export class StationeryLiteModel extends CommonModel {
@@ -11,7 +12,7 @@ export class StationeryLiteModel extends CommonModel {
 }
 
 export class StationeryModel extends StationeryLiteModel {
-  DetailPengembalian: object[];
+  DetailPengembalian: ReimburseDetailLiteModel[];
 }
 
 export type getStationeriesInput = object;

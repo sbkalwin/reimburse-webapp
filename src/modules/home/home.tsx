@@ -80,12 +80,12 @@ export const userNavigationItems: NavigationItemType[] = [
 export default function Home() {
   const { user, handleUser, isAdmin, isUser } = useAuth();
 
-  // const { replace } = useRouter();
+  const { replace } = useRouter();
 
   const onLogout = React.useCallback(() => {
     handleUser(undefined);
-    // replace(NavigationRoutes.login);
-  }, [handleUser]);
+    replace(NavigationRoutes.login);
+  }, [handleUser, replace]);
 
   const logoutItem = (
     <Card
@@ -165,14 +165,14 @@ export default function Home() {
   const employeeStatistics = isAdmin && (
     <>
       <Title order={6}>Statistik Karyawan</Title>
-      <UsersStatistic users={[]} />
+      <UsersStatistic />
     </>
   );
 
   const reimburseStatistics = (isUser || isAdmin) && (
     <>
       {isAdmin && <Title order={6}>Statistik Reimburse</Title>}
-      {/* <UserStatistic userId={isAdmin ? undefined : user?.nip} /> */}
+      <UserStatistic userId={isAdmin ? undefined : user?.nip} />
     </>
   );
 

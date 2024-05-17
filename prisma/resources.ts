@@ -6,6 +6,16 @@ export const PegawaiLiteResource = {
   status: true,
   peran: true,
   nomorRekening: true,
+  teamId: true,
+  Team: {
+    select: {
+      id: true,
+      nama: true,
+      nipLeader: true,
+      tanggalDibuat: true,
+      tanggalDiubah: true,
+    },
+  },
 };
 
 export const PerjalananLiteResource = {
@@ -39,10 +49,11 @@ export const PeralatanKantorLiteResource = {
 export const KasDetailLiteResource = {
   id: true,
   deskripsi: true,
+  tanggalDibuat: true,
+  tanggalDiubah: true,
   jenis: true,
   kasId: true,
   pengembalianId: true,
-  tanggalDibuat: true,
   total: true,
 };
 
@@ -171,7 +182,15 @@ export const TeamResource = {
   tanggalDibuat: true,
   tanggalDiubah: true,
   Pegawai: {
-    select: PegawaiLiteResource,
+    select: {
+      nama: true,
+      nip: true,
+      tanggalDibuat: true,
+      tanggalDiubah: true,
+      status: true,
+      peran: true,
+      nomorRekening: true,
+    },
   },
 };
 

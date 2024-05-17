@@ -12,6 +12,7 @@ import NavigationRoutes from './common/side-navigation/navigations';
 export interface LoaderViewProps<T> {
   query: UseQueryResult<ApiResult<T>, ApiError>;
   children: (data: T) => React.ReactElement;
+  loadingComponent?: React.ReactElement;
 }
 
 export default function LoaderView<T>(props: LoaderViewProps<T>) {
@@ -60,9 +61,12 @@ export default function LoaderView<T>(props: LoaderViewProps<T>) {
   }, []);
 
   if (query.isFetching || query.isLoading) {
+    if (props.loadingComponent) return props.loadingComponent;
+
     if (isEdit) {
       return <AppLayout back>{loadingComponent}</AppLayout>;
     }
+
     return loadingComponent;
   }
 

@@ -1,14 +1,12 @@
 import { ActionIcon, Box, Button, Card, Flex, Text } from '@mantine/core';
 import { Plus, Trash } from '@phosphor-icons/react';
-import { string2money } from 'common/helpers/string';
+import { ReimburseTypeEnum } from 'api-hooks/reimburse/model';
 import { useFormState } from 'components/form';
 import Input from 'components/input';
-import { stationeries } from 'modules/stationery/components/stationery-form-type';
 import React from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
-import { ReimburseFormType, ReimburseTypeEnum } from './reimburse-form-type';
-
+import { ReimburseFormType } from './reimburse-form-type';
 export default function ReimburseDetailForm() {
   const { control, setValue } = useFormContext<ReimburseFormType>();
   const jenis = useWatch({
@@ -60,16 +58,7 @@ export default function ReimburseDetailForm() {
           setValue(`${parentName}.nama`, option.label);
           setValue(`${parentName}.subtotal`, option.price);
         }}
-        data={stationeries.map((stationery) => {
-          return {
-            value: stationery.id,
-            label: [
-              stationery.nama,
-              `Rp ${string2money(stationery.harga)}`,
-            ].join(' - '),
-            price: stationery.harga,
-          };
-        })}
+        data={[]}
       />
     ) : (
       <Input

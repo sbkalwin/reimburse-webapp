@@ -1,41 +1,9 @@
+import {
+  ReimburseModel,
+  ReimburseStatusEnum,
+  ReimburseTypeEnum,
+} from 'api-hooks/reimburse/model';
 import * as Yup from 'yup';
-
-export enum ReimburseStatusEnum {
-  pending = 'pending',
-  finished = 'finished',
-  rejected = 'rejected',
-}
-export enum ReimburseTypeEnum {
-  itinerary = 'itinerary',
-  stationery = 'stationery',
-}
-
-export type ReimburseDetailModel = {
-  id: string;
-  peralatan_kantor_id: string | null;
-  nama: string;
-  deskripsi: string;
-  file_url: string;
-  subtotal: number;
-};
-
-export type ReimburseModel = {
-  id: string;
-  perjalanan_id: string | null;
-  deskripsi: string;
-  status: ReimburseStatusEnum;
-  jenis: ReimburseTypeEnum;
-  nip_pemohon: string; // yang minta reimburse
-  nip_pic: string | null; //penanggung jawab (yg acc reimburse)
-  tanggal_dibuat: Date;
-  tanggal_diubah: Date;
-  tanggal_pelunasan: Date | null;
-  total_pelunasan: number | null;
-  tanggal_penolakan: Date | null;
-  deskripsi_penolakan: string | null;
-
-  details: ReimburseDetailModel[];
-};
 
 export const ReimburseDetailFormSchema = () =>
   Yup.object({

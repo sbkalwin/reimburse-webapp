@@ -1,4 +1,5 @@
 import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
+import { ReimburseLiteModel } from 'api-hooks/reimburse/model';
 import { TeamLiteModel } from 'api-hooks/team/model';
 import { Expose, Type } from 'class-transformer';
 
@@ -27,10 +28,13 @@ export class EmployeeLiteModel {
 }
 
 export class EmployeeModel extends EmployeeLiteModel {
-  pengembalian: object[];
+  @Type(() => TeamLiteModel)
+  Team: TeamLiteModel;
+
+  pengembalian: ReimburseLiteModel[];
 
   @Expose({ name: 'pengembalian_pic' })
-  pengembalianPic: object[];
+  pengembalianPic: ReimburseLiteModel[];
 }
 
 export type getEmployeesInput = {

@@ -1,4 +1,5 @@
 import { CommonModel } from 'api-hooks/common/model';
+import { ReimburseLiteModel } from 'api-hooks/reimburse/model';
 import { Expose, Type } from 'class-transformer';
 
 export class ItinenaryLiteModel extends CommonModel {
@@ -15,7 +16,7 @@ export class ItinenaryLiteModel extends CommonModel {
 }
 
 export class ItinenaryModel extends ItinenaryLiteModel {
-  Pengembalian: object[];
+  Pengembalian: ReimburseLiteModel[];
 }
 
 export type getItinenariesInput = {

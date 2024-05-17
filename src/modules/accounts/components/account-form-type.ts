@@ -1,30 +1,9 @@
-import { ReimburseModel } from 'modules/reimburse/components/reimburse-form-type';
+import {
+  AccountDetailModel,
+  AccountDetailTypeEnum,
+  AccountModel,
+} from 'api-hooks/account/model';
 import * as Yup from 'yup';
-
-export enum AccountDetailTypeEnum {
-  outcome = 'outcome',
-  income = 'income',
-}
-
-export type AccountDetailModel = {
-  id: string;
-  kas_id: string;
-  reimburse: ReimburseModel | null;
-  deskripsi: string;
-  jenis: AccountDetailTypeEnum;
-  total: number;
-  tanggal_dibuat: Date;
-  tanggal_diubah: Date;
-};
-
-export type AccountModel = {
-  id: string;
-  nama: string;
-  deskripsi: string;
-  tanggal_dibuat: Date;
-  tanggal_diubah: Date;
-  details: AccountDetailModel[];
-};
 
 export const AccountDetailFormSchema = () =>
   Yup.object({

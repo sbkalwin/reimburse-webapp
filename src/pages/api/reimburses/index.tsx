@@ -1,7 +1,7 @@
 import { ReimburseStatusEnum, ReimburseTypeEnum } from '@prisma/client';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { generateId, parseValidationError } from 'utils/server';
+import { generateId, getFilterDate, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -34,10 +34,22 @@ export default async function handler(
   response: NextApiResponse,
 ) {
   const body = request.body;
+  const nip_pemohon = request.query.nip_pemohon as string | undefined;
+
+  const tanggal_mulai = request.query.tanggal_mulai as string | undefined;
+  const tanggal_selesai = request.query.tanggal_selesai as string | undefined;
+
   try {
     if (request.method === 'GET') {
       const pengembalian = await prisma.pengembalian.findMany({
         select: ReimburseLiteResource,
+        where: {
+          nipPemohon: nip_pemohon,
+          tanggalDibuat: {
+            lte: getFilterDate(tanggal_selesai),
+            gte: getFilterDate(tanggal_mulai),
+          },
+        },
       });
       return response.status(200).json({
         data: decamelizeKeys(pengembalian),
