@@ -108,7 +108,7 @@ export default function ReimburseList() {
           ]}
         />
       </Flex>
-      <LoaderView query={queryGetReimburses}>
+      <LoaderView query={queryGetReimburses} isCompact>
         {(data) => {
           const reimburse = data.filter(onSearchUser).filter(onSearchStatus);
           return (

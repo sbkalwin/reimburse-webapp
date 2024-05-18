@@ -198,7 +198,7 @@ export default function Home() {
         </SimpleGrid>
       )}
       {!user && (
-        <Flex w="100%" my={24} gap={24}>
+        <Flex w="100%" my="auto" gap={24}>
           {loginUser}
         </Flex>
       )}

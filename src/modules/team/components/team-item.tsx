@@ -1,8 +1,8 @@
 import { Flex, Text, Title } from '@mantine/core';
 import { TeamModel } from 'api-hooks/team/model';
+import { formatDate } from 'common/helpers/string';
 import ListItem from 'components/common/list-item/list-item';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
-import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -29,7 +29,7 @@ export default function TeamItem(props: TeamModel) {
       <Flex direction="column">
         <Title order={6}>{props.nama}</Title>
         {leaderComponent}
-        <Text fz={11}>{format(props.tanggalDibuat, 'dd MMM yyyy')}</Text>
+        <Text fz={11}>{formatDate(props.tanggalDibuat)}</Text>
       </Flex>
     </ListItem>
   );

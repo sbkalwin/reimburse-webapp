@@ -1,7 +1,7 @@
 import { Flex, Text } from '@mantine/core';
 import { ReimburseTypeEnum } from 'api-hooks/reimburse/model';
 import Input from 'components/input';
-import { format } from 'date-fns';
+import ItinenarySelect from 'modules/select/itinenary-select';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ReimburseFormType } from './reimburse-form-type';
@@ -16,21 +16,10 @@ function SelectItinery() {
   switch (type) {
     case ReimburseTypeEnum.itinerary:
       return (
-        <Input
-          type="select"
+        <ItinenarySelect
           name="perjalanan_id"
           label="Perjalanan"
           placeholder="Masukkan Perjalanan"
-          data={[].map((item) => {
-            return {
-              label: [
-                item.nama,
-                format(item.tanggal_mulai, 'dd MMM yyyy'),
-                format(item.tanggal_selesai, 'dd MMM yyyy'),
-              ].join(' - '),
-              value: item.id,
-            };
-          })}
         />
       );
     case ReimburseTypeEnum.stationery:

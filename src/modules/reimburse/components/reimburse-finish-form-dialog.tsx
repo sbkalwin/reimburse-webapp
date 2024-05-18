@@ -2,6 +2,7 @@ import { Button, Flex, SimpleGrid } from '@mantine/core';
 import Form from 'components/form';
 import Input from 'components/input';
 import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
+import AccountSelect from 'modules/select/account-select';
 import React from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 
@@ -54,13 +55,7 @@ export default function ReimburseFinishFormDialog(props: {
           label="Tanggal Pelunasan"
           placeholder="Tanggal Pelunasan"
         />
-        <Input
-          type="select"
-          name="kas_id"
-          label="Kas"
-          placeholder="Pilih Kas"
-          data={[]}
-        />
+        <AccountSelect name="kas_id" label="Kas" placeholder="Pilih Kas" />
         <Input
           type="text"
           name="deskripsi"
@@ -77,7 +72,15 @@ export default function ReimburseFinishFormDialog(props: {
           <Button onClick={props.onClose} type="button" color="red">
             Batal
           </Button>
-          <Button type="submit">Simpan</Button>
+          <Button
+            type="button"
+            loading={methods.formState.isSubmitting}
+            onClick={() => {
+              methods.handleSubmit(onSubmit)();
+            }}
+          >
+            Simpan
+          </Button>
         </SimpleGrid>
       </Flex>
     </Form>

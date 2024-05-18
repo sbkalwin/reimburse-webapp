@@ -49,7 +49,15 @@ export default function ReimburseRejectFormDialog(props: {
           <Button onClick={props.onClose} type="button" color="red">
             Batal
           </Button>
-          <Button type="submit">Simpan</Button>
+          <Button
+            type="button"
+            loading={methods.formState.isSubmitting}
+            onClick={() => {
+              methods.handleSubmit(onSubmit)();
+            }}
+          >
+            Simpan
+          </Button>
         </SimpleGrid>
       </Flex>
     </Form>

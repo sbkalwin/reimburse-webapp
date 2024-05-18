@@ -3,10 +3,9 @@ import {
   ReimburseLiteModel,
   ReimburseStatusEnum,
 } from 'api-hooks/reimburse/model';
-import { string2money } from 'common/helpers/string';
+import { formatDateTime, string2money } from 'common/helpers/string';
 import ListItem from 'components/common/list-item/list-item';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
-import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -41,16 +40,14 @@ export default function ReimburseItem(props: ReimburseLiteModel) {
     if (props.tanggalPenolakan) {
       return (
         <Text fz={11}>
-          Tanggal Penolakan:{' '}
-          {format(props.tanggalPenolakan, 'dd MMM yyy, HH:mm')}
+          Tanggal Penolakan: {formatDateTime(props.tanggalPenolakan)}
         </Text>
       );
     }
     if (props.tanggalPelunasan) {
       return (
         <Text fz={11}>
-          Tanggal Diterima:{' '}
-          {format(props.tanggalPelunasan, 'dd MMM yyy, HH:mm')}
+          Tanggal Diterima: {formatDateTime(props.tanggalPelunasan)}
         </Text>
       );
     }
@@ -89,7 +86,7 @@ export default function ReimburseItem(props: ReimburseLiteModel) {
         <Title order={6}>{requesterLabel}</Title>
         <Text fz={11}>Jenis Reimburse: {props.jenis}</Text>
         <Text fz={11} pos="absolute" right={16} bottom={16}>
-          {format(props.tanggalDibuat, 'dd MMM yyy, HH:mm')}
+          {formatDateTime(props.tanggalDibuat)}
         </Text>
         {rejectedComponent}
         {respondenComponent}
