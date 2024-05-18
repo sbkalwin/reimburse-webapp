@@ -1,7 +1,9 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Flex, Text } from '@mantine/core';
+import { StationeryModel } from 'api-hooks/stationery/model';
+import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -9,11 +11,11 @@ import { useForm } from 'react-hook-form';
 import {
   StationeryFormSchema,
   StationeryFormType,
-  StationeryModel,
 } from './stationery-form-type';
 
 interface StationeryFormProps {
   stationery?: StationeryModel;
+  onSubmit: (values: StationeryFormType) => Promise<void>;
 }
 
 export default function StationeryForm(props: StationeryFormProps) {
@@ -22,23 +24,29 @@ export default function StationeryForm(props: StationeryFormProps) {
     return {
       deskripsi: stationery?.deskripsi ?? '',
       nama: stationery?.nama ?? '',
-      tanggal_diperbarui: stationery?.tanggal_diperbarui ?? new Date(),
-      file_url: stationery?.file_url ?? '',
+      file_url: stationery?.fileUrl ?? '',
       harga: (stationery?.harga ?? undefined) as any,
       data: stationery,
     };
   }, [stationery]);
 
-  const resolver = useYupValidationResolver(StationeryFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(StationeryFormSchema()),
   });
 
   const onSubmit = React.useCallback(
-    async (values: StationeryFormType) => {},
-    [],
+    async (values: StationeryFormType) => {
+      try {
+        await props.onSubmit(values);
+      } catch (e) {
+        console.error(e);
+        notification.error({
+          message: e.message,
+        });
+      }
+    },
+    [props],
   );
   return (
     <Form
@@ -46,7 +54,7 @@ export default function StationeryForm(props: StationeryFormProps) {
       onSubmit={onSubmit}
       defaultEditable={!props.stationery}
     >
-      <FormLayout>
+      <FormLayout isEditable>
         <Flex direction="column" gap={16}>
           <Input
             type="text"

@@ -1,29 +1,26 @@
 import { Flex, Text, Title } from '@mantine/core';
-import { string2money } from 'common/helpers/string';
+import {
+  ReimburseLiteModel,
+  ReimburseStatusEnum,
+} from 'api-hooks/reimburse/model';
+import { formatDateTime, string2money } from 'common/helpers/string';
 import ListItem from 'components/common/list-item/list-item';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
-import { format } from 'date-fns';
-import { employees } from 'modules/user/components/user-form-type';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { ReimburseModel, ReimburseStatusEnum } from './reimburse-form-type';
 import ReimburseStatusBadge from './reimburse-status-badge';
 
-export default function ReimburseItem(props: ReimburseModel) {
+export default function ReimburseItem(props: ReimburseLiteModel) {
   const { prefetch, push } = useRouter();
   const route = `${NavigationRoutes.reimburses}/${props.id}`;
   React.useEffect(() => {
     prefetch(route);
   }, [prefetch, route]);
 
-  const requester = employees.find(
-    (employee) => employee.nip === props.nip_pemohon,
-  );
+  const requester = props.pemohon;
 
-  const responden = employees.find(
-    (employee) => employee.nip === props.nip_pic,
-  );
+  const responden = props.pic;
 
   const respondenLabel = [responden?.nip, responden?.nama]
     .filter(Boolean)
@@ -33,33 +30,28 @@ export default function ReimburseItem(props: ReimburseModel) {
     .filter(Boolean)
     .join(' - ');
 
-  const total = props.details.reduce(
-    (prev, detail) => prev + detail.subtotal,
-    0,
-  );
+  const total = 0;
 
-  const rejectedComponent = props.deskripsi_penolakan && (
-    <Text fz={11}>Alasan Ditolak: {props.deskripsi_penolakan}</Text>
+  const rejectedComponent = props.deskripsiPenolakan && (
+    <Text fz={11}>Alasan Ditolak: {props.deskripsiPenolakan}</Text>
   );
 
   const timeComponent = React.useMemo(() => {
-    if (props.tanggal_penolakan) {
+    if (props.tanggalPenolakan) {
       return (
         <Text fz={11}>
-          Tanggal Penolakan:{' '}
-          {format(props.tanggal_penolakan, 'dd MMM yyy, HH:mm')}
+          Tanggal Penolakan: {formatDateTime(props.tanggalPenolakan)}
         </Text>
       );
     }
-    if (props.tanggal_pelunasan) {
+    if (props.tanggalPelunasan) {
       return (
         <Text fz={11}>
-          Tanggal Diterima:{' '}
-          {format(props.tanggal_pelunasan, 'dd MMM yyy, HH:mm')}
+          Tanggal Diterima: {formatDateTime(props.tanggalPelunasan)}
         </Text>
       );
     }
-  }, [props.tanggal_pelunasan, props.tanggal_penolakan]);
+  }, [props.tanggalPelunasan, props.tanggalPenolakan]);
 
   const respondenComponent = React.useMemo(() => {
     if (!respondenLabel) return null;
@@ -74,9 +66,9 @@ export default function ReimburseItem(props: ReimburseModel) {
     }
   }, [props.status, respondenLabel]);
 
-  const finishedAmountComponent = props.total_pelunasan && (
+  const finishedAmountComponent = props.totalPelunasan && (
     <Text fz={11}>
-      Total Pelunasan: Rp. {string2money(props.total_pelunasan)}
+      Total Pelunasan: Rp. {string2money(props.totalPelunasan)}
     </Text>
   );
   return (
@@ -94,7 +86,7 @@ export default function ReimburseItem(props: ReimburseModel) {
         <Title order={6}>{requesterLabel}</Title>
         <Text fz={11}>Jenis Reimburse: {props.jenis}</Text>
         <Text fz={11} pos="absolute" right={16} bottom={16}>
-          {format(props.tanggal_dibuat, 'dd MMM yyy, HH:mm')}
+          {formatDateTime(props.tanggalDibuat)}
         </Text>
         {rejectedComponent}
         {respondenComponent}

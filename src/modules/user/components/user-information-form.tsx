@@ -1,13 +1,10 @@
 import { Flex } from '@mantine/core';
+import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
 import Input from 'components/input';
-import { teams } from 'modules/team/components/team-form-type';
+import TeamSelect from 'modules/select/team-select';
 import { useFormContext } from 'react-hook-form';
 
-import {
-  EmployeeFormType,
-  EmployeeRoleEnum,
-  EmployeeStatusEnum,
-} from './user-form-type';
+import { EmployeeFormType } from './user-form-type';
 
 export default function UserInformationForm() {
   const { getValues } = useFormContext<EmployeeFormType>();
@@ -31,20 +28,7 @@ export default function UserInformationForm() {
         placeholder="Masukkan Peran"
         data={[EmployeeRoleEnum.admin, EmployeeRoleEnum.user]}
       />
-      <Input
-        searchable
-        clearable
-        type="select"
-        name="team_id"
-        label="Team"
-        placeholder="Masukkan Team"
-        data={teams.map((team) => {
-          return {
-            value: team.id,
-            label: team.nama,
-          };
-        })}
-      />
+      <TeamSelect name="team_id" label="Team" placeholder="Masukkan Team" />
       <Input
         type="select"
         name="status"

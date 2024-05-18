@@ -1,20 +1,29 @@
-import { Button, Flex, Modal, Title } from '@mantine/core';
+import { Button, Flex, Modal, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Plus } from '@phosphor-icons/react';
+import { AccountDetailLiteModel, AccountModel } from 'api-hooks/account/model';
+import {
+  useGetAccountDetail,
+  useGetAccountDetails,
+} from 'api-hooks/account/query';
+import colors from 'common/styles/colors';
+import LoaderView from 'components/loader-view';
 import AccountDetailForm from 'modules/accounts/components/account-detail-form';
 import AccountDetailItem from 'modules/accounts/components/account-detail-item';
-import {
-  AccountDetailModel,
-  AccountModel,
-  accountDetails,
-} from 'modules/accounts/components/account-form-type';
 import React from 'react';
 
 export default function AccountDetailList(props: { account: AccountModel }) {
   const [accountDetail, setAccountDetail] = React.useState<
-    AccountDetailModel | undefined
+    AccountDetailLiteModel | undefined
   >(undefined);
   const [isOpenForm, { close, open }] = useDisclosure(false);
+  const queryGetAccountDetails = useGetAccountDetails({
+    params: { kas_id: props.account.id },
+  });
+
+  const queryGetAccountDetail = useGetAccountDetail({
+    input: { id: accountDetail?.id },
+  });
 
   return (
     <>
@@ -32,18 +41,31 @@ export default function AccountDetailList(props: { account: AccountModel }) {
             Tambah Transaksi
           </Button>
         </Flex>
-        {accountDetails.map((accountDetail) => {
-          return (
-            <AccountDetailItem
-              key={accountDetail.id}
-              data={accountDetail}
-              onClick={() => {
-                setAccountDetail(accountDetail);
-                open();
-              }}
-            />
-          );
-        })}
+        <LoaderView isCompact query={queryGetAccountDetails}>
+          {(data) => {
+            return (
+              <>
+                {data.length === 0 && (
+                  <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
+                    No Result Found
+                  </Text>
+                )}
+                {data.map((accountDetail) => {
+                  return (
+                    <AccountDetailItem
+                      key={accountDetail.id}
+                      data={accountDetail}
+                      onClick={() => {
+                        setAccountDetail(accountDetail);
+                        open();
+                      }}
+                    />
+                  );
+                })}
+              </>
+            );
+          }}
+        </LoaderView>
       </Flex>
       <Modal
         onClose={close}
@@ -54,12 +76,23 @@ export default function AccountDetailList(props: { account: AccountModel }) {
         }
         centered
         opened={isOpenForm}
+        withinPortal
       >
-        <AccountDetailForm
-          account={props.account}
-          onClose={close}
-          accountDetail={accountDetail}
-        />
+        {accountDetail ? (
+          <LoaderView query={queryGetAccountDetail} isCompact>
+            {(data) => {
+              return (
+                <AccountDetailForm
+                  account={props.account}
+                  onClose={close}
+                  accountDetail={data}
+                />
+              );
+            }}
+          </LoaderView>
+        ) : (
+          <AccountDetailForm account={props.account} onClose={close} />
+        )}
       </Modal>
     </>
   );
