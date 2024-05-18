@@ -71,14 +71,15 @@ export default function UserList() {
       </Flex>
       <LoaderView query={queryGetEmployees}>
         {(data) => {
+          const result = data.filter(onSearch);
           return (
             <>
-              {data.length === 0 && (
+              {result.length === 0 && (
                 <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
                   No Result Found
                 </Text>
               )}
-              {data.filter(onSearch).map((employee) => {
+              {result.map((employee) => {
                 return <UserItem key={employee.nip} {...employee} />;
               })}
             </>

@@ -1,7 +1,8 @@
-import { Loader, Text } from '@mantine/core';
+import { Center, Flex, Loader, Text } from '@mantine/core';
 import { X } from '@phosphor-icons/react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { ApiError, ApiResult } from 'api-hooks/common/model';
+import notification from 'common/helpers/notifications';
 import colors from 'common/styles/colors';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -12,11 +13,11 @@ import NavigationRoutes from './common/side-navigation/navigations';
 export interface LoaderViewProps<T> {
   query: UseQueryResult<ApiResult<T>, ApiError>;
   children: (data: T) => React.ReactElement;
-  loadingComponent?: React.ReactElement;
+  isCompact?: boolean;
 }
 
 export default function LoaderView<T>(props: LoaderViewProps<T>) {
-  const { query, children } = props;
+  const { query, children, isCompact = false } = props;
   const { pathname } = useRouter();
 
   const isEdit = React.useMemo(() => {
@@ -45,11 +46,10 @@ export default function LoaderView<T>(props: LoaderViewProps<T>) {
     return (
       <div
         style={{
-          position: 'fixed',
+          position: 'absolute',
           inset: 0,
           minHeight: '100dvh',
           minWidth: '100dvw',
-          zIndex: 2,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -61,7 +61,14 @@ export default function LoaderView<T>(props: LoaderViewProps<T>) {
   }, []);
 
   if (query.isFetching || query.isLoading) {
-    if (props.loadingComponent) return props.loadingComponent;
+    if (isCompact)
+      return (
+        <>
+          <Center>
+            <Loader size={24} />
+          </Center>
+        </>
+      );
 
     if (isEdit) {
       return <AppLayout back>{loadingComponent}</AppLayout>;
@@ -71,14 +78,21 @@ export default function LoaderView<T>(props: LoaderViewProps<T>) {
   }
 
   if (query.status === 'error') {
+    notification.error({ message: query.error?.message });
+
     const errorComponent = (
-      <>
+      <Flex direction="column" align="center">
         <X color={colors.sentimentNegative} size={24} weight="bold" />
-        <Text c={colors.sentimentNegative} fz={16} mt={8}>
+        <Text c={colors.sentimentNegative} maw={768} ta="center" fz={16} mt={8}>
           {query.error?.message}
         </Text>
-      </>
+      </Flex>
     );
+
+    if (isCompact) {
+      return errorComponent;
+    }
+
     if (isEdit) {
       return (
         <AppLayout back>
@@ -100,11 +114,10 @@ export default function LoaderView<T>(props: LoaderViewProps<T>) {
       return (
         <div
           style={{
-            position: 'fixed',
+            position: 'absolute',
             inset: 0,
             minHeight: '100dvh',
             minWidth: '100dvw',
-            zIndex: 2,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

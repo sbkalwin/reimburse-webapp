@@ -1,4 +1,4 @@
-import { Button, Center, Flex, Loader, Modal, Title } from '@mantine/core';
+import { Button, Flex, Modal, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Plus } from '@phosphor-icons/react';
 import { AccountDetailLiteModel, AccountModel } from 'api-hooks/account/model';
@@ -6,6 +6,7 @@ import {
   useGetAccountDetail,
   useGetAccountDetails,
 } from 'api-hooks/account/query';
+import colors from 'common/styles/colors';
 import LoaderView from 'components/loader-view';
 import AccountDetailForm from 'modules/accounts/components/account-detail-form';
 import AccountDetailItem from 'modules/accounts/components/account-detail-item';
@@ -24,11 +25,6 @@ export default function AccountDetailList(props: { account: AccountModel }) {
     input: { id: accountDetail?.id },
   });
 
-  const loadingComponent = (
-    <Center>
-      <Loader size={24} />
-    </Center>
-  );
   return (
     <>
       <Flex direction="column">
@@ -45,13 +41,15 @@ export default function AccountDetailList(props: { account: AccountModel }) {
             Tambah Transaksi
           </Button>
         </Flex>
-        <LoaderView
-          loadingComponent={loadingComponent}
-          query={queryGetAccountDetails}
-        >
+        <LoaderView isCompact query={queryGetAccountDetails}>
           {(data) => {
             return (
               <>
+                {data.length === 0 && (
+                  <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
+                    No Result Found
+                  </Text>
+                )}
                 {data.map((accountDetail) => {
                   return (
                     <AccountDetailItem
@@ -81,10 +79,7 @@ export default function AccountDetailList(props: { account: AccountModel }) {
         withinPortal
       >
         {accountDetail ? (
-          <LoaderView
-            query={queryGetAccountDetail}
-            loadingComponent={loadingComponent}
-          >
+          <LoaderView query={queryGetAccountDetail} isCompact>
             {(data) => {
               return (
                 <AccountDetailForm

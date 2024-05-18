@@ -48,17 +48,39 @@ export default async function handler(
       });
     }
 
-    if (request.method === 'GET') {
-      const perjalanan = await prisma.perjalanan.findMany({
-        where: {
-          AND: {
+    const tanggalMulai = getFilterDate(tanggal_mulai);
+    const tanggalSelesai = getFilterDate(tanggal_selesai);
+
+    const filterRange =
+      tanggalMulai && tanggalSelesai
+        ? {
             tanggalMulai: {
               gte: getFilterDate(tanggal_mulai),
             },
             tanggalSelesai: {
               lte: getFilterDate(tanggal_selesai),
             },
-          },
+          }
+        : undefined;
+
+    const filterTanggalMulai = tanggalSelesai
+      ? undefined
+      : {
+          equals: getFilterDate(tanggal_mulai),
+        };
+
+    const filterTanggalSelesai = tanggalMulai
+      ? undefined
+      : {
+          equals: getFilterDate(tanggal_selesai),
+        };
+
+    if (request.method === 'GET') {
+      const perjalanan = await prisma.perjalanan.findMany({
+        where: {
+          AND: filterRange,
+          tanggalMulai: filterTanggalMulai,
+          tanggalSelesai: filterTanggalSelesai,
           nama: {
             contains: nama,
             mode: 'insensitive',

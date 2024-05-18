@@ -1,4 +1,4 @@
-import { Card, Center, Loader, SimpleGrid, Text } from '@mantine/core';
+import { Card, SimpleGrid, Text } from '@mantine/core';
 import { FileMinus, FilePlus, FileText } from '@phosphor-icons/react';
 import {
   AccountDetailTypeEnum,
@@ -16,16 +16,8 @@ export interface AccountStatisticProps {
 export default function AccountStatistic(props: AccountStatisticProps) {
   const queryGetAccountDetails = useGetAccountDetails();
 
-  const loadingComponent = (
-    <Center>
-      <Loader size={24} />
-    </Center>
-  );
   return (
-    <LoaderView
-      query={queryGetAccountDetails}
-      loadingComponent={loadingComponent}
-    >
+    <LoaderView query={queryGetAccountDetails} isCompact>
       {(data) => {
         const income = data
           .filter((data) => data.jenis === AccountDetailTypeEnum.income)

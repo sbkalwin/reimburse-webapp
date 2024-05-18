@@ -1,4 +1,4 @@
-import { Card, Center, Flex, Loader, SimpleGrid, Text } from '@mantine/core';
+import { Card, Flex, SimpleGrid, Text } from '@mantine/core';
 import {
   CheckCircle,
   ClockClockwise,
@@ -34,14 +34,8 @@ export default function UserStatistic(props: UserStatisticProps) {
   const filterWithRejected = (reimburse: ReimburseLiteModel) =>
     reimburse.status === ReimburseStatusEnum.rejected;
 
-  const loadingComponent = (
-    <Center>
-      <Loader size={24} />
-    </Center>
-  );
-
   return (
-    <LoaderView query={queryGetReimburses} loadingComponent={loadingComponent}>
+    <LoaderView query={queryGetReimburses} isCompact>
       {(data) => {
         const all = data.filter(filterByUser).length;
 

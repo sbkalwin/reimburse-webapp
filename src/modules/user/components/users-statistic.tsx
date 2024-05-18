@@ -1,4 +1,4 @@
-import { Card, Center, Loader, SimpleGrid, Text } from '@mantine/core';
+import { Card, SimpleGrid, Text } from '@mantine/core';
 import { CheckCircle, UsersFour, XCircle } from '@phosphor-icons/react';
 import { EmployeeStatusEnum } from 'api-hooks/auth/model';
 import { useGetEmployees } from 'api-hooks/employee/query';
@@ -13,14 +13,8 @@ export default function UsersStatistic(props: UsersStatisticProps) {
 
   const queryGetEmployee = useGetEmployees();
 
-  const loadingComponent = (
-    <Center>
-      <Loader size={24} />
-    </Center>
-  );
-
   return (
-    <LoaderView query={queryGetEmployee} loadingComponent={loadingComponent}>
+    <LoaderView query={queryGetEmployee} isCompact>
       {(data) => {
         const all = data.length;
         const active = data.filter(filterByActive).length;

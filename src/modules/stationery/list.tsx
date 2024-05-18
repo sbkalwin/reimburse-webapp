@@ -1,7 +1,8 @@
-import { Flex, TextInput } from '@mantine/core';
+import { Flex, Text, TextInput } from '@mantine/core';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { StationeryLiteModel } from 'api-hooks/stationery/model';
 import { useGetStationeries } from 'api-hooks/stationery/query';
+import colors from 'common/styles/colors';
 import LoaderView from 'components/loader-view';
 import React from 'react';
 
@@ -31,9 +32,15 @@ export default function StationeryList() {
       </Flex>
       <LoaderView query={queryGetStationeries}>
         {(data) => {
+          const result = data.filter(onSearch);
           return (
             <>
-              {data.filter(onSearch).map((stationery) => {
+              {result.length === 0 && (
+                <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
+                  No Result Found
+                </Text>
+              )}
+              {result.map((stationery) => {
                 return <StationeryItem key={stationery.id} {...stationery} />;
               })}
             </>

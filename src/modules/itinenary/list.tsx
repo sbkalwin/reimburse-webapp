@@ -1,8 +1,9 @@
-import { Flex, SimpleGrid, TextInput } from '@mantine/core';
+import { Flex, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { ItinenaryLiteModel } from 'api-hooks/itinenary/model';
 import { useGetItinenaries } from 'api-hooks/itinenary/query';
+import colors from 'common/styles/colors';
 import LoaderView from 'components/loader-view';
 import React from 'react';
 
@@ -56,6 +57,7 @@ export default function ItinenaryList() {
               centered: true,
             }}
             onChange={setTanggalMulai}
+            clearable
           />
           <DatePickerInput
             label="Tanggal Selesai"
@@ -65,14 +67,21 @@ export default function ItinenaryList() {
               centered: true,
             }}
             onChange={setTanggalSelesai}
+            clearable
           />
         </SimpleGrid>
       </Flex>
       <LoaderView query={queryGetItinenaries}>
         {(data) => {
+          const result = data.filter(onSearch);
           return (
             <>
-              {data.filter(onSearch).map((itinenary) => {
+              {result.length === 0 && (
+                <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
+                  No Result Found
+                </Text>
+              )}
+              {result.map((itinenary) => {
                 return <ItinenaryItem key={itinenary.id} {...itinenary} />;
               })}
             </>
