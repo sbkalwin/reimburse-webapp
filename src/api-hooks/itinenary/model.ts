@@ -16,7 +16,8 @@ export class ItinenaryLiteModel extends CommonModel {
 }
 
 export class ItinenaryModel extends ItinenaryLiteModel {
-  Pengembalian: ReimburseLiteModel[];
+  @Type(() => ReimburseLiteModel)
+  pengembalian: ReimburseLiteModel[];
 }
 
 export type getItinenariesInput = {

@@ -1,7 +1,7 @@
 import { AccountDetailTypeEnum } from '@prisma/client';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { generateId, parseValidationError } from 'utils/server';
+import { generateId, middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -35,7 +35,7 @@ export default async function handler(
         data: decamelizeKeys(kasDetail),
       });
     }
-
+    middleware(request, response, true);
     if (request.method === 'POST') {
       const kasDetail = await kasDetailSchema.validate(body);
       const id = generateId();

@@ -52,7 +52,7 @@ export function useDeleteTeam(
   return useMutation<ApiResult<any>, ApiError, TeamDeleteMutationInput>({
     mutationFn({ id }) {
       return callApi({
-        url: `${API_LIST.Teams}/${id}}`,
+        url: `${API_LIST.Teams}/${id}`,
         method: 'DELETE',
       });
     },

@@ -1,5 +1,5 @@
 import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
-import { EmployeeModel } from 'api-hooks/employee/model';
+import { EmployeeLiteModel, EmployeeModel } from 'api-hooks/employee/model';
 import * as Yup from 'yup';
 
 export const EmployeeFormSchema = () =>
@@ -20,5 +20,5 @@ export const EmployeeFormSchema = () =>
 export type EmployeeFormType = Yup.InferType<
   ReturnType<typeof EmployeeFormSchema>
 > & {
-  data?: EmployeeModel;
+  data?: EmployeeModel | EmployeeLiteModel;
 };

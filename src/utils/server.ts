@@ -40,7 +40,7 @@ export function generateAccessToken(data: {
   nomorRekening: string;
   tanggalDibuat: Date;
   tanggalDiubah: Date;
-  teamId: string;
+  teamId: string | null;
 }) {
   const token = sign(decamelizeKeys(data), 'test', {
     expiresIn: '60 days',
@@ -85,7 +85,7 @@ export function middleware(
   try {
     const token = request.headers.authorization;
     const user = verifyBearerToken(token);
-    console.log(user);
+
     if (user) {
       const tokenExpired = isTokenExpired(user.exp);
       if (tokenExpired) {

@@ -1,7 +1,7 @@
 import { AccountDetailTypeEnum } from '@prisma/client';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { parseValidationError } from 'utils/server';
+import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../../prisma';
@@ -21,6 +21,7 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
+  middleware(request, response, true);
   const id = request.query.id as string;
   const body = request.body;
 

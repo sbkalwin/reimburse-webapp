@@ -54,7 +54,6 @@ export default function ReimburseDetailForm() {
         label="Alat Kantor"
         placeholder="Masukkan Alat Kantor"
         onAfterChange={(_, option: any) => {
-          console.log(option);
           setValue(`${parentName}.nama`, option.label);
           setValue(`${parentName}.subtotal`, option.price);
         }}

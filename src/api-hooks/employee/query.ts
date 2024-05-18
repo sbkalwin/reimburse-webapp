@@ -12,11 +12,15 @@ import {
 export const employeeKeys = {
   employees: 'get-employees',
   employee: 'get-employee',
+  me: 'get-me',
   employeesKey(input?: getEmployeesInput) {
     return [employeeKeys.employees, input];
   },
   employeeKey(input: getEmployeeInput) {
     return [employeeKeys.employee, input.id];
+  },
+  meKey() {
+    return [employeeKeys.me];
   },
 } as const;
 
@@ -55,6 +59,25 @@ export function useGetEmployee(props: {
         EmployeeModel,
       );
     },
+    ...props?.options,
+  });
+}
+
+export function useGetMe(props?: {
+  options?: UseQueryOptions<ApiResult<EmployeeLiteModel>, ApiError>;
+}) {
+  return useQuery({
+    queryKey: employeeKeys.meKey(),
+    async queryFn() {
+      return await callApi(
+        {
+          url: `${API_LIST.Auth}/me`,
+          method: 'GET',
+        },
+        EmployeeLiteModel,
+      );
+    },
+    staleTime: 15000,
     ...props?.options,
   });
 }

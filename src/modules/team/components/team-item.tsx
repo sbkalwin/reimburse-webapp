@@ -10,7 +10,7 @@ export default function TeamItem(props: TeamModel) {
   const { prefetch, push } = useRouter();
   const route = `${NavigationRoutes.teams}/${props.id}`;
 
-  const leader = props.Pegawai?.find((pegawai) => {
+  const leader = props.pegawai?.find((pegawai) => {
     return pegawai.nip === props.nipLeader;
   });
 

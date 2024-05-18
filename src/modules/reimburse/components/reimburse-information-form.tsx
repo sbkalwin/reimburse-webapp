@@ -2,6 +2,7 @@ import { Flex, Text } from '@mantine/core';
 import { ReimburseTypeEnum } from 'api-hooks/reimburse/model';
 import Input from 'components/input';
 import ItinenarySelect from 'modules/select/itinenary-select';
+import UserSelect from 'modules/select/user-select';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ReimburseFormType } from './reimburse-form-type';
@@ -42,10 +43,8 @@ export default function ReimburseInformationForm() {
           <ReimburseStatusBadge status={data?.status} />
         </Flex>
       )}
-      <Input
-        type="select"
+      <UserSelect
         name="nip_pemohon"
-        data={[]}
         label="Pemohon"
         placeholder="Masukkan Pemohon"
         disabled

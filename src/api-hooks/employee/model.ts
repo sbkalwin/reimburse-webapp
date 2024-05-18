@@ -31,6 +31,7 @@ export class EmployeeModel extends EmployeeLiteModel {
   @Type(() => TeamLiteModel)
   Team: TeamLiteModel;
 
+  @Type(() => ReimburseLiteModel)
   pengembalian: ReimburseLiteModel[];
 
   @Expose({ name: 'pengembalian_pic' })

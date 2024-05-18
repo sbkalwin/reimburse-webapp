@@ -95,16 +95,15 @@ export default async function handler(
           nipPemohon: pengembalian.nip_pemohon,
           nipPic: pengembalian.nip_pic,
           perjalananId: pengembalian.perjalanan_id,
-          DetailPengembalian: {
-            createMany: {
-              data: details,
-            },
-          },
         },
         where: {
           id,
         },
         select: ReimburseResource,
+      });
+
+      await prisma.detailPengembalian.createMany({
+        data: details,
       });
 
       return response.status(200).json({

@@ -95,8 +95,9 @@ export class ReimburseDetailModel extends CommonModel {
 }
 
 export class ReimburseModel extends ReimburseLiteModel {
+  @Expose({ name: 'detail_pengembalian' })
   @Type(() => ReimburseDetailLiteModel)
-  DetailPengembalian: ReimburseDetailLiteModel[];
+  detailPengembalian: ReimburseDetailLiteModel[];
 }
 
 export type getReimbursesInput = {

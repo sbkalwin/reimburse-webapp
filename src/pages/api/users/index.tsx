@@ -1,7 +1,7 @@
 import { EmployeeRoleEnum, EmployeeStatusEnum } from '@prisma/client';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { generateId, parseValidationError } from 'utils/server';
+import { generateId, middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -32,6 +32,20 @@ export default async function handler(
   const role = request.query.role as EmployeeRoleEnum | undefined;
   const status = request.query.status as EmployeeStatusEnum | undefined;
   try {
+    if (request.method === 'GET') {
+      const users = await prisma.pegawai.findMany({
+        where: {
+          peran: role,
+          status,
+        },
+        select: PegawaiLiteResource,
+      });
+
+      return response.status(200).json({ data: decamelizeKeys(users) });
+    }
+
+    middleware(request, response, true);
+
     if (request.method === 'POST') {
       const nip = generateId(5);
       const user = await pegawaiSchema.validate(body);
@@ -52,18 +66,6 @@ export default async function handler(
         data: decamelizeKeys(newPegawai),
         message: 'Pegawai Berhasil Ditambah',
       });
-    }
-
-    if (request.method === 'GET') {
-      const users = await prisma.pegawai.findMany({
-        where: {
-          peran: role,
-          status,
-        },
-        select: PegawaiLiteResource,
-      });
-
-      return response.status(200).json({ data: decamelizeKeys(users) });
     }
   } catch (e) {
     const validationError = JSON.stringify(e);

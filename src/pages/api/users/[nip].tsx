@@ -1,7 +1,7 @@
 import { EmployeeRoleEnum, EmployeeStatusEnum } from '@prisma/client';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { parseValidationError } from 'utils/server';
+import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -41,6 +41,12 @@ export default async function handler(
         .json({ message: 'Pegawai tidak dapat ditemukan' });
     }
 
+    if (request.method === 'GET') {
+      return response
+        .status(200)
+        .json({ data: decamelizeKeys(currentKaryawan) });
+    }
+
     if (request.method === 'PUT') {
       await karyawanSchema.validate(body, {
         abortEarly: false,
@@ -68,12 +74,7 @@ export default async function handler(
       });
     }
 
-    if (request.method === 'GET') {
-      return response
-        .status(200)
-        .json({ data: decamelizeKeys(currentKaryawan) });
-    }
-
+    middleware(request, response, true);
     if (request.method === 'DELETE') {
       const pengembalianPicLength = currentKaryawan.PengembalianPic.length;
       const pengembalianLength = currentKaryawan.Pengembalian.length;

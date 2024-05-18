@@ -1,6 +1,6 @@
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getDate, parseValidationError } from 'utils/server';
+import { getDate, middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -34,6 +34,14 @@ export default async function handler(
         .json({ message: 'Perjalanan tidak dapat ditemukan' });
     }
 
+    if (request.method === 'GET') {
+      return response
+        .status(200)
+        .json({ data: decamelizeKeys(currentPerjalanan) });
+    }
+
+    middleware(request, response, true);
+
     if (request.method === 'PUT') {
       await perjalananSchema.validate(body, {
         abortEarly: false,
@@ -57,12 +65,6 @@ export default async function handler(
         data: decamelizeKeys(updatePerjalanan),
         message: 'Perjalanan berhasil diubah',
       });
-    }
-
-    if (request.method === 'GET') {
-      return response
-        .status(200)
-        .json({ data: decamelizeKeys(currentPerjalanan) });
     }
 
     if (request.method === 'DELETE') {

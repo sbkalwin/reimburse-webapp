@@ -34,7 +34,7 @@ export default function UserSelect(props: UserSelectProps) {
       {...rest}
       type="select"
       data={options}
-      disabled={queryGetUsers.isLoading || undefined}
+      disabled={queryGetUsers.isLoading || rest.disabled}
       onAfterChange={onAfterChange as any}
     />
   );

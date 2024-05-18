@@ -1,6 +1,6 @@
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { generateId, parseValidationError } from 'utils/server';
+import { generateId, middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -18,6 +18,19 @@ export default async function handler(
   const body = request.body;
 
   try {
+    if (request.method === 'GET') {
+      const teams = await prisma.team.findMany({
+        include: {
+          Pegawai: {
+            select: PegawaiLiteResource,
+          },
+        },
+      });
+      return response.status(200).json({ data: decamelizeKeys(teams) });
+    }
+
+    middleware(request, response, true);
+
     if (request.method === 'POST') {
       const id = generateId();
       const team = await teamSchema.validate(body);
@@ -33,17 +46,6 @@ export default async function handler(
         data: decamelizeKeys(newTeam),
         message: 'Team Berhasil Ditambah',
       });
-    }
-
-    if (request.method === 'GET') {
-      const teams = await prisma.team.findMany({
-        include: {
-          Pegawai: {
-            select: PegawaiLiteResource,
-          },
-        },
-      });
-      return response.status(200).json({ data: decamelizeKeys(teams) });
     }
   } catch (e) {
     const validationError = JSON.stringify(e);

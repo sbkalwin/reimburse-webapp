@@ -12,7 +12,8 @@ export class StationeryLiteModel extends CommonModel {
 }
 
 export class StationeryModel extends StationeryLiteModel {
-  DetailPengembalian: ReimburseDetailLiteModel[];
+  @Expose({ name: 'detail_pengembalian' })
+  detailPengembalian: ReimburseDetailLiteModel[];
 }
 
 export type getStationeriesInput = object;

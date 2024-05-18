@@ -1,6 +1,6 @@
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { parseValidationError } from 'utils/server';
+import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -36,6 +36,12 @@ export default async function handler(
         .json({ message: 'Team tidak dapat ditemukan' });
     }
 
+    if (request.method === 'GET') {
+      return response.status(200).json({ data: decamelizeKeys(currentTeam) });
+    }
+
+    middleware(request, response, true);
+
     if (request.method === 'PUT') {
       await teamSchema.validate(body, {
         abortEarly: false,
@@ -57,10 +63,6 @@ export default async function handler(
         data: decamelizeKeys(updateTeam),
         message: 'Team berhasil diubah',
       });
-    }
-
-    if (request.method === 'GET') {
-      return response.status(200).json({ data: decamelizeKeys(currentTeam) });
     }
 
     if (request.method === 'DELETE') {

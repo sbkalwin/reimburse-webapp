@@ -55,6 +55,7 @@ export default function ReimburseForm(props: ReimburseFormProps) {
         data: undefined,
       };
     }
+
     return {
       deskripsi: reimburse?.deskripsi ?? '',
       jenis: reimburse?.jenis ?? ReimburseTypeEnum.itinerary,
@@ -62,7 +63,7 @@ export default function ReimburseForm(props: ReimburseFormProps) {
       nip_pic: reimburse?.pic?.nip ?? null,
       status: reimburse?.status ?? ReimburseStatusEnum.pending,
       perjalanan_id: reimburse?.Perjalanan?.id ?? null,
-      details: reimburse?.DetailPengembalian?.map((detail) => {
+      details: reimburse?.detailPengembalian?.map((detail) => {
         return {
           peralatan_kantor_id: detail.peralatanKantorId,
           deskripsi: detail.deskripsi,

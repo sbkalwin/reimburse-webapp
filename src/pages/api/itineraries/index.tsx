@@ -4,6 +4,7 @@ import {
   generateId,
   getDate,
   getFilterDate,
+  middleware,
   parseValidationError,
 } from 'utils/server';
 import * as Yup from 'yup';
@@ -28,26 +29,6 @@ export default async function handler(
   const nama = request.query.nama as string | undefined;
 
   try {
-    if (request.method === 'POST') {
-      const id = generateId();
-      const perjalanan = await perjalananSchema.validate(body);
-
-      const newPerjalanan = await prisma.perjalanan.create({
-        data: {
-          id,
-          deskripsi: perjalanan.deskripsi,
-          nama: perjalanan.nama,
-          tanggalMulai: getDate(perjalanan.tanggal_mulai),
-          tanggalSelesai: getDate(perjalanan.tanggal_selesai),
-        },
-        select: PerjalananLiteResource,
-      });
-      return response.status(200).json({
-        data: decamelizeKeys(newPerjalanan),
-        message: 'Perjalanan Berhasil Ditambah',
-      });
-    }
-
     const tanggalMulai = getFilterDate(tanggal_mulai);
     const tanggalSelesai = getFilterDate(tanggal_selesai);
 
@@ -90,6 +71,26 @@ export default async function handler(
       });
 
       return response.status(200).json({ data: decamelizeKeys(perjalanan) });
+    }
+    middleware(request, response, true);
+    if (request.method === 'POST') {
+      const id = generateId();
+      const perjalanan = await perjalananSchema.validate(body);
+
+      const newPerjalanan = await prisma.perjalanan.create({
+        data: {
+          id,
+          deskripsi: perjalanan.deskripsi,
+          nama: perjalanan.nama,
+          tanggalMulai: getDate(perjalanan.tanggal_mulai),
+          tanggalSelesai: getDate(perjalanan.tanggal_selesai),
+        },
+        select: PerjalananLiteResource,
+      });
+      return response.status(200).json({
+        data: decamelizeKeys(newPerjalanan),
+        message: 'Perjalanan Berhasil Ditambah',
+      });
     }
   } catch (e) {
     const validationError = JSON.stringify(e);

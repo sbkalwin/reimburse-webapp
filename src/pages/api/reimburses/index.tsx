@@ -82,15 +82,13 @@ export default async function handler(
           deskripsi: pengembalian.deskripsi,
           perjalananId: pengembalian.perjalanan_id,
           nipPic: pengembalian.nip_pic,
-          DetailPengembalian: {
-            createMany: {
-              data: details,
-            },
-          },
         },
         select: ReimburseLiteResource,
       });
 
+      await prisma.detailPengembalian.createMany({
+        data: details,
+      });
       return response.status(200).json({
         data: decamelizeKeys({
           newReimburse,

@@ -1,6 +1,6 @@
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { parseValidationError } from 'utils/server';
+import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../../prisma';
@@ -17,6 +17,7 @@ export default async function handler(
 ) {
   const id = request.query.id as string;
   const body = request.body;
+  middleware(request, response, true);
 
   try {
     const currentKas = await prisma.kas.findUnique({

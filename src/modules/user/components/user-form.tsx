@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SegmentedControl } from '@mantine/core';
 import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
-import { EmployeeModel } from 'api-hooks/employee/model';
+import { EmployeeLiteModel } from 'api-hooks/employee/model';
 import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import { FormLayout } from 'modules/common/layout';
@@ -13,7 +13,7 @@ import { EmployeeFormSchema, EmployeeFormType } from './user-form-type';
 import UserInformationForm from './user-information-form';
 
 interface UserFormProps {
-  user?: EmployeeModel;
+  user?: EmployeeLiteModel;
   onSubmit: (values: EmployeeFormType) => Promise<void>;
 }
 

@@ -1,6 +1,6 @@
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { parseValidationError } from 'utils/server';
+import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -35,6 +35,11 @@ export default async function handler(
         .status(404)
         .json({ message: 'Peralatan Kantor tidak dapat ditemukan' });
     }
+    if (request.method === 'GET') {
+      const { DetailPengembalian, ...rest } = currentPeralatanKantor;
+      return response.status(200).json({ data: decamelizeKeys(rest) });
+    }
+    middleware(request, response, true);
 
     if (request.method === 'PUT') {
       await peralatanKantorSchema.validate(body, {
@@ -59,11 +64,6 @@ export default async function handler(
         data: decamelizeKeys(updatePeralatanKantor),
         message: 'Peralatan Kantor berhasil diubah',
       });
-    }
-
-    if (request.method === 'GET') {
-      const { DetailPengembalian, ...rest } = currentPeralatanKantor;
-      return response.status(200).json({ data: decamelizeKeys(rest) });
     }
 
     if (request.method === 'DELETE') {

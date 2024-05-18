@@ -46,7 +46,8 @@ export class AccountDetailModel extends CommonModel {
 
 export class AccountModel extends AccountLiteModel {
   @Type(() => AccountDetailLiteModel)
-  DetailPengembalian: AccountDetailLiteModel[];
+  @Expose({ name: 'detail_pengembalian' })
+  detailPengembalian: AccountDetailLiteModel[];
 }
 
 export type getAccountsInput = object;

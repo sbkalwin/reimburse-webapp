@@ -28,7 +28,7 @@ export class TeamEmployeeModel {
 }
 export class TeamModel extends TeamLiteModel {
   @Type(() => TeamEmployeeModel)
-  Pegawai: TeamEmployeeModel[];
+  pegawai: TeamEmployeeModel[];
 }
 
 export type getTeamsInput = object;
