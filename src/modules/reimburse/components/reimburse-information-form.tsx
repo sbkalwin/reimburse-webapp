@@ -1,11 +1,11 @@
 import { Flex, Text } from '@mantine/core';
+import { ReimburseTypeEnum } from 'api-hooks/reimburse/model';
 import Input from 'components/input';
-import { format } from 'date-fns';
-import { itinenaries } from 'modules/itinenary/components/itinenary-form-type';
-import { employees } from 'modules/user/components/user-form-type';
+import ItinenarySelect from 'modules/select/itinenary-select';
+import UserSelect from 'modules/select/user-select';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { ReimburseFormType, ReimburseTypeEnum } from './reimburse-form-type';
+import { ReimburseFormType } from './reimburse-form-type';
 import ReimburseStatusBadge from './reimburse-status-badge';
 
 function SelectItinery() {
@@ -17,21 +17,10 @@ function SelectItinery() {
   switch (type) {
     case ReimburseTypeEnum.itinerary:
       return (
-        <Input
-          type="select"
+        <ItinenarySelect
           name="perjalanan_id"
           label="Perjalanan"
           placeholder="Masukkan Perjalanan"
-          data={itinenaries.map((item) => {
-            return {
-              label: [
-                item.nama,
-                format(item.tanggal_mulai, 'dd MMM yyyy'),
-                format(item.tanggal_selesai, 'dd MMM yyyy'),
-              ].join(' - '),
-              value: item.id,
-            };
-          })}
         />
       );
     case ReimburseTypeEnum.stationery:
@@ -54,15 +43,8 @@ export default function ReimburseInformationForm() {
           <ReimburseStatusBadge status={data?.status} />
         </Flex>
       )}
-      <Input
-        type="select"
+      <UserSelect
         name="nip_pemohon"
-        data={employees.map((employee) => {
-          return {
-            value: employee.nip,
-            label: [employee.nip, employee.nama].join(' - '),
-          };
-        })}
         label="Pemohon"
         placeholder="Masukkan Pemohon"
         disabled

@@ -1,7 +1,7 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, SimpleGrid } from '@mantine/core';
 import Form from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -20,10 +20,9 @@ export default function ReimburseRejectFormDialog(props: {
     };
   }, []);
 
-  const resolver = useYupValidationResolver(ReimburseRejectFormSchema());
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(ReimburseRejectFormSchema()),
   });
 
   const onSubmit = React.useCallback(() => {
@@ -49,7 +48,15 @@ export default function ReimburseRejectFormDialog(props: {
           <Button onClick={props.onClose} type="button" color="red">
             Batal
           </Button>
-          <Button type="submit">Simpan</Button>
+          <Button
+            type="button"
+            loading={methods.formState.isSubmitting}
+            onClick={() => {
+              methods.handleSubmit(onSubmit)();
+            }}
+          >
+            Simpan
+          </Button>
         </SimpleGrid>
       </Flex>
     </Form>

@@ -1,6 +1,5 @@
 import { Button, Image } from '@mantine/core';
 import { Camera, CameraRotate } from '@phosphor-icons/react';
-import useWindowDimensions from 'hooks/use-window-dimensions';
 import React from 'react';
 import Webcam from 'react-webcam';
 
@@ -12,8 +11,6 @@ const selfieCamera = {
 };
 
 export default function WebcamTest() {
-  const { width, height } = useWindowDimensions();
-
   const [image, setImage] = React.useState<string | null | undefined>(
     undefined,
   );
@@ -45,7 +42,6 @@ export default function WebcamTest() {
     >
       {image && <Image src={image} />}
       <Webcam
-        height={height || 0}
         screenshotFormat="image/jpeg"
         ref={webcamRef}
         videoConstraints={videoConstraints}

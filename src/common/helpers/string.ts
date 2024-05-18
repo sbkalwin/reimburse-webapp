@@ -10,3 +10,9 @@ export function string2money(rawValue: string | number): string {
 export function formatDateTime(date: Date) {
   return format(date, 'dd MMM yyyy, HH:mm');
 }
+
+export function formatDate(date: Date) {
+  return format(date.toISOString().substring(0, 10), 'dd MMM yyyy');
+}
+
+export const isWindowUndefined = typeof window === 'undefined';

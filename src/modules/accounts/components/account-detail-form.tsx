@@ -1,8 +1,13 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, SimpleGrid, Title } from '@mantine/core';
+import {
+  AccountDetailModel,
+  AccountDetailTypeEnum,
+  AccountModel,
+} from 'api-hooks/account/model';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Form, { FormState } from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -10,9 +15,6 @@ import { useForm } from 'react-hook-form';
 import {
   AccountDetailFormSchema,
   AccountDetailFormType,
-  AccountDetailModel,
-  AccountDetailTypeEnum,
-  AccountModel,
 } from './account-form-type';
 
 interface AccountDetailFormProps {
@@ -29,16 +31,14 @@ export default function AccountDetailForm(props: AccountDetailFormProps) {
       deskripsi: accountDetail?.deskripsi ?? '-',
       jenis: accountDetail?.jenis ?? AccountDetailTypeEnum.income,
       kas_id: account.id,
-      reimburse_id: accountDetail?.reimburse?.id ?? '',
+      pengembalian_id: accountDetail?.pengembalian?.id ?? '',
       total: 0,
     };
   }, [account.id, accountDetail]);
 
-  const resolver = useYupValidationResolver(AccountDetailFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(AccountDetailFormSchema()),
   });
 
   const onSubmit = React.useCallback(
@@ -48,7 +48,7 @@ export default function AccountDetailForm(props: AccountDetailFormProps) {
     [props],
   );
 
-  const reimburse = accountDetail?.reimburse;
+  const reimburse = accountDetail?.pengembalian;
   const reimburseRoute = `${NavigationRoutes.reimburses}/${reimburse?.id}`;
   const reimburseLabel = [reimburse?.id];
 

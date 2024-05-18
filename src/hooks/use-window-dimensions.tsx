@@ -16,8 +16,6 @@ function getWindowDimensions() {
 }
 
 export default function useWindowDimensions() {
-  const hasWindow = typeof window !== 'undefined';
-
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );

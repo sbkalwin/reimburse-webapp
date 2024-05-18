@@ -1,7 +1,6 @@
 import { Badge } from '@mantine/core';
+import { EmployeeRoleEnum } from 'api-hooks/auth/model';
 import React from 'react';
-
-import { EmployeeRoleEnum } from './user-form-type';
 
 type BadgeProps = React.ComponentProps<typeof Badge<'div'>>;
 

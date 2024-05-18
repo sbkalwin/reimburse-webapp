@@ -1,6 +1,5 @@
 import { Badge, Text } from '@mantine/core';
-
-import { ReimburseStatusEnum } from './reimburse-form-type';
+import { ReimburseStatusEnum } from 'api-hooks/reimburse/model';
 
 export default function ReimburseStatusBadge(props: {
   status: ReimburseStatusEnum;

@@ -1,20 +1,33 @@
-import { Flex, SimpleGrid, TextInput } from '@mantine/core';
+import { Flex, SimpleGrid, Text, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import { ItinenaryLiteModel } from 'api-hooks/itinenary/model';
+import { useGetItinenaries } from 'api-hooks/itinenary/query';
+import colors from 'common/styles/colors';
+import LoaderView from 'components/loader-view';
 import React from 'react';
 
-import { ItinenaryModel, itinenaries } from './components/itinenary-form-type';
 import ItinenaryItem from './components/itinenary-item';
 
 export default function ItinenaryList() {
   const [search, setSearch] = React.useState('');
   const onSearch = React.useCallback(
-    (itinenary: ItinenaryModel) => {
+    (itinenary: ItinenaryLiteModel) => {
       const label = itinenary.nama.toLowerCase();
       return label.includes(search.toLowerCase());
     },
     [search],
   );
+
+  const [tanggalMulai, setTanggalMulai] = React.useState<Date | null>(null);
+
+  const [tanggalSelesai, setTanggalSelesai] = React.useState<Date | null>(null);
+  const queryGetItinenaries = useGetItinenaries({
+    params: {
+      tanggal_mulai: tanggalMulai || undefined,
+      tanggal_selesai: tanggalSelesai || undefined,
+    },
+  });
   return (
     <Flex direction="column">
       <Flex
@@ -43,6 +56,8 @@ export default function ItinenaryList() {
             modalProps={{
               centered: true,
             }}
+            onChange={setTanggalMulai}
+            clearable
           />
           <DatePickerInput
             label="Tanggal Selesai"
@@ -51,12 +66,28 @@ export default function ItinenaryList() {
             modalProps={{
               centered: true,
             }}
+            onChange={setTanggalSelesai}
+            clearable
           />
         </SimpleGrid>
       </Flex>
-      {itinenaries.filter(onSearch).map((itinenary) => {
-        return <ItinenaryItem key={itinenary.id} {...itinenary} />;
-      })}
+      <LoaderView query={queryGetItinenaries}>
+        {(data) => {
+          const result = data.filter(onSearch);
+          return (
+            <>
+              {result.length === 0 && (
+                <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
+                  No Result Found
+                </Text>
+              )}
+              {result.map((itinenary) => {
+                return <ItinenaryItem key={itinenary.id} {...itinenary} />;
+              })}
+            </>
+          );
+        }}
+      </LoaderView>
     </Flex>
   );
 }

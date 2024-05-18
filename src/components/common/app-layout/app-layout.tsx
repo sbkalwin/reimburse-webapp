@@ -5,6 +5,7 @@ import {
   Card,
   CardProps,
   Flex,
+  Space,
 } from '@mantine/core';
 import { ArrowLeft } from '@phosphor-icons/react';
 import { useRouter } from 'next/router';
@@ -83,6 +84,7 @@ export default function AppLayout(props: AppLayoutProps) {
         return '';
     }
   }, [pathname]);
+
   return (
     <>
       <Card shadow="sm" withBorder>
@@ -118,7 +120,8 @@ export default function AppLayout(props: AppLayoutProps) {
         </Flex>
       </Card>
       <Card
-        h="calc(100dvh - 55px)"
+        mih={`calc(100dvh - 55px - ${bottomContainer ? '80px' : '0px'})`}
+        mah={`calc(100dvh - 55px - ${bottomContainer ? '80px' : '0px'})`}
         m="auto"
         style={{
           overflow: 'auto',
@@ -130,10 +133,12 @@ export default function AppLayout(props: AppLayoutProps) {
           style={{
             margin: '0px auto',
             width: '100%',
+            height: '100%',
             maxWidth: 768,
           }}
         >
           {children}
+          <Space h={16} />
         </div>
       </Card>
       {bottomContainer}
