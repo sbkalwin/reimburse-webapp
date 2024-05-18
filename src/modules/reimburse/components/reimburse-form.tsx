@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
   Flex,
@@ -18,7 +19,6 @@ import { formatDateTime } from 'common/helpers/string';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Form from 'components/form';
 import useAuth from 'hooks/use-auth';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -58,10 +58,10 @@ export default function ReimburseForm(props: ReimburseFormProps) {
     return {
       deskripsi: reimburse?.deskripsi ?? '',
       jenis: reimburse?.jenis ?? ReimburseTypeEnum.itinerary,
-      nip_pemohon: reimburse?.nipPemohon ?? user?.nip ?? '',
-      nip_pic: reimburse?.nipPic ?? null,
+      nip_pemohon: reimburse?.pemohon.nip ?? user?.nip ?? '',
+      nip_pic: reimburse?.pic?.nip ?? null,
       status: reimburse?.status ?? ReimburseStatusEnum.pending,
-      perjalanan_id: reimburse?.perjalananId ?? null,
+      perjalanan_id: reimburse?.Perjalanan?.id ?? null,
       details: reimburse?.DetailPengembalian?.map((detail) => {
         return {
           peralatan_kantor_id: detail.peralatanKantorId,
@@ -85,11 +85,9 @@ export default function ReimburseForm(props: ReimburseFormProps) {
     };
   }, [data, reimburse, user?.nip]);
 
-  const resolver = useYupValidationResolver(ReimburseFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(ReimburseFormSchema()),
   });
 
   const onSubmit = React.useCallback(

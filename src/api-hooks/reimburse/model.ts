@@ -102,7 +102,7 @@ export class ReimburseModel extends ReimburseLiteModel {
 export type getReimbursesInput = {
   tanggal_mulai?: Date;
   tanggal_selesai?: Date;
-  nip_pemohon?: Date;
+  nip_pemohon?: string;
 };
 export type getReimburseDetailsInput = object;
 

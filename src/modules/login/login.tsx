@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Card, Flex, Space, Title } from '@mantine/core';
 import { SignIn } from '@phosphor-icons/react';
 import { EmployeeModel } from 'api-hooks/auth/model';
@@ -9,7 +10,6 @@ import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Form from 'components/form';
 import Input from 'components/input';
 import useAuth from 'hooks/use-auth';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,11 +27,9 @@ export default function Login() {
     };
   }, []);
 
-  const resolver = useYupValidationResolver(LoginFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(LoginFormSchema()),
     mode: 'onChange',
   });
 

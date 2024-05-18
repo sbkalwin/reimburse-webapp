@@ -1,9 +1,9 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Flex, Text } from '@mantine/core';
 import { StationeryModel } from 'api-hooks/stationery/model';
 import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -30,11 +30,9 @@ export default function StationeryForm(props: StationeryFormProps) {
     };
   }, [stationery]);
 
-  const resolver = useYupValidationResolver(StationeryFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(StationeryFormSchema()),
   });
 
   const onSubmit = React.useCallback(

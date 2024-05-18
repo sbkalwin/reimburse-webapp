@@ -21,7 +21,7 @@ export default function ReimburseList() {
   const [segment, setSegment] = React.useState('all');
   const { isAdmin, user } = useAuth();
   const { query } = useRouter();
-  const userId = query.id;
+  const userId = query.id as string | undefined;
   const nip = user?.nip;
   const [tanggalMulai, setTanggalMulai] = React.useState<Date | null>(null);
   const [tanggalSelesai, setTanggalSelesai] = React.useState<Date | null>(null);
@@ -41,6 +41,7 @@ export default function ReimburseList() {
     params: {
       tanggal_mulai: tanggalMulai || undefined,
       tanggal_selesai: tanggalSelesai || undefined,
+      nip_pemohon: userId,
     },
   });
 

@@ -1,9 +1,9 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { SegmentedControl } from '@mantine/core';
 import { EmployeeRoleEnum, EmployeeStatusEnum } from 'api-hooks/auth/model';
 import { EmployeeModel } from 'api-hooks/employee/model';
 import notification from 'common/helpers/notifications';
 import Form from 'components/form';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
 import ReimburseList from 'pages/reimburses';
 import React from 'react';
@@ -22,7 +22,7 @@ export default function UserForm(props: UserFormProps) {
   const [segment, setSegment] = React.useState('Informasi');
   const defaultValues = React.useMemo<EmployeeFormType>(() => {
     return {
-      team_id: user?.teamId ?? '',
+      team_id: user?.team?.id ?? '',
       kata_sandi: '',
       nama: user?.nama ?? '',
       nip: user?.nip ?? '',
@@ -33,13 +33,11 @@ export default function UserForm(props: UserFormProps) {
     };
   }, [user]);
 
-  const resolver = useYupValidationResolver(EmployeeFormSchema());
-
   const isEdit = !!props.user;
 
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(EmployeeFormSchema()),
   });
 
   const onSubmit = React.useCallback(

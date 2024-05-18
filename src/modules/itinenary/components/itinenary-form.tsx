@@ -1,9 +1,9 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Flex } from '@mantine/core';
 import { ItinenaryModel } from 'api-hooks/itinenary/model';
 import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,11 +27,9 @@ export default function ItinenaryForm(props: ItinenaryFormProps) {
     };
   }, [itinenary]);
 
-  const resolver = useYupValidationResolver(ItinenaryFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(ItinenaryFormSchema()),
   });
 
   const onSubmit = React.useCallback(

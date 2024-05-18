@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, SimpleGrid, Title } from '@mantine/core';
 import {
   AccountDetailModel,
@@ -7,7 +8,6 @@ import {
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Form, { FormState } from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -36,11 +36,9 @@ export default function AccountDetailForm(props: AccountDetailFormProps) {
     };
   }, [account.id, accountDetail]);
 
-  const resolver = useYupValidationResolver(AccountDetailFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(AccountDetailFormSchema()),
   });
 
   const onSubmit = React.useCallback(

@@ -1,7 +1,7 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, SimpleGrid } from '@mantine/core';
 import Form from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import AccountSelect from 'modules/select/account-select';
 import React from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
@@ -33,10 +33,9 @@ export default function ReimburseFinishFormDialog(props: {
     };
   }, [pengembalian_id, total]);
 
-  const resolver = useYupValidationResolver(ReimburseFinishFormSchema());
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(ReimburseFinishFormSchema()),
   });
 
   const onSubmit = React.useCallback(
