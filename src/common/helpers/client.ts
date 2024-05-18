@@ -5,7 +5,8 @@ import { decamelizeKeys } from 'humps';
 import QueryTransformer from './query-transfomer';
 import { getToken } from './token';
 
-export const BASE_URL = 'https://reimburse-webapp-sigma.vercel.app/' as const;
+export const BASE_URL =
+  'https://reimburse-webapp-sigma.vercel.app/api' as const;
 
 export const API_LIST = {
   Auth: '/auth',
