@@ -6,7 +6,9 @@ import QueryTransformer from './query-transfomer';
 import { getToken } from './token';
 
 export const BASE_URL =
-  'https://reimburse-webapp-sigma.vercel.app/api' as const;
+  process.env.NODE_ENV === 'development'
+    ? ('http://localhost:3000/api' as const)
+    : ('https://reimburse-webapp-sigma.vercel.app/api' as const);
 
 export const API_LIST = {
   Auth: '/auth',
