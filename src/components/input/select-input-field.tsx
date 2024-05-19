@@ -6,7 +6,7 @@ import { useController } from 'react-hook-form';
 export interface SelectFieldProps extends SelectProps {
   type: 'select';
   name: string;
-  onAfterChange?: (value: string | null, option: ComboboxItem) => void;
+  onAfterChange?: (value: string | null, option: ComboboxItem | null) => void;
 }
 
 export default function SelectField(props: SelectFieldProps) {
@@ -17,6 +17,8 @@ export default function SelectField(props: SelectFieldProps) {
     readOnly,
     rightSection,
     onAfterChange,
+    searchable = true,
+    clearable = true,
     ...rest
   } = props;
   const formState = useFormState();
@@ -34,6 +36,8 @@ export default function SelectField(props: SelectFieldProps) {
       {...field}
       disabled={_disabled}
       error={error}
+      clearable={clearable}
+      searchable={searchable}
       inputWrapperOrder={['label', 'input', 'description', 'error']}
       onChange={(val, option) => {
         field.onChange(val);

@@ -35,6 +35,7 @@ export default function DateInputField(props: DateInputFieldProps) {
       }}
       inputWrapperOrder={['label', 'input', 'description', 'error']}
       error={error}
+      clearable
     />
   );
 }

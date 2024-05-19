@@ -1,8 +1,11 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, SimpleGrid } from '@mantine/core';
+import { ReimburseModel } from 'api-hooks/reimburse/model';
+import { useFinishReimburse } from 'api-hooks/reimburse/mutation';
+import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
-import { accounts } from 'modules/accounts/components/account-form-type';
+import AccountSelect from 'modules/select/account-select';
 import React from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 
@@ -13,6 +16,7 @@ import {
 } from './reimburse-form-type';
 
 export default function ReimburseFinishFormDialog(props: {
+  reimburse: ReimburseModel;
   onClose: () => void;
 }) {
   const { getValues } = useFormContext<ReimburseFormType>();
@@ -33,17 +37,31 @@ export default function ReimburseFinishFormDialog(props: {
     };
   }, [pengembalian_id, total]);
 
-  const resolver = useYupValidationResolver(ReimburseFinishFormSchema());
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(ReimburseFinishFormSchema()),
   });
+
+  const { mutateAsync } = useFinishReimburse();
 
   const onSubmit = React.useCallback(
     async (values: ReimburseFinishFormType) => {
-      props.onClose();
+      try {
+        const result = await mutateAsync({
+          id: props.reimburse.id,
+          data: { ...values, name: `Reimburse no: ${props.reimburse.id}` },
+        });
+        notification.success({
+          message: result.message,
+        });
+        props.onClose();
+      } catch (e) {
+        notification.error({
+          message: e.message,
+        });
+      }
     },
-    [props],
+    [mutateAsync, props],
   );
 
   return (
@@ -55,18 +73,7 @@ export default function ReimburseFinishFormDialog(props: {
           label="Tanggal Pelunasan"
           placeholder="Tanggal Pelunasan"
         />
-        <Input
-          type="select"
-          name="kas_id"
-          label="Kas"
-          placeholder="Pilih Kas"
-          data={accounts.map((account) => {
-            return {
-              label: account.nama,
-              value: account.id,
-            };
-          })}
-        />
+        <AccountSelect name="kas_id" label="Kas" placeholder="Pilih Kas" />
         <Input
           type="text"
           name="deskripsi"
@@ -83,7 +90,15 @@ export default function ReimburseFinishFormDialog(props: {
           <Button onClick={props.onClose} type="button" color="red">
             Batal
           </Button>
-          <Button type="submit">Simpan</Button>
+          <Button
+            type="button"
+            loading={methods.formState.isSubmitting}
+            onClick={() => {
+              methods.handleSubmit(onSubmit)();
+            }}
+          >
+            Simpan
+          </Button>
         </SimpleGrid>
       </Flex>
     </Form>

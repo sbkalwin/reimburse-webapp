@@ -1,28 +1,49 @@
-import { Flex, SegmentedControl, Text, TextInput } from '@mantine/core';
+import {
+  Flex,
+  SegmentedControl,
+  SimpleGrid,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import { ReimburseLiteModel } from 'api-hooks/reimburse/model';
+import { useGetReimburses } from 'api-hooks/reimburse/query';
 import colors from 'common/styles/colors';
+import LoaderView from 'components/loader-view';
 import useAuth from 'hooks/use-auth';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { reimburses } from './components/reimburse-form-type';
 import ReimburseItem from './components/reimburse-item';
 
 export default function ReimburseList() {
   const [segment, setSegment] = React.useState('all');
   const { isAdmin, user } = useAuth();
   const { query } = useRouter();
-  const userId = query.id;
+  const userId = query.id as string | undefined;
   const nip = user?.nip;
+  const [tanggalMulai, setTanggalMulai] = React.useState<Date | null>(null);
+  const [tanggalSelesai, setTanggalSelesai] = React.useState<Date | null>(null);
 
-  const data = reimburses
-    .filter((reimburse) => {
-      if (userId) {
-        return reimburse.nip_pemohon === userId;
-      }
-      return isAdmin || reimburse.nip_pemohon === nip;
-    })
-    .filter((reimburse) => segment === 'all' || reimburse.status === segment);
+  const onSearchUser = (reimburse: ReimburseLiteModel) => {
+    if (userId) {
+      return reimburse.nipPemohon === userId;
+    }
+    return isAdmin || reimburse.nipPemohon === nip;
+  };
+
+  const onSearchStatus = (reimburse: ReimburseLiteModel) => {
+    return segment === 'all' || reimburse.status === segment;
+  };
+
+  const queryGetReimburses = useGetReimburses({
+    params: {
+      tanggal_mulai: tanggalMulai || undefined,
+      tanggal_selesai: tanggalSelesai || undefined,
+      nip_pemohon: userId,
+    },
+  });
 
   return (
     <Flex direction="column">
@@ -45,6 +66,26 @@ export default function ReimburseList() {
             rightSection={<MagnifyingGlass size={16} />}
           />
         )}
+        <SimpleGrid cols={2} mb={16}>
+          <DatePickerInput
+            label="Tanggal Dimulai"
+            placeholder="Cari Tanggal Dimulai"
+            dropdownType="modal"
+            modalProps={{
+              centered: true,
+            }}
+            onChange={setTanggalMulai}
+          />
+          <DatePickerInput
+            label="Tanggal Selesai"
+            placeholder="Cari Tanggal Selesai"
+            dropdownType="modal"
+            modalProps={{
+              centered: true,
+            }}
+            onChange={setTanggalSelesai}
+          />
+        </SimpleGrid>
         <SegmentedControl
           value={segment}
           onChange={setSegment}
@@ -68,14 +109,23 @@ export default function ReimburseList() {
           ]}
         />
       </Flex>
-      {data.length === 0 && (
-        <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
-          No Result Found
-        </Text>
-      )}
-      {data.map((reimburse) => {
-        return <ReimburseItem key={reimburse.id} {...reimburse} />;
-      })}
+      <LoaderView query={queryGetReimburses} isCompact>
+        {(data) => {
+          const reimburse = data.filter(onSearchUser).filter(onSearchStatus);
+          return (
+            <>
+              {reimburse.length === 0 && (
+                <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
+                  No Result Found
+                </Text>
+              )}
+              {reimburse.map((reimburse) => {
+                return <ReimburseItem key={reimburse.id} {...reimburse} />;
+              })}
+            </>
+          );
+        }}
+      </LoaderView>
     </Flex>
   );
 }

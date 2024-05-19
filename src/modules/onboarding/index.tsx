@@ -1,5 +1,6 @@
 import { Carousel, Embla } from '@mantine/carousel';
 import { Box, Button, Flex, Space, Text } from '@mantine/core';
+import { isWindowUndefined } from 'common/helpers/string';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Link from 'next/link';
 import React from 'react';
@@ -11,14 +12,14 @@ export type SlideType = {
 export const IS_APP_FIRST_RUN = 'is_app_first_run';
 
 export function getIsAppFirstRun() {
-  if (typeof window === 'undefined') return;
+  if (isWindowUndefined) return;
   return (localStorage.getItem(IS_APP_FIRST_RUN) || 'false') as
     | 'true'
     | 'false';
 }
 
 export function setIsAppFirstRun(value: 'true' | 'false') {
-  if (typeof window === 'undefined') return;
+  if (isWindowUndefined) return;
   localStorage.setItem(IS_APP_FIRST_RUN, value);
 }
 

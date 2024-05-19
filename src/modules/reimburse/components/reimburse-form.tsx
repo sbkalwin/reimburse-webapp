@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
   Flex,
@@ -8,11 +9,16 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Check, X } from '@phosphor-icons/react';
+import {
+  ReimburseModel,
+  ReimburseStatusEnum,
+  ReimburseTypeEnum,
+} from 'api-hooks/reimburse/model';
+import notification from 'common/helpers/notifications';
 import { formatDateTime } from 'common/helpers/string';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Form from 'components/form';
 import useAuth from 'hooks/use-auth';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -20,18 +26,13 @@ import { useForm } from 'react-hook-form';
 
 import ReimburseDetailForm from './reimburse-detail-form';
 import ReimburseFinishFormDialog from './reimburse-finish-form-dialog';
-import {
-  ReimburseFormSchema,
-  ReimburseFormType,
-  ReimburseModel,
-  ReimburseStatusEnum,
-  ReimburseTypeEnum,
-} from './reimburse-form-type';
+import { ReimburseFormSchema, ReimburseFormType } from './reimburse-form-type';
 import ReimburseInformationForm from './reimburse-information-form';
 import ReimburseRejectFormDialog from './reimburse-reject-form-dialog';
 
 interface ReimburseFormProps {
   reimburse?: ReimburseModel;
+  onSubmit: (values: ReimburseFormType) => Promise<void>;
 }
 
 export default function ReimburseForm(props: ReimburseFormProps) {
@@ -54,18 +55,19 @@ export default function ReimburseForm(props: ReimburseFormProps) {
         data: undefined,
       };
     }
+
     return {
       deskripsi: reimburse?.deskripsi ?? '',
       jenis: reimburse?.jenis ?? ReimburseTypeEnum.itinerary,
-      nip_pemohon: reimburse?.nip_pemohon ?? user?.nip ?? '',
-      nip_pic: reimburse?.nip_pemohon ?? null,
+      nip_pemohon: reimburse?.pemohon.nip ?? user?.nip ?? '',
+      nip_pic: reimburse?.pic?.nip ?? null,
       status: reimburse?.status ?? ReimburseStatusEnum.pending,
-      perjalanan_id: reimburse?.perjalanan_id ?? null,
-      details: reimburse?.details?.map((detail) => {
+      perjalanan_id: reimburse?.Perjalanan?.id ?? null,
+      details: reimburse?.detailPengembalian?.map((detail) => {
         return {
-          peralatan_kantor_id: detail.peralatan_kantor_id,
+          peralatan_kantor_id: detail.peralatanKantorId,
           deskripsi: detail.deskripsi,
-          file_url: detail.file_url,
+          file_url: detail.fileUrl,
           nama: detail.nama,
           subtotal: detail.subtotal,
           id: detail.id,
@@ -84,16 +86,23 @@ export default function ReimburseForm(props: ReimburseFormProps) {
     };
   }, [data, reimburse, user?.nip]);
 
-  const resolver = useYupValidationResolver(ReimburseFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(ReimburseFormSchema()),
   });
 
   const onSubmit = React.useCallback(
-    async (values: ReimburseFormType) => {},
-    [],
+    async (values: ReimburseFormType) => {
+      try {
+        await props.onSubmit(values);
+      } catch (e) {
+        console.error(e);
+        notification.error({
+          message: e.message,
+        });
+      }
+    },
+    [props],
   );
 
   const isContribute = user?.nip === defaultValues.nip_pemohon;
@@ -135,20 +144,20 @@ export default function ReimburseForm(props: ReimburseFormProps) {
   }, [isContribute, onCopy]);
 
   const dateComponent = React.useMemo(() => {
-    if (reimburse?.tanggal_pelunasan) {
+    if (reimburse?.tanggalPelunasan) {
       return (
         <Text fz={11} my={16}>
-          Diterima: {formatDateTime(reimburse.tanggal_pelunasan)}
+          Diterima: {formatDateTime(reimburse.tanggalPelunasan)}
         </Text>
       );
     }
-    if (reimburse?.tanggal_penolakan) {
+    if (reimburse?.tanggalPenolakan) {
       return (
         <Flex direction="column" gap={16} my={16}>
           <Text fz={11}>
-            Ditolak: {formatDateTime(reimburse.tanggal_penolakan)}
+            Ditolak: {formatDateTime(reimburse.tanggalPenolakan)}
           </Text>
-          <Text fz={11}>Alasan Ditolak: {reimburse.deskripsi_penolakan}</Text>
+          <Text fz={11}>Alasan Ditolak: {reimburse.deskripsiPenolakan}</Text>
           {copyButton}
         </Flex>
       );
@@ -199,7 +208,10 @@ export default function ReimburseForm(props: ReimburseFormProps) {
               withCloseButton={false}
               closeOnClickOutside={false}
             >
-              <ReimburseFinishFormDialog onClose={handleFinished.close} />
+              <ReimburseFinishFormDialog
+                onClose={handleFinished.close}
+                reimburse={reimburse}
+              />
             </Modal>
             <Modal
               title={<Text fw={600}>Tolak Reimburse</Text>}
@@ -209,7 +221,10 @@ export default function ReimburseForm(props: ReimburseFormProps) {
               withCloseButton={false}
               closeOnClickOutside={false}
             >
-              <ReimburseRejectFormDialog onClose={handleReject.close} />
+              <ReimburseRejectFormDialog
+                onClose={handleReject.close}
+                reimburse={reimburse}
+              />
             </Modal>
           </SimpleGrid>
         )}

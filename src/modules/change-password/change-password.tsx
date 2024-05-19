@@ -1,7 +1,7 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Space } from '@mantine/core';
 import Form from 'components/form';
 import Input from 'components/input';
-import useYupValidationResolver from 'hooks/use-yup-validation-resolver';
 import { FormLayout } from 'modules/common/layout';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,11 +20,9 @@ export default function ChangePassword() {
     };
   }, []);
 
-  const resolver = useYupValidationResolver(ChangePasswordFormSchema());
-
   const methods = useForm({
     defaultValues,
-    resolver,
+    resolver: yupResolver(ChangePasswordFormSchema()),
   });
 
   const onSubmit = React.useCallback(async (values) => {}, []);

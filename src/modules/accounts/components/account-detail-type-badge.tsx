@@ -1,6 +1,5 @@
 import { Badge } from '@mantine/core';
-
-import { AccountDetailTypeEnum } from './account-form-type';
+import { AccountDetailTypeEnum } from 'api-hooks/account/model';
 
 export default function AccountDetailTypeBadge(props: {
   jenis: AccountDetailTypeEnum;
