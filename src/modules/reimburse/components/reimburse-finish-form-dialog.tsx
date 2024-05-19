@@ -49,7 +49,7 @@ export default function ReimburseFinishFormDialog(props: {
       try {
         const result = await mutateAsync({
           id: props.reimburse.id,
-          data: values,
+          data: { ...values, name: `Reimburse no: ${props.reimburse.id}` },
         });
         notification.success({
           message: result.message,

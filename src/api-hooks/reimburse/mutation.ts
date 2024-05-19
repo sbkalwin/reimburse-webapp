@@ -74,10 +74,11 @@ export function useRejectReimburse(
   >,
 ) {
   return useMutation<ApiResult<any>, ApiError, ReimburseRejectMutationInput>({
-    mutationFn({ id }) {
+    mutationFn({ id, data }) {
       return callApi({
         url: `${API_LIST.Reimburses}/${id}/reject`,
         method: 'PUT',
+        data,
       });
     },
     ...options,
@@ -92,10 +93,11 @@ export function useFinishReimburse(
   >,
 ) {
   return useMutation<ApiResult<any>, ApiError, ReimburseFinishMutationInput>({
-    mutationFn({ id }) {
+    mutationFn({ id, data }) {
       return callApi({
         url: `${API_LIST.Reimburses}/${id}/finish`,
         method: 'PUT',
+        data,
       });
     },
     ...options,
