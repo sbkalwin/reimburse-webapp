@@ -35,7 +35,7 @@ export default async function handler(
         data: decamelizeKeys(kasDetail),
       });
     }
-    middleware(request, response, true);
+    await middleware(request, response, true);
     if (request.method === 'POST') {
       const kasDetail = await kasDetailSchema.validate(body);
       const id = generateId();

@@ -46,32 +46,32 @@ export default function UserStatistic(props: UserStatisticProps) {
         const rejected = data.filter(filterWithRejected).length;
         return (
           <>
-            <SimpleGrid cols={4}>
-              <Card withBorder shadow="xs">
-                <Flex align="center" direction="column">
+            <SimpleGrid cols={2}>
+              <Card withBorder>
+                <Flex align="start" direction="column">
                   <List size={36} />
                   <Text>Total Diajukan</Text>
                   <Text>{all}</Text>
                 </Flex>
               </Card>
-              <Card withBorder shadow="xs">
-                <Flex align="center" direction="column">
+              <Card withBorder>
+                <Flex align="start" direction="column">
                   <ClockClockwise size={36} />
-                  <Text>Total Pending</Text>
+                  <Text>Pending</Text>
                   <Text>{pending}</Text>
                 </Flex>
               </Card>
-              <Card withBorder shadow="xs">
-                <Flex align="center" direction="column">
+              <Card withBorder>
+                <Flex align="start" direction="column">
                   <CheckCircle size={36} />
-                  <Text>Total Diterima</Text>
+                  <Text>Diterima</Text>
                   <Text>{finished}</Text>
                 </Flex>
               </Card>
-              <Card withBorder shadow="xs">
-                <Flex align="center" direction="column">
+              <Card withBorder>
+                <Flex align="start" direction="column">
                   <XCircle size={36} />
-                  <Text>Total Ditolak</Text>
+                  <Text>Ditolak</Text>
                   <Text>{rejected}</Text>
                 </Flex>
               </Card>

@@ -26,7 +26,7 @@ export default async function handler(
       });
     }
 
-    middleware(request, response, true);
+    await middleware(request, response, true);
     if (request.method === 'POST') {
       const kas = await kasFormSchema.validate(body);
       const id = generateId();

@@ -74,7 +74,7 @@ export default async function handler(
       });
     }
 
-    middleware(request, response, true);
+    await middleware(request, response, true);
     if (request.method === 'DELETE') {
       const pengembalianPicLength = currentKaryawan.PengembalianPic.length;
       const pengembalianLength = currentKaryawan.Pengembalian.length;

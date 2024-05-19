@@ -1,4 +1,5 @@
 import { decamelizeKeys } from 'humps';
+import { JwtPayload } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
@@ -17,7 +18,7 @@ export default async function handler(
 ) {
   const id = request.query.id as string;
   const body = request.body;
-  middleware(request, response, true);
+  const user = middleware(request, response, true) as JwtPayload;
 
   try {
     const currentPengembalian = await prisma.pengembalian.findUnique({
@@ -58,6 +59,7 @@ export default async function handler(
           status: 'rejected',
           deskripsiPenolakan: pengembalian.deskripsi_penolakan,
           tanggalPenolakan: pengembalian.tanggal_penolakan,
+          nipPic: user.nip,
         },
         select: ReimburseResource,
       });

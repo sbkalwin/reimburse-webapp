@@ -27,7 +27,7 @@ export default async function handler(
         data: decamelizeKeys(peralatanKantor),
       });
     }
-    middleware(request, response, true);
+    await middleware(request, response, true);
     if (request.method === 'POST') {
       const peralatanKantor = await peralatanKantorFormSchema.validate(body);
       const id = generateId();

@@ -39,7 +39,7 @@ export default async function handler(
       const { DetailPengembalian, ...rest } = currentPeralatanKantor;
       return response.status(200).json({ data: decamelizeKeys(rest) });
     }
-    middleware(request, response, true);
+    await middleware(request, response, true);
 
     if (request.method === 'PUT') {
       await peralatanKantorSchema.validate(body, {

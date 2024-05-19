@@ -21,20 +21,20 @@ export default function UsersStatistic(props: UsersStatisticProps) {
         const inactive = data.filter(filterByInactive).length;
         return (
           <>
-            <SimpleGrid cols={3}>
-              <Card withBorder shadow="xs">
+            <SimpleGrid cols={2}>
+              <Card withBorder>
                 <UsersFour size={36} />
                 <Text>Jumlah Karyawan</Text>
                 <Text>{all}</Text>
               </Card>
-              <Card withBorder shadow="xs">
+              <Card withBorder>
                 <CheckCircle size={36} />
-                <Text>Jumlah Karyawan Active</Text>
+                <Text>Karyawan Active</Text>
                 <Text>{active}</Text>
               </Card>
-              <Card withBorder shadow="xs">
+              <Card withBorder>
                 <XCircle size={36} />
-                <Text>Jumlah Karyawan Inactive</Text>
+                <Text>Karyawan Inactive</Text>
                 <Text>{inactive}</Text>
               </Card>
             </SimpleGrid>

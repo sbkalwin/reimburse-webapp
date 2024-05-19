@@ -4,6 +4,8 @@ import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { jwtDecode } from 'jwt-decode';
 import { customAlphabet } from 'nanoid';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+import prisma from '../../prisma';
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
 
 export function parseValidationError(validationError: string) {
@@ -77,7 +79,7 @@ export function isTokenExpired(exp: number = -1) {
   }
 }
 
-export function middleware(
+export async function middleware(
   request: NextApiRequest,
   response: NextApiResponse,
   isAdmin = false,
@@ -94,11 +96,23 @@ export function middleware(
         });
       }
 
-      if (user.peran !== 'admin' && isAdmin) {
+      const currentUser = await prisma.pegawai.findUnique({
+        where: { nip: user.nip },
+      });
+
+      if (!currentUser) {
+        return response.status(401).json({
+          message: 'Unauthorized',
+        });
+      }
+
+      if (currentUser.peran !== 'admin' && isAdmin) {
         return response.status(403).json({
           message: 'Maaf anda tidak dapat mengakses fitur ini',
         });
       }
+
+      return currentUser;
     } else {
       return response.status(401).json({
         message: 'Unauthorized',

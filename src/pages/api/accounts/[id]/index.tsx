@@ -17,7 +17,7 @@ export default async function handler(
 ) {
   const id = request.query.id as string;
   const body = request.body;
-  middleware(request, response, true);
+  await middleware(request, response, true);
 
   try {
     const currentKas = await prisma.kas.findUnique({
