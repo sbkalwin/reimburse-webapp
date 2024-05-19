@@ -40,7 +40,7 @@ export default async function handler(
       return response.status(200).json({ data: decamelizeKeys(currentTeam) });
     }
 
-    middleware(request, response, true);
+    await middleware(request, response, true);
 
     if (request.method === 'PUT') {
       await teamSchema.validate(body, {

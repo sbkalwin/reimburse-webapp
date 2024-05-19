@@ -3,6 +3,7 @@ import { Button, Flex, SimpleGrid } from '@mantine/core';
 import { ReimburseModel } from 'api-hooks/reimburse/model';
 import { useFinishReimburse } from 'api-hooks/reimburse/mutation';
 import notification from 'common/helpers/notifications';
+import { queryClient } from 'common/helpers/query-client';
 import Form from 'components/form';
 import Input from 'components/input';
 import AccountSelect from 'modules/select/account-select';
@@ -54,6 +55,8 @@ export default function ReimburseFinishFormDialog(props: {
         notification.success({
           message: result.message,
         });
+        queryClient.refetchQueries();
+
         props.onClose();
       } catch (e) {
         notification.error({

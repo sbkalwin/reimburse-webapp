@@ -188,14 +188,18 @@ export default function Home() {
         {reimburseStatistics}
       </Flex>
       {isAdmin && (
-        <SimpleGrid cols={2} my={24}>
-          {adminLinks}
-        </SimpleGrid>
+        <>
+          <SimpleGrid cols={2} my={24}>
+            {adminLinks}
+          </SimpleGrid>
+        </>
       )}
       {isUser && (
-        <SimpleGrid cols={2} my={24}>
-          {userLinks}
-        </SimpleGrid>
+        <>
+          <SimpleGrid cols={2} my={24}>
+            {userLinks}
+          </SimpleGrid>
+        </>
       )}
       {!user && (
         <Flex w="100%" my="auto" gap={24}>

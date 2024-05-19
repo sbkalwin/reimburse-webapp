@@ -40,7 +40,7 @@ export default async function handler(
         .json({ data: decamelizeKeys(currentPerjalanan) });
     }
 
-    middleware(request, response, true);
+    await middleware(request, response, true);
 
     if (request.method === 'PUT') {
       await perjalananSchema.validate(body, {

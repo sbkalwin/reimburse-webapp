@@ -21,7 +21,7 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
-  middleware(request, response, true);
+  await middleware(request, response, true);
   const id = request.query.id as string;
   const body = request.body;
 

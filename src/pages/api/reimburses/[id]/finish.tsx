@@ -1,13 +1,11 @@
 import { decamelizeKeys } from 'humps';
+import { JwtPayload } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { generateId, middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../../prisma';
-import {
-  KasLiteResource,
-  ReimburseResource,
-} from '../../../../../prisma/resources';
+import { ReimburseResource } from '../../../../../prisma/resources';
 
 export const reimburseFinishFormSchema = Yup.object({
   total: Yup.number().default(0).required(),
@@ -23,7 +21,7 @@ export default async function handler(
 ) {
   const id = request.query.id as string;
   const body = request.body;
-  middleware(request, response, true);
+  const user = (await middleware(request, response, true)) as JwtPayload;
   try {
     const currentPengembalian = await prisma.pengembalian.findUnique({
       where: {
@@ -63,13 +61,14 @@ export default async function handler(
           status: 'finished',
           tanggalPelunasan: pengembalian.tanggal_pelunasan,
           totalPelunasan: pengembalian.total,
+          nipPic: user.nip,
         },
         select: ReimburseResource,
       });
 
       const idKas = generateId();
 
-      const createKasDetail = await prisma.kasDetail.create({
+      await prisma.kasDetail.create({
         data: {
           deskripsi: pengembalian.deskripsi,
           kasId: pengembalian.kas_id,
@@ -78,13 +77,11 @@ export default async function handler(
           total: pengembalian.total,
           id: idKas,
         },
-        select: KasLiteResource,
       });
 
       return response.status(200).json({
         data: decamelizeKeys({
           pengembalian: updatePengembalian,
-          kasDetail: createKasDetail,
         }),
         message: 'Pengembalian telah selesai',
       });

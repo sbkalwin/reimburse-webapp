@@ -29,7 +29,7 @@ export default async function handler(
       return response.status(200).json({ data: decamelizeKeys(teams) });
     }
 
-    middleware(request, response, true);
+    await middleware(request, response, true);
 
     if (request.method === 'POST') {
       const id = generateId();

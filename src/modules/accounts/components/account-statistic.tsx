@@ -32,18 +32,18 @@ export default function AccountStatistic(props: AccountStatisticProps) {
         const total = income - outcome;
         return (
           <>
-            <SimpleGrid cols={3}>
-              <Card withBorder shadow="xs">
+            <SimpleGrid cols={2}>
+              <Card withBorder>
                 <FileText size={36} />
                 <Text>Total</Text>
                 <Text>Rp. {string2money(total)}</Text>
               </Card>
-              <Card withBorder shadow="xs">
+              <Card withBorder>
                 <FilePlus size={36} />
                 <Text>Pemasukan</Text>
                 <Text>Rp. {string2money(income)}</Text>
               </Card>
-              <Card withBorder shadow="xs">
+              <Card withBorder>
                 <FileMinus size={36} />
                 <Text>Pengeluaran</Text>
                 <Text>Rp. {string2money(outcome)}</Text>
