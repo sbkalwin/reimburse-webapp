@@ -5,6 +5,7 @@ import {
   AccountDetailTypeEnum,
   AccountModel,
 } from 'api-hooks/account/model';
+import notification from 'common/helpers/notifications';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import Form, { FormState } from 'components/form';
 import Input from 'components/input';
@@ -21,6 +22,7 @@ interface AccountDetailFormProps {
   accountDetail?: AccountDetailModel;
   account: AccountModel;
   onClose: () => void;
+  onSubmit: (values: AccountDetailFormType) => Promise<void>;
 }
 
 export default function AccountDetailForm(props: AccountDetailFormProps) {
@@ -43,7 +45,14 @@ export default function AccountDetailForm(props: AccountDetailFormProps) {
 
   const onSubmit = React.useCallback(
     async (values: AccountDetailFormType) => {
-      props.onClose();
+      try {
+        await props.onSubmit(values);
+        props.onClose();
+      } catch (e) {
+        notification.error({
+          message: e.message,
+        });
+      }
     },
     [props],
   );
@@ -102,7 +111,17 @@ export default function AccountDetailForm(props: AccountDetailFormProps) {
                     >
                       Batal
                     </Button>
-                    {!disabled && <Button type="submit">Simpan</Button>}
+                    {!disabled && (
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          methods.handleSubmit(onSubmit)();
+                        }}
+                        loading={methods.formState.isSubmitting}
+                      >
+                        Simpan
+                      </Button>
+                    )}
                     {isEdit && disabled && (
                       <Button
                         onClick={() => {

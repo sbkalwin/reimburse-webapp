@@ -140,3 +140,22 @@ export type ReimburseUpdateMutationInput = {
 export type ReimburseDeleteMutationInput = {
   id: string;
 };
+
+export type ReimburseRejectMutationInput = {
+  id: string;
+  data: {
+    deskripsi_penolakan: string;
+    tanggal_penolakan: Date;
+  };
+};
+
+export type ReimburseFinishMutationInput = {
+  id: string;
+  data: {
+    total: number;
+    deskripsi: string;
+    kas_id: string;
+    tanggal_pelunasan: Date;
+    pengembalian_id: string;
+  };
+};

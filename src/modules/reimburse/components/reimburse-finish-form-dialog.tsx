@@ -1,5 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, SimpleGrid } from '@mantine/core';
+import { ReimburseModel } from 'api-hooks/reimburse/model';
+import { useFinishReimburse } from 'api-hooks/reimburse/mutation';
+import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
 import AccountSelect from 'modules/select/account-select';
@@ -13,6 +16,7 @@ import {
 } from './reimburse-form-type';
 
 export default function ReimburseFinishFormDialog(props: {
+  reimburse: ReimburseModel;
   onClose: () => void;
 }) {
   const { getValues } = useFormContext<ReimburseFormType>();
@@ -38,11 +42,26 @@ export default function ReimburseFinishFormDialog(props: {
     resolver: yupResolver(ReimburseFinishFormSchema()),
   });
 
+  const { mutateAsync } = useFinishReimburse();
+
   const onSubmit = React.useCallback(
     async (values: ReimburseFinishFormType) => {
-      props.onClose();
+      try {
+        const result = await mutateAsync({
+          id: props.reimburse.id,
+          data: values,
+        });
+        notification.success({
+          message: result.message,
+        });
+        props.onClose();
+      } catch (e) {
+        notification.error({
+          message: e.message,
+        });
+      }
     },
-    [props],
+    [mutateAsync, props],
   );
 
   return (

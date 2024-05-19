@@ -208,7 +208,10 @@ export default function ReimburseForm(props: ReimburseFormProps) {
               withCloseButton={false}
               closeOnClickOutside={false}
             >
-              <ReimburseFinishFormDialog onClose={handleFinished.close} />
+              <ReimburseFinishFormDialog
+                onClose={handleFinished.close}
+                reimburse={reimburse}
+              />
             </Modal>
             <Modal
               title={<Text fw={600}>Tolak Reimburse</Text>}
@@ -218,7 +221,10 @@ export default function ReimburseForm(props: ReimburseFormProps) {
               withCloseButton={false}
               closeOnClickOutside={false}
             >
-              <ReimburseRejectFormDialog onClose={handleReject.close} />
+              <ReimburseRejectFormDialog
+                onClose={handleReject.close}
+                reimburse={reimburse}
+              />
             </Modal>
           </SimpleGrid>
         )}

@@ -82,7 +82,7 @@ export function useCreateAccountDetail(
   });
 }
 
-export function useUpdateAccountDetailDetail(
+export function useUpdateAccountDetail(
   options?: UseMutationOptions<
     ApiResult<any>,
     ApiError,

@@ -4,7 +4,9 @@ import { API_LIST, callApi } from 'common/helpers/client';
 
 import {
   ReimburseDeleteMutationInput,
+  ReimburseFinishMutationInput,
   ReimburseMutationInput,
+  ReimburseRejectMutationInput,
   ReimburseUpdateMutationInput,
 } from './model';
 
@@ -58,6 +60,42 @@ export function useDeleteReimburse(
       return callApi({
         url: `${API_LIST.Reimburses}/${id}`,
         method: 'DELETE',
+      });
+    },
+    ...options,
+  });
+}
+
+export function useRejectReimburse(
+  options?: UseMutationOptions<
+    ApiResult<any>,
+    ApiError,
+    ReimburseRejectMutationInput
+  >,
+) {
+  return useMutation<ApiResult<any>, ApiError, ReimburseRejectMutationInput>({
+    mutationFn({ id }) {
+      return callApi({
+        url: `${API_LIST.Reimburses}/${id}/reject`,
+        method: 'PUT',
+      });
+    },
+    ...options,
+  });
+}
+
+export function useFinishReimburse(
+  options?: UseMutationOptions<
+    ApiResult<any>,
+    ApiError,
+    ReimburseFinishMutationInput
+  >,
+) {
+  return useMutation<ApiResult<any>, ApiError, ReimburseFinishMutationInput>({
+    mutationFn({ id }) {
+      return callApi({
+        url: `${API_LIST.Reimburses}/${id}/finish`,
+        method: 'PUT',
       });
     },
     ...options,

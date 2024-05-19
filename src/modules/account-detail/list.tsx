@@ -3,9 +3,15 @@ import { useDisclosure } from '@mantine/hooks';
 import { Plus } from '@phosphor-icons/react';
 import { AccountDetailLiteModel, AccountModel } from 'api-hooks/account/model';
 import {
+  useCreateAccountDetail,
+  useUpdateAccountDetail,
+} from 'api-hooks/account/mutation';
+import {
   useGetAccountDetail,
   useGetAccountDetails,
 } from 'api-hooks/account/query';
+import notification from 'common/helpers/notifications';
+import { queryClient } from 'common/helpers/query-client';
 import colors from 'common/styles/colors';
 import LoaderView from 'components/loader-view';
 import AccountDetailForm from 'modules/accounts/components/account-detail-form';
@@ -24,6 +30,9 @@ export default function AccountDetailList(props: { account: AccountModel }) {
   const queryGetAccountDetail = useGetAccountDetail({
     input: { id: accountDetail?.id },
   });
+
+  const { mutateAsync: createDetailMutate } = useCreateAccountDetail();
+  const { mutateAsync: updateDetailMutate } = useUpdateAccountDetail();
 
   return (
     <>
@@ -86,12 +95,28 @@ export default function AccountDetailList(props: { account: AccountModel }) {
                   account={props.account}
                   onClose={close}
                   accountDetail={data}
+                  onSubmit={async (values) => {
+                    const result = await updateDetailMutate({
+                      id: data.id,
+                      data: values,
+                    });
+                    queryClient.refetchQueries();
+                    notification.success({ message: result.message });
+                  }}
                 />
               );
             }}
           </LoaderView>
         ) : (
-          <AccountDetailForm account={props.account} onClose={close} />
+          <AccountDetailForm
+            account={props.account}
+            onClose={close}
+            onSubmit={async (values) => {
+              const result = await createDetailMutate(values);
+              queryClient.refetchQueries();
+              notification.success({ message: result.message });
+            }}
+          />
         )}
       </Modal>
     </>
