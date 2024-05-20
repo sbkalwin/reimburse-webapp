@@ -5,9 +5,11 @@ import Webcam from 'react-webcam';
 
 const frontCamera = {
   facingMode: { exact: 'environment' },
+  aspectRatio: 9 / 16,
 };
 const selfieCamera = {
   facingMode: 'user',
+  aspectRatio: 9 / 16,
 };
 
 export default function WebcamTest() {
@@ -75,34 +77,20 @@ export default function WebcamTest() {
       style={{
         minWidth: '100dvw',
         minHeight: '100dvh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {image ? (
-        <Image
-          src={image}
-          style={{
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
-            left: '50%',
-            marginLeft: '-50%',
-            objectFit: 'cover',
-            objectPosition: 'center',
-          }}
-        />
+        <Image src={image} h="100dvh" />
       ) : (
         <Webcam
           screenshotFormat="image/jpeg"
           ref={webcamRef}
           videoConstraints={videoConstraints}
           style={{
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
-            left: '50%',
-            marginLeft: '-50%',
-            objectFit: 'cover',
-            objectPosition: 'center',
+            height: '100dvh',
           }}
         />
       )}
