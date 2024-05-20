@@ -1,5 +1,5 @@
-import { Button, Image } from '@mantine/core';
-import { Camera, CameraRotate } from '@phosphor-icons/react';
+import { ActionIcon, Image } from '@mantine/core';
+import { Camera, CameraRotate, Check, X } from '@phosphor-icons/react';
 import React from 'react';
 import Webcam from 'react-webcam';
 
@@ -33,6 +33,43 @@ export default function WebcamTest() {
     setIsSelfie(false);
     setVideoConstraints(frontCamera);
   };
+
+  const cameraActionIcons = (
+    <>
+      <ActionIcon size="xl" radius="50%" onClick={capture}>
+        <Camera size={20} />
+      </ActionIcon>
+      <ActionIcon
+        size="xl"
+        radius="50%"
+        onClick={isSelfie ? onFront : onSelfie}
+        pos="absolute"
+        right={16}
+        bottom={16}
+      >
+        <CameraRotate size={20} />
+      </ActionIcon>
+    </>
+  );
+
+  const submitActionIcons = (
+    <>
+      <ActionIcon size="xl" radius="50%">
+        <Check size={20} />
+      </ActionIcon>
+      <ActionIcon
+        size="xl"
+        radius="50%"
+        onClick={() => {
+          setImage(undefined);
+        }}
+        color="red"
+      >
+        <X size={20} />
+      </ActionIcon>
+    </>
+  );
+
   return (
     <div
       style={{
@@ -40,28 +77,39 @@ export default function WebcamTest() {
         minHeight: '100dvh',
       }}
     >
-      {image && <Image src={image} />}
-      <Webcam
-        screenshotFormat="image/jpeg"
-        ref={webcamRef}
-        videoConstraints={videoConstraints}
-      />
+      {image ? (
+        <Image src={image} />
+      ) : (
+        <Webcam
+          screenshotFormat="image/jpeg"
+          ref={webcamRef}
+          videoConstraints={videoConstraints}
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            left: '50%',
+            marginLeft: '-50%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
+        />
+      )}
       <div
         style={{
-          position: 'absolute',
+          position: 'fixed',
           zIndex: 1,
-          backgroundColor: 'black',
           bottom: 0,
           left: 0,
           right: 0,
+          padding: 16,
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 64,
         }}
-      />
-      <Button onClick={capture}>
-        <Camera />
-      </Button>
-      <Button onClick={isSelfie ? onFront : onSelfie}>
-        <CameraRotate />
-      </Button>
+      >
+        {image ? submitActionIcons : cameraActionIcons}
+      </div>
     </div>
   );
 }
