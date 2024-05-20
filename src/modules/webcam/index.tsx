@@ -95,6 +95,7 @@ export default function WebcamTest() {
         <Webcam
           screenshotFormat="image/jpeg"
           ref={webcamRef}
+          forceScreenshotSourceSize
           videoConstraints={videoConstraints}
           style={{
             width: '100%',
