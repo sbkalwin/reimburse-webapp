@@ -1,4 +1,12 @@
-import { Button, Card, Flex, SimpleGrid, Text, Title } from '@mantine/core';
+import {
+  Button,
+  Card,
+  FileButton,
+  Flex,
+  SimpleGrid,
+  Text,
+  Title,
+} from '@mantine/core';
 import {
   Bank,
   Books,
@@ -14,6 +22,7 @@ import {
   Graph,
 } from '@phosphor-icons/react';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
+import ImageInput from 'components/file-input';
 import useAuth from 'hooks/use-auth';
 import AccountStatistic from 'modules/accounts/components/account-statistic';
 import UserStatistic from 'modules/user/components/user-statistic';
@@ -178,6 +187,19 @@ export default function Home() {
 
   return (
     <>
+      <ImageInput type="image" />
+      <FileButton
+        onChange={(file) => {
+          console.log(file);
+          const reader = new FileReader();
+          reader.addEventListener('load', (event) => {
+            console.log(event.target?.result);
+          });
+          file && reader.readAsDataURL(file);
+        }}
+      >
+        {(props) => <Button {...props}>Upload image</Button>}
+      </FileButton>
       <Flex direction="row" gap={16} align="center">
         <User size={24} weight="bold" />
         <Title order={6}>Hello, {user?.nama ?? 'World'}</Title>

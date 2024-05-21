@@ -41,7 +41,7 @@ export class ReimburseLiteModel extends CommonModel {
 
   @Expose({ name: 'kas_detail' })
   @Type(() => AccountDetailLiteModel)
-  KasDetail: AccountDetailLiteModel;
+  KasDetail: AccountDetailLiteModel[];
 
   @Type(() => EmployeeLiteModel)
   pemohon: EmployeeLiteModel;

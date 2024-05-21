@@ -30,7 +30,10 @@ export default function ReimburseItem(props: ReimburseLiteModel) {
     .filter(Boolean)
     .join(' - ');
 
-  const total = 0;
+  const total = props.KasDetail.reduce(
+    (prev, detail) => prev + detail.total,
+    0,
+  );
 
   const rejectedComponent = props.deskripsiPenolakan && (
     <Text fz={11}>Alasan Ditolak: {props.deskripsiPenolakan}</Text>
