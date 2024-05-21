@@ -22,7 +22,6 @@ import {
   Graph,
 } from '@phosphor-icons/react';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
-import ImageInput from 'components/file-input';
 import useAuth from 'hooks/use-auth';
 import AccountStatistic from 'modules/accounts/components/account-statistic';
 import UserStatistic from 'modules/user/components/user-statistic';
@@ -187,7 +186,6 @@ export default function Home() {
 
   return (
     <>
-      <ImageInput type="image" />
       <FileButton
         onChange={(file) => {
           console.log(file);
