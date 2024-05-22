@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import ReimburseStatusBadge from './reimburse-status-badge';
+import ReimburseTypeBadge from './reimburse-type-badge';
 
 export default function ReimburseItem(props: ReimburseLiteModel) {
   const { prefetch, push } = useRouter();
@@ -87,7 +88,9 @@ export default function ReimburseItem(props: ReimburseLiteModel) {
           <Text fz={11}>Total: {string2money(total)}</Text>
         </Flex>
         <Title order={6}>{requesterLabel}</Title>
-        <Text fz={11}>Jenis Reimburse: {props.jenis}</Text>
+        <Text fz={11}>
+          Jenis Reimburse: <ReimburseTypeBadge type={props.jenis} />
+        </Text>
         <Text fz={11} pos="absolute" right={16} bottom={16}>
           {formatDateTime(props.tanggalDibuat)}
         </Text>
