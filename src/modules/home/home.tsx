@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  FileButton,
-  Flex,
-  SimpleGrid,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Button, Card, Flex, SimpleGrid, Text, Title } from '@mantine/core';
 import {
   Bank,
   Books,
@@ -186,18 +178,6 @@ export default function Home() {
 
   return (
     <>
-      <FileButton
-        onChange={(file) => {
-          console.log(file);
-          const reader = new FileReader();
-          reader.addEventListener('load', (event) => {
-            console.log(event.target?.result);
-          });
-          file && reader.readAsDataURL(file);
-        }}
-      >
-        {(props) => <Button {...props}>Upload image</Button>}
-      </FileButton>
       <Flex direction="row" gap={16} align="center">
         <User size={24} weight="bold" />
         <Title order={6}>Hello, {user?.nama ?? 'World'}</Title>
