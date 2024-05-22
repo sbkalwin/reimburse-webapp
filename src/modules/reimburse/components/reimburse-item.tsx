@@ -30,8 +30,8 @@ export default function ReimburseItem(props: ReimburseLiteModel) {
     .filter(Boolean)
     .join(' - ');
 
-  const total = props.KasDetail.reduce(
-    (prev, detail) => prev + detail.total,
+  const total = props.detailPengembalian.reduce(
+    (prev, detail) => prev + detail.subtotal,
     0,
   );
 

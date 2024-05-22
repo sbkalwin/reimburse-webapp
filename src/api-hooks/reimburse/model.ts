@@ -25,7 +25,19 @@ export class ReimburseDetailLiteModel extends CommonModel {
   subtotal: number;
 }
 
+export class ReimburseReimburseDetailLiteModel {
+  id: string;
+  deskripsi: string;
+  nama: string;
+  jenis: ReimburseTypeEnum;
+  subtotal: number;
+}
+
 export class ReimburseLiteModel extends CommonModel {
+  @Expose({ name: 'detail_pengembalian' })
+  @Type(() => ReimburseReimburseDetailLiteModel)
+  detailPengembalian: ReimburseReimburseDetailLiteModel[];
+
   deskripsi: string;
 
   @Expose({ name: 'deskripsi_penolakan' })
@@ -94,7 +106,49 @@ export class ReimburseDetailModel extends CommonModel {
   pengembalian: ReimburseLiteModel;
 }
 
-export class ReimburseModel extends ReimburseLiteModel {
+export class ReimburseModel extends CommonModel {
+  deskripsi: string;
+
+  @Expose({ name: 'deskripsi_penolakan' })
+  deskripsiPenolakan: string | null;
+
+  jenis: ReimburseTypeEnum;
+
+  @Expose({ name: 'nip_pemohon' })
+  nipPemohon: string;
+
+  @Expose({ name: 'nip_pic' })
+  nipPic: string | null;
+
+  @Expose({ name: 'kas_detail' })
+  @Type(() => AccountDetailLiteModel)
+  KasDetail: AccountDetailLiteModel[];
+
+  @Type(() => EmployeeLiteModel)
+  pemohon: EmployeeLiteModel;
+
+  @Expose({ name: 'perjalanan_id' })
+  perjalananId: string | null;
+
+  @Type(() => ItinenaryLiteModel)
+  Perjalanan: ItinenaryLiteModel | null;
+
+  @Type(() => EmployeeLiteModel)
+  pic: EmployeeLiteModel | null;
+
+  status: ReimburseStatusEnum;
+
+  @Expose({ name: 'tanggal_pelunasan' })
+  @Type(() => Date)
+  tanggalPelunasan: Date | null;
+
+  @Expose({ name: 'tanggal_penolakan' })
+  @Type(() => Date)
+  tanggalPenolakan: Date | null;
+
+  @Expose({ name: 'total_pelunasan' })
+  totalPelunasan: number | null;
+
   @Expose({ name: 'detail_pengembalian' })
   @Type(() => ReimburseDetailLiteModel)
   detailPengembalian: ReimburseDetailLiteModel[];

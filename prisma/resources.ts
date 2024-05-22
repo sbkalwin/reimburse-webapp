@@ -104,6 +104,16 @@ export const ReimburseLiteResource = {
   tanggalPelunasan: true,
   tanggalPenolakan: true,
   totalPelunasan: true,
+  DetailPengembalian: {
+    select: {
+      id: true,
+      deskripsi: true,
+      fileUrl: true,
+      nama: true,
+      jenis: true,
+      subtotal: true,
+    },
+  },
 };
 
 export const ReimburseDetailResource = {
