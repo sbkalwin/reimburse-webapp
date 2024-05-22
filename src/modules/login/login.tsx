@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Card, Flex, Space, Title } from '@mantine/core';
+import { Button, Card, Center, Flex, Image, Space, Title } from '@mantine/core';
 import { SignIn } from '@phosphor-icons/react';
 import { EmployeeModel } from 'api-hooks/auth/model';
 import { useLogin } from 'api-hooks/auth/mutation';
@@ -63,7 +63,9 @@ export default function Login() {
           <Title order={6} mb={8} ta="center">
             Reimburse-app
           </Title>
-          <Box bg="dark" m="auto" h={36} w={120} />
+          <Center>
+            <Image src="/logo.png" maw={120} width={120} alt="logo" />
+          </Center>
           <Space h={24} />
           <Input
             type="text"

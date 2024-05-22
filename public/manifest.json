@@ -1,33 +1,27 @@
 {
-  "name": "Reimbuse app",
-  "short_name": "Re imbuse app",
-  "description": "A simple progressive web app template using Next.js",
-  "display": "standalone",
-  "orientation": "portrait",
-  "scope": "/",
-  "start_url": "/",
-  "background_color": "#ffffff",
-  "theme_color": "#F3EFE0",
+  "theme_color": "#8936FF",
+  "background_color": "#2EC6FE",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "icon512_maskable.png",
+      "type": "image/png"
     },
     {
-      "src": "/icons/icon-256x256.png",
-      "type": "image/png",
-      "sizes": "256x192"
-    },
-    {
-      "src": "/icons/icon-384x384.png",
-      "type": "image/png",
-      "sizes": "384x384"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "icon512_rounded.png",
+      "type": "image/png"
     }
-  ]
+  ],
+  "orientation": "portrait",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "en-US",
+  "name": "Reimburse App",
+  "short_name": "Reimburse App",
+  "start_url": "/",
+  "scope": "/",
+  "id": "https://reimburse-webapp-sigma.vercel.app/"
 }
