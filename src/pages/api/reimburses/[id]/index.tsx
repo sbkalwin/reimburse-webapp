@@ -108,7 +108,7 @@ export default async function handler(
 
       return response.status(200).json({
         data: decamelizeKeys(updatePengembalian),
-        message: 'Kas berhasil diubah',
+        message: 'Pengembalian berhasil diubah',
       });
     }
 
