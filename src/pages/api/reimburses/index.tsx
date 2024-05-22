@@ -39,16 +39,30 @@ export default async function handler(
   const tanggal_mulai = request.query.tanggal_mulai as string | undefined;
   const tanggal_selesai = request.query.tanggal_selesai as string | undefined;
 
+  const tanggalMulai = getFilterDate(tanggal_mulai);
+  const tanggalSelesai = getFilterDate(tanggal_selesai);
+
+  const startedAt = tanggalMulai || tanggalSelesai;
+  //end of date
+  const endedAt = startedAt
+    ? new Date(startedAt.getTime() + 24 * 60 * 60 * 1000 - 1)
+    : undefined;
+
+  const filterRange =
+    tanggalMulai || tanggalSelesai
+      ? {
+          lte: tanggalSelesai || endedAt,
+          gte: tanggalMulai || startedAt,
+        }
+      : undefined;
+
   try {
     if (request.method === 'GET') {
       const pengembalian = await prisma.pengembalian.findMany({
         select: ReimburseLiteResource,
         where: {
           nipPemohon: nip_pemohon,
-          tanggalDibuat: {
-            lte: getFilterDate(tanggal_selesai),
-            gte: getFilterDate(tanggal_mulai),
-          },
+          tanggalDibuat: filterRange,
         },
       });
 

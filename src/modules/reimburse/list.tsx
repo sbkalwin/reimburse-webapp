@@ -75,6 +75,7 @@ export default function ReimburseList() {
               centered: true,
             }}
             onChange={setTanggalMulai}
+            clearable
           />
           <DatePickerInput
             label="Tanggal Selesai"
@@ -84,6 +85,7 @@ export default function ReimburseList() {
               centered: true,
             }}
             onChange={setTanggalSelesai}
+            clearable
           />
         </SimpleGrid>
         <SegmentedControl
