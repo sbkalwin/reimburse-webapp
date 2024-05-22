@@ -3,6 +3,7 @@ import { Plus, Trash } from '@phosphor-icons/react';
 import { ReimburseTypeEnum } from 'api-hooks/reimburse/model';
 import { useFormState } from 'components/form';
 import Input from 'components/input';
+import StationerySelect from 'modules/select/stationery-select';
 import React from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
@@ -48,16 +49,14 @@ export default function ReimburseDetailForm() {
   const stationerySelectComponent = (index: number) => {
     const parentName = `${name}.${index}` as const;
     return isStationery ? (
-      <Input
-        type="select"
+      <StationerySelect
         name={`${parentName}.peralatan_kantor_id`}
         label="Alat Kantor"
         placeholder="Masukkan Alat Kantor"
-        onAfterChange={(_, option: any) => {
+        onAfterChange={(_, option) => {
           setValue(`${parentName}.nama`, option.label);
-          setValue(`${parentName}.subtotal`, option.price);
+          setValue(`${parentName}.subtotal`, option.item.harga);
         }}
-        data={[]}
       />
     ) : (
       <Input

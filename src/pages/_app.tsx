@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { MantineProvider } from '@mantine/core';
+import { DatesProvider } from '@mantine/dates';
 import { Notifications } from '@mantine/notifications';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from 'common/helpers/query-client';
@@ -62,10 +63,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         />
       </Head>
       <MantineProvider theme={theme}>
-        <Notifications position="top-center" zIndex={1000} />
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
-        </QueryClientProvider>
+        <DatesProvider
+          settings={{
+            timezone: 'UTC',
+          }}
+        >
+          <Notifications position="top-center" zIndex={1000} />
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              {getLayout(<Component {...pageProps} />)}
+            </AuthProvider>
+          </QueryClientProvider>
+        </DatesProvider>
       </MantineProvider>
     </>
   );

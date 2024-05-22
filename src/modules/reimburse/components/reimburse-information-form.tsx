@@ -3,6 +3,7 @@ import { ReimburseTypeEnum } from 'api-hooks/reimburse/model';
 import Input from 'components/input';
 import ItinenarySelect from 'modules/select/itinenary-select';
 import UserSelect from 'modules/select/user-select';
+import React from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { ReimburseFormType } from './reimburse-form-type';
@@ -32,6 +33,21 @@ function SelectItinery() {
 export default function ReimburseInformationForm() {
   const { getValues, setValue } = useFormContext<ReimburseFormType>();
   const data = getValues('data');
+
+  const resetItinenary = React.useCallback(() => {
+    setValue('perjalanan_id', null);
+  }, [setValue]);
+
+  const resetStationery = React.useCallback(() => {
+    const details = getValues('details').map((detail) => {
+      return {
+        ...detail,
+        peralatan_kantor_id: null,
+        nama: '',
+      };
+    });
+    setValue('details', details);
+  }, [getValues, setValue]);
 
   return (
     <Flex gap={16} direction="column">
@@ -70,8 +86,15 @@ export default function ReimburseInformationForm() {
             label: 'ATK (Alat Tulis Kantor)',
           },
         ]}
-        onAfterChange={() => {
-          setValue('perjalanan_id', null);
+        onAfterChange={(value) => {
+          if (value === ReimburseTypeEnum.stationery) {
+            resetItinenary();
+          } else if (value === ReimburseTypeEnum.itinerary) {
+            resetStationery();
+          } else {
+            resetItinenary();
+            resetStationery();
+          }
         }}
         disabled={!!data}
       />

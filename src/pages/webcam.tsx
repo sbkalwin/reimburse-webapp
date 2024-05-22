@@ -1,3 +1,3 @@
-import WebcamTest from 'modules/webcam';
+import Webcam from 'components/webcam';
 
-export default WebcamTest;
+export default Webcam;

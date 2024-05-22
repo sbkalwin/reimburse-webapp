@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Title } from '@mantine/core';
+import { Card, Flex, Image, Title } from '@mantine/core';
 
 interface HomeLayoutProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export default function HomeLayout(props: HomeLayoutProps) {
           align="center"
         >
           <Flex direction="row" gap={16} align="center">
-            <Box bg="dark" h={36} w={120} />
+            <Image src="/logo.png" height={36} alt="logo" />
             <Title order={6}>Reimburse App</Title>
           </Flex>
         </Flex>

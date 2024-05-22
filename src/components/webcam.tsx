@@ -1,7 +1,8 @@
 import { ActionIcon, Image } from '@mantine/core';
 import { Camera, CameraRotate, Check, X } from '@phosphor-icons/react';
+import colors from 'common/styles/colors';
 import React from 'react';
-import Webcam from 'react-webcam';
+import RawWebcam from 'react-webcam';
 
 const frontCamera = {
   facingMode: { exact: 'environment' },
@@ -10,12 +11,19 @@ const selfieCamera = {
   facingMode: 'user',
 };
 
-export default function WebcamTest() {
+interface WebcamProps {
+  onChange?: (value: string) => void;
+  onClose?: () => void;
+  isOpen?: boolean;
+}
+
+export default function Webcam(props: WebcamProps) {
+  const { isOpen = true } = props;
   const [image, setImage] = React.useState<string | null | undefined>(
     undefined,
   );
 
-  const webcamRef = React.useRef<Webcam>(null);
+  const webcamRef = React.useRef<RawWebcam>(null);
   const [isSelfie, setIsSelfie] = React.useState(false);
   const [videoConstraints, setVideoConstraints] =
     React.useState<MediaTrackConstraints>(frontCamera);
@@ -29,9 +37,15 @@ export default function WebcamTest() {
     setIsSelfie(true);
     setVideoConstraints(selfieCamera);
   };
+
   const onFront = () => {
     setIsSelfie(false);
     setVideoConstraints(frontCamera);
+  };
+
+  const onSubmit = (image: string) => () => {
+    props.onChange?.(image);
+    props.onClose?.();
   };
 
   const cameraActionIcons = (
@@ -52,9 +66,9 @@ export default function WebcamTest() {
     </>
   );
 
-  const submitActionIcons = (
+  const submitActionIcons = image && (
     <>
-      <ActionIcon size="xl" radius="50%">
+      <ActionIcon size="xl" radius="50%" onClick={onSubmit(image)}>
         <Check size={20} />
       </ActionIcon>
       <ActionIcon
@@ -70,6 +84,26 @@ export default function WebcamTest() {
     </>
   );
 
+  const closeIcon = props.onClose && (
+    <ActionIcon
+      size="xl"
+      radius="50%"
+      onClick={props.onClose}
+      pos="absolute"
+      variant="light"
+      left={16}
+      top={16}
+      color={colors.mainWhite}
+      style={{
+        zIndex: 10,
+      }}
+    >
+      <X size={20} weight="bold" />
+    </ActionIcon>
+  );
+
+  if (!isOpen) return null;
+
   return (
     <div
       style={{
@@ -78,8 +112,13 @@ export default function WebcamTest() {
         display: 'flex',
         justifyItems: 'center',
         alignItems: 'center',
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1000,
+        backgroundColor: 'white',
       }}
     >
+      {closeIcon}
       {image ? (
         <Image
           src={image}
@@ -92,7 +131,7 @@ export default function WebcamTest() {
           }}
         />
       ) : (
-        <Webcam
+        <RawWebcam
           screenshotFormat="image/jpeg"
           ref={webcamRef}
           forceScreenshotSourceSize
@@ -121,7 +160,7 @@ export default function WebcamTest() {
           gap: 64,
         }}
       >
-        {image ? submitActionIcons : cameraActionIcons}
+        {submitActionIcons ?? cameraActionIcons}
       </div>
     </div>
   );
