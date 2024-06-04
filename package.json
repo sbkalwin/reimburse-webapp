@@ -30,6 +30,7 @@
     "class-transformer": "^0.5.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
+    "file-saver": "^2.0.5",
     "google": "link:@next/font/google",
     "humps": "^2.0.1",
     "jsonwebtoken": "^8.5.1",
@@ -46,6 +47,7 @@
     "react-webcam": "^7.2.0",
     "recharts": "2",
     "reflect-metadata": "^0.2.1",
+    "xlsx": "^0.18.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {

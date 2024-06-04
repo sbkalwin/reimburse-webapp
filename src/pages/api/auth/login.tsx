@@ -26,6 +26,19 @@ export default async function handler(
           .json({ message: 'Gagal Login, NIP tidak terdaftar' });
       }
 
+      if (user.kataSandi !== login.kata_sandi) {
+        return response.status(401).json({
+          message: 'NIP atau Password anda salah',
+        });
+      }
+
+      if (user.status === 'inactive') {
+        return response.status(400).json({
+          message:
+            'Akun anda telah di nonaktifkan, silahkan hubungi admin untuk mengaktifkan kembali',
+        });
+      }
+
       const token = generateAccessToken(user);
 
       return response.status(200).json({
