@@ -31,6 +31,16 @@ export default function ReimburseList() {
   const [tanggalMulai, setTanggalMulai] = React.useState<Date | null>(null);
   const [tanggalSelesai, setTanggalSelesai] = React.useState<Date | null>(null);
 
+  const [search, setSearch] = React.useState('');
+
+  const onSearch = (reimburse: ReimburseLiteModel) => {
+    const label = [reimburse.id, reimburse.pemohon.nip, reimburse.pemohon.nama]
+      .join('')
+      .toLowerCase();
+
+    return label.includes(search.toLowerCase());
+  };
+
   const onSearchUser = (reimburse: ReimburseLiteModel) => {
     if (userId) {
       return reimburse.nipPemohon === userId;
@@ -66,8 +76,13 @@ export default function ReimburseList() {
       >
         {!userId && (
           <TextInput
+            value={search}
             placeholder="Cari Karyawan"
             my={16}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSearch(value);
+            }}
             rightSection={<MagnifyingGlass size={16} />}
           />
         )}
@@ -118,7 +133,10 @@ export default function ReimburseList() {
       </Flex>
       <LoaderView query={queryGetReimburses} isCompact>
         {(data) => {
-          const reimburse = data.filter(onSearchUser).filter(onSearchStatus);
+          const reimburse = data
+            .filter(onSearchUser)
+            .filter(onSearchStatus)
+            .filter(onSearch);
           const dataExport = reimburse.map((item) => {
             const pemohon = item.pemohon;
             const pic = item.pic;

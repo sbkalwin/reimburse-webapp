@@ -88,6 +88,7 @@ export default function ReimburseItem(props: ReimburseLiteModel) {
           <Text fz={11}>Total: {string2money(total)}</Text>
         </Flex>
         <Title order={6}>{requesterLabel}</Title>
+        <Text fz={11}>Reimburse ID: {props.id}</Text>
         <Text fz={11}>
           Jenis Reimburse: <ReimburseTypeBadge type={props.jenis} />
         </Text>

@@ -1,6 +1,6 @@
-import { Button, Flex, Modal, Text, Title } from '@mantine/core';
+import { Button, Flex, Modal, Text, TextInput, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Plus } from '@phosphor-icons/react';
+import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
 import { AccountDetailLiteModel, AccountModel } from 'api-hooks/account/model';
 import {
   useCreateAccountDetail,
@@ -22,6 +22,7 @@ export default function AccountDetailList(props: { account: AccountModel }) {
   const [accountDetail, setAccountDetail] = React.useState<
     AccountDetailLiteModel | undefined
   >(undefined);
+  const [search, setSearch] = React.useState('');
   const [isOpenForm, { close, open }] = useDisclosure(false);
   const queryGetAccountDetails = useGetAccountDetails({
     params: { kas_id: props.account.id },
@@ -33,6 +34,11 @@ export default function AccountDetailList(props: { account: AccountModel }) {
 
   const { mutateAsync: createDetailMutate } = useCreateAccountDetail();
   const { mutateAsync: updateDetailMutate } = useUpdateAccountDetail();
+  const onSearch = (accountDetail: AccountDetailLiteModel) => {
+    const label = [accountDetail.id].filter(Boolean).join('').toLowerCase();
+
+    return label.includes(search.toLowerCase());
+  };
 
   return (
     <>
@@ -50,16 +56,23 @@ export default function AccountDetailList(props: { account: AccountModel }) {
             Tambah Transaksi
           </Button>
         </Flex>
+        <TextInput
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Cari ID Transaksi"
+          rightSection={<MagnifyingGlass size={16} />}
+        />
         <LoaderView isCompact query={queryGetAccountDetails}>
           {(data) => {
+            const accountDetails = data.filter(onSearch);
             return (
               <>
-                {data.length === 0 && (
+                {accountDetails.length === 0 && (
                   <Text mt={16} mx={16} fw={600} c={colors.foregroundTertiary}>
                     No Result Found
                   </Text>
                 )}
-                {data.map((accountDetail) => {
+                {accountDetails.map((accountDetail) => {
                   return (
                     <AccountDetailItem
                       key={accountDetail.id}
