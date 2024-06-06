@@ -182,10 +182,10 @@ export default function ReimburseList() {
               <ExportButton
                 data={dataExport}
                 filename={[
-                  'reimburse',
+                  'Laporan Reimburse',
                   userId,
-                  tanggalMulai?.toISOString().substring(0, 10),
-                  tanggalSelesai?.toISOString().substring(0, 10),
+                  tanggalMulai?.toISOString()?.substring(0, 10),
+                  tanggalSelesai?.toISOString()?.substring(0, 10),
                 ]
                   .filter(Boolean)
                   .join('-')}

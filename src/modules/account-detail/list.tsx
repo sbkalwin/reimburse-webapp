@@ -3,6 +3,7 @@ import {
   Flex,
   Modal,
   SimpleGrid,
+  Space,
   Text,
   TextInput,
   Title,
@@ -25,6 +26,7 @@ import colors from 'common/styles/colors';
 import LoaderView from 'components/loader-view';
 import AccountDetailForm from 'modules/accounts/components/account-detail-form';
 import AccountDetailItem from 'modules/accounts/components/account-detail-item';
+import ExportButton from 'modules/common/export-button';
 import React from 'react';
 
 export default function AccountDetailList(props: { account: AccountModel }) {
@@ -42,8 +44,6 @@ export default function AccountDetailList(props: { account: AccountModel }) {
       tanggal_selesai: tanggalSelesai || undefined,
     },
   });
-
-  console.log(tanggalMulai, tanggalSelesai);
 
   const queryGetAccountDetail = useGetAccountDetail({
     input: {
@@ -128,6 +128,21 @@ export default function AccountDetailList(props: { account: AccountModel }) {
                     />
                   );
                 })}
+                <Space h={60} />
+
+                <ExportButton
+                  data={accountDetails}
+                  filename={[
+                    'Laporan Kas',
+                    props.account.id,
+                    props.account.nama,
+                    search,
+                    tanggalMulai?.toISOString()?.substring(0, 10),
+                    tanggalSelesai?.toISOString()?.substring(0, 10),
+                  ]
+                    .filter(Boolean)
+                    .join(' - ')}
+                />
               </>
             );
           }}
