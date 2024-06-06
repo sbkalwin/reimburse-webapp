@@ -75,6 +75,7 @@ export default function ReimburseFinishFormDialog(props: {
           name="tanggal_pelunasan"
           label="Tanggal Pelunasan"
           placeholder="Tanggal Pelunasan"
+          disabled
         />
         <AccountSelect name="kas_id" label="Kas" placeholder="Pilih Kas" />
         <Input

@@ -51,7 +51,11 @@ export class AccountModel extends AccountLiteModel {
 }
 
 export type getAccountsInput = object;
-export type getAccountDetailsInput = { kas_id?: string };
+export type getAccountDetailsInput = {
+  kas_id?: string;
+  tanggal_mulai?: Date;
+  tanggal_selesai?: Date;
+};
 
 export type getAccountInput = {
   id: string;

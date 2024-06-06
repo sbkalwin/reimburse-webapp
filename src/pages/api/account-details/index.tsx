@@ -1,7 +1,12 @@
 import { AccountDetailTypeEnum } from '@prisma/client';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { generateId, middleware, parseValidationError } from 'utils/server';
+import {
+  generateId,
+  getFilterDate,
+  middleware,
+  parseValidationError,
+} from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
@@ -23,12 +28,37 @@ export default async function handler(
 ) {
   const body = request.body;
   const kas_id = request.query.kas_id as string | undefined;
+
+  const tanggal_mulai = request.query.tanggal_mulai as string | undefined;
+  const tanggal_selesai = request.query.tanggal_selesai as string | undefined;
+
+  const tanggalMulai = getFilterDate(tanggal_mulai);
+  const tanggalSelesai = getFilterDate(tanggal_selesai);
+
+  const startedAt = tanggalMulai || tanggalSelesai;
+  //end of date
+  const maxTime = 24 * 60 * 60 * 1000 - 1;
+  const endedAt = startedAt
+    ? new Date(startedAt.getTime() + maxTime)
+    : undefined;
+
+  const filterRange =
+    tanggalMulai || tanggalSelesai
+      ? {
+          lte: tanggalSelesai
+            ? new Date(tanggalSelesai.getTime() + maxTime)
+            : endedAt,
+          gte: tanggalMulai || startedAt,
+        }
+      : undefined;
+
   try {
     if (request.method === 'GET') {
       const kasDetail = await prisma.kasDetail.findMany({
         select: KasDetailLiteResource,
         where: {
           kasId: kas_id,
+          tanggalDibuat: filterRange,
         },
       });
       return response.status(200).json({

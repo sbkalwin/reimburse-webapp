@@ -61,6 +61,7 @@ export default function ReimburseRejectFormDialog(props: {
           name="tanggal_penolakan"
           label="Tanggal Penolakan"
           placeholder="Tanggal Penolakan"
+          disabled
         />
         <Input
           type="text"

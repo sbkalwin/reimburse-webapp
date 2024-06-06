@@ -1,4 +1,13 @@
-import { Button, Flex, Modal, Text, TextInput, Title } from '@mantine/core';
+import {
+  Button,
+  Flex,
+  Modal,
+  SimpleGrid,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
 import { AccountDetailLiteModel, AccountModel } from 'api-hooks/account/model';
@@ -23,13 +32,23 @@ export default function AccountDetailList(props: { account: AccountModel }) {
     AccountDetailLiteModel | undefined
   >(undefined);
   const [search, setSearch] = React.useState('');
+  const [tanggalMulai, setTanggalMulai] = React.useState<Date | null>(null);
+  const [tanggalSelesai, setTanggalSelesai] = React.useState<Date | null>(null);
   const [isOpenForm, { close, open }] = useDisclosure(false);
   const queryGetAccountDetails = useGetAccountDetails({
-    params: { kas_id: props.account.id },
+    params: {
+      kas_id: props.account.id,
+      tanggal_mulai: tanggalMulai || undefined,
+      tanggal_selesai: tanggalSelesai || undefined,
+    },
   });
 
+  console.log(tanggalMulai, tanggalSelesai);
+
   const queryGetAccountDetail = useGetAccountDetail({
-    input: { id: accountDetail?.id },
+    input: {
+      id: accountDetail?.id,
+    },
   });
 
   const { mutateAsync: createDetailMutate } = useCreateAccountDetail();
@@ -43,25 +62,50 @@ export default function AccountDetailList(props: { account: AccountModel }) {
   return (
     <>
       <Flex direction="column">
-        <Flex align="center" justify="space-between" my={16}>
-          <Title order={5}>Daftar Transaksi</Title>
-          <Button
-            variant="outline"
-            onClick={() => {
-              setAccountDetail(undefined);
-              open();
-            }}
-            rightSection={<Plus size={16} />}
-          >
-            Tambah Transaksi
-          </Button>
+        <Flex direction="column">
+          <Flex align="center" justify="space-between" my={16}>
+            <Title order={5}>Daftar Transaksi</Title>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setAccountDetail(undefined);
+                open();
+              }}
+              rightSection={<Plus size={16} />}
+            >
+              Tambah Transaksi
+            </Button>
+          </Flex>
+          <TextInput
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Cari ID Transaksi"
+            rightSection={<MagnifyingGlass size={16} />}
+          />
+          <SimpleGrid cols={2} my={16}>
+            <DatePickerInput
+              label="Tanggal Dimulai"
+              placeholder="Cari Tanggal Dimulai"
+              dropdownType="modal"
+              modalProps={{
+                centered: true,
+              }}
+              onChange={setTanggalMulai}
+              clearable
+            />
+            <DatePickerInput
+              label="Tanggal Selesai"
+              placeholder="Cari Tanggal Selesai"
+              dropdownType="modal"
+              modalProps={{
+                centered: true,
+              }}
+              onChange={setTanggalSelesai}
+              clearable
+            />
+          </SimpleGrid>
         </Flex>
-        <TextInput
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Cari ID Transaksi"
-          rightSection={<MagnifyingGlass size={16} />}
-        />
+
         <LoaderView isCompact query={queryGetAccountDetails}>
           {(data) => {
             const accountDetails = data.filter(onSearch);
