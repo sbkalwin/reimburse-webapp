@@ -13,9 +13,11 @@ const EXCEL_TYPE =
 const EXCEL_EXTENSION = '.xlsx';
 
 export default function useJsonToExcel<T>(props: UseJsonToExcelProps<T>) {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { data, filename = 'data' } = props;
   const onExport = React.useCallback(async () => {
     try {
+      setIsLoading(true);
       //create sheet
       const worksheet = XLSX.utils.json_to_sheet(data);
       //create file
@@ -35,8 +37,10 @@ export default function useJsonToExcel<T>(props: UseJsonToExcelProps<T>) {
       saveAs(blob, filename + EXCEL_EXTENSION);
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   }, [data, filename]);
 
-  return onExport;
+  return { onExport, isLoading };
 }

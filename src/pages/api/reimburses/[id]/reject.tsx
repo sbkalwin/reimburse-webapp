@@ -18,7 +18,7 @@ export default async function handler(
 ) {
   const id = request.query.id as string;
   const body = request.body;
-  const user = middleware(request, response, true) as JwtPayload;
+  const user = (await middleware(request, response, true)) as JwtPayload;
 
   try {
     const currentPengembalian = await prisma.pengembalian.findUnique({

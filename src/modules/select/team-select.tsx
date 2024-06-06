@@ -18,7 +18,7 @@ export function teamTransformer(team: TeamLiteModel): TeamOption {
   return {
     item: team,
     value: team.id,
-    label: team.nama,
+    label: [team.id, team.nama].join(' - '),
   };
 }
 

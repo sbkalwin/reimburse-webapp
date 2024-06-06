@@ -62,7 +62,7 @@ export default function ReimburseForm(props: ReimburseFormProps) {
       nip_pemohon: reimburse?.pemohon.nip ?? user?.nip ?? '',
       nip_pic: reimburse?.pic?.nip ?? null,
       status: reimburse?.status ?? ReimburseStatusEnum.pending,
-      perjalanan_id: reimburse?.Perjalanan?.id ?? null,
+      perjalanan_id: reimburse?.perjalanan?.id ?? null,
       details: reimburse?.detailPengembalian?.map((detail) => {
         return {
           peralatan_kantor_id: detail.peralatanKantorId,

@@ -12,12 +12,14 @@ interface FormLayoutProps {
   onDelete?: Function;
   isEditable?: boolean;
   rightIconProps?: React.ReactNode;
+  isShowBottomContainer?: boolean;
 }
 
 export function FormLayout({
   children,
   onDelete,
   isEditable = false,
+  isShowBottomContainer = true,
 }: FormLayoutProps) {
   const { disabled, setDisabled } = useFormState();
   const { reset, getValues, formState } = useFormContext();
@@ -69,7 +71,7 @@ export function FormLayout({
 
   const cols = [editButton, cancelButton, submitButton].filter(Boolean).length;
 
-  const bottomContainer = (
+  const bottomContainer = isShowBottomContainer && (
     <Card withBorder>
       <SimpleGrid cols={cols} w="100%" maw={768} m="auto">
         {editButton}

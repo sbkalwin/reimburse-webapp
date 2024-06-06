@@ -16,12 +16,15 @@ export default function AccountItem(props: AccountLiteModel) {
 
   return (
     <ListItem onClick={() => push(route)}>
-      <Flex justify="space-between" w="100%">
+      <Flex justify="space-between" w="100%" pos="relative">
         <Flex direction="column" gap={4}>
           <Title order={6}>{props.nama}</Title>
           <Text fz={12}>{props.deskripsi}</Text>
           <Text fz={11}>{formatDateTime(props.tanggalDibuat)}</Text>
         </Flex>
+        <Text fz={11} pos="absolute" top={0} right={0}>
+          {props.id}
+        </Text>
       </Flex>
     </ListItem>
   );

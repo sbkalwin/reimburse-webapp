@@ -26,10 +26,13 @@ export default function TeamItem(props: TeamModel) {
 
   return (
     <ListItem onClick={() => push(route)}>
-      <Flex direction="column">
+      <Flex direction="column" w="100%" pos="relative">
         <Title order={6}>{props.nama}</Title>
         {leaderComponent}
         <Text fz={11}>{formatDate(props.tanggalDibuat)}</Text>
+        <Text fz={11} pos="absolute" top={0} right={0}>
+          {props.id}
+        </Text>
       </Flex>
     </ListItem>
   );

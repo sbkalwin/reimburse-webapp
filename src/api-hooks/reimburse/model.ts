@@ -17,11 +17,19 @@ export enum ReimburseTypeEnum {
 
 export class ReimburseDetailLiteModel extends CommonModel {
   deskripsi: string;
+  @Expose({ name: 'file_url' })
   fileUrl: string;
+
   jenis: ReimburseTypeEnum;
+
   nama: string;
+
+  @Expose({ name: 'pengembalian_id' })
   pengembalianId: string;
+
+  @Expose({ name: 'peralatan_kantor_id' })
   peralatanKantorId: string;
+
   subtotal: number;
 }
 
@@ -53,7 +61,7 @@ export class ReimburseLiteModel extends CommonModel {
 
   @Expose({ name: 'kas_detail' })
   @Type(() => AccountDetailLiteModel)
-  KasDetail: AccountDetailLiteModel[];
+  KasDetail: AccountDetailLiteModel | null;
 
   @Type(() => EmployeeLiteModel)
   pemohon: EmployeeLiteModel;
@@ -62,7 +70,7 @@ export class ReimburseLiteModel extends CommonModel {
   perjalananId: string | null;
 
   @Type(() => ItinenaryLiteModel)
-  Perjalanan: ItinenaryLiteModel | null;
+  perjalanan: ItinenaryLiteModel | null;
 
   @Type(() => EmployeeLiteModel)
   pic: EmployeeLiteModel | null;
@@ -131,7 +139,7 @@ export class ReimburseModel extends CommonModel {
   perjalananId: string | null;
 
   @Type(() => ItinenaryLiteModel)
-  Perjalanan: ItinenaryLiteModel | null;
+  perjalanan: ItinenaryLiteModel | null;
 
   @Type(() => EmployeeLiteModel)
   pic: EmployeeLiteModel | null;

@@ -24,7 +24,11 @@ export function stationeryTransformer(
   return {
     item: stationery,
     value: stationery.id,
-    label: [stationery.nama, string2money(stationery.harga)].join(' - '),
+    label: [
+      stationery.id,
+      stationery.nama,
+      string2money(stationery.harga),
+    ].join(' - '),
   };
 }
 
