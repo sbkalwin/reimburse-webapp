@@ -56,7 +56,7 @@ export default function UserForm(props: UserFormProps) {
 
   return (
     <Form methods={methods} onSubmit={onSubmit} defaultEditable={!props.user}>
-      <FormLayout isEditable>
+      <FormLayout isEditable isShowBottomContainer={segment === 'Informasi'}>
         {isEdit && (
           <SegmentedControl
             w="100%"

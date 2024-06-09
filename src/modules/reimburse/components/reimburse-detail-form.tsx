@@ -9,7 +9,7 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
 import { ReimburseFormType } from './reimburse-form-type';
 export default function ReimburseDetailForm() {
-  const { control, setValue } = useFormContext<ReimburseFormType>();
+  const { control, setValue, getValues } = useFormContext<ReimburseFormType>();
   const jenis = useWatch({
     control,
     name: 'jenis',
@@ -20,6 +20,7 @@ export default function ReimburseDetailForm() {
   const isStationery = jenis === ReimburseTypeEnum.stationery;
 
   const name = 'details' as const;
+  const isEdit = !!getValues('data');
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -74,7 +75,7 @@ export default function ReimburseDetailForm() {
         const parentName = `${name}.${index}` as const;
         return (
           <Card key={field.customId} withBorder pos="relative">
-            {!disabled && (
+            {!disabled && !isEdit && (
               <ActionIcon
                 variant="subtle"
                 color="red"

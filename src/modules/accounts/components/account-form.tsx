@@ -52,7 +52,7 @@ export default function AccountForm(props: AccountFormProps) {
       onSubmit={onSubmit}
       defaultEditable={!props.account}
     >
-      <FormLayout>
+      <FormLayout isShowBottomContainer={segment === 'Informasi'}>
         {!!account && (
           <SegmentedControl
             w="100%"

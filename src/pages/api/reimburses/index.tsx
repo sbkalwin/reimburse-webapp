@@ -44,14 +44,18 @@ export default async function handler(
 
   const startedAt = tanggalMulai || tanggalSelesai;
   //end of date
+  const maxTime = 24 * 60 * 60 * 1000 - 1;
+
   const endedAt = startedAt
-    ? new Date(startedAt.getTime() + 24 * 60 * 60 * 1000 - 1)
+    ? new Date(startedAt.getTime() + maxTime)
     : undefined;
 
   const filterRange =
     tanggalMulai || tanggalSelesai
       ? {
-          lte: tanggalSelesai || endedAt,
+          lte: tanggalSelesai
+            ? new Date(tanggalSelesai.getTime() + maxTime)
+            : endedAt,
           gte: tanggalMulai || startedAt,
         }
       : undefined;

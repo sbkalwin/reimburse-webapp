@@ -16,7 +16,7 @@ export default function StationeryItem(props: StationeryLiteModel) {
 
   return (
     <ListItem onClick={() => push(route)}>
-      <Flex justify="space-between" w="100%">
+      <Flex justify="space-between" w="100%" pos="relative">
         <Flex direction="column" gap={4}>
           <Title order={6}>{props.nama}</Title>
           <Text fz={12}>{props.deskripsi}</Text>
@@ -24,6 +24,9 @@ export default function StationeryItem(props: StationeryLiteModel) {
         </Flex>
         <Text miw={120} ta="right" fz={11}>
           Rp {string2money(props.harga)}
+        </Text>
+        <Text fz={11} pos="absolute" bottom={0} right={0}>
+          {props.id}
         </Text>
       </Flex>
     </ListItem>

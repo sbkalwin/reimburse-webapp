@@ -80,7 +80,7 @@ model KasDetail {
   deskripsi      String
   total          Float
   kasId          String                @map("kas_id")
-  pengembalianId String?               @map("pengembalian_id")
+  pengembalianId String?               @unique @map("pengembalian_id")
   tanggalDibuat  DateTime              @default(now()) @map("tanggal_dibuat")
   tanggalDiubah  DateTime              @updatedAt @map("tanggal_diubah")
   jenis          AccountDetailTypeEnum
@@ -110,7 +110,7 @@ model Pengembalian {
   pic                Pegawai?             @relation("PengembalianPic", fields: [nipPic], references: [nip])
   Perjalanan         Perjalanan?          @relation(fields: [perjalananId], references: [id])
   DetailPengembalian DetailPengembalian[]
-  KasDetail          KasDetail[]
+  KasDetail          KasDetail?
 
   @@index([nipPemohon])
   @@index([nipPic])

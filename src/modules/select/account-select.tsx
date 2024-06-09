@@ -18,7 +18,7 @@ export function accountTransformer(account: AccountLiteModel): AccountOption {
   return {
     item: account,
     value: account.id,
-    label: account.nama,
+    label: [account.id, account.nama].join(' - '),
   };
 }
 

@@ -24,7 +24,7 @@ export default function UserList() {
 
   const onSearch = React.useCallback(
     (user: EmployeeLiteModel) => {
-      const label = [user.nama.toLowerCase(), user.nip].join('');
+      const label = [user.nama, user.nip].join('').toLowerCase();
       return label.includes(search.toLowerCase());
     },
     [search],

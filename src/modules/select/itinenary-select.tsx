@@ -25,6 +25,7 @@ export function itinenaryTransformer(
     item: itinenary,
     value: itinenary.id,
     label: [
+      itinenary.id,
       itinenary.nama,
       `(${[formatDate(itinenary.tanggalMulai), formatDate(itinenary.tanggalSelesai)].join(' - ')})`,
     ].join(' - '),

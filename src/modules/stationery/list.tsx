@@ -12,7 +12,7 @@ export default function StationeryList() {
   const [search, setSearch] = React.useState('');
   const onSearch = React.useCallback(
     (stationery: StationeryLiteModel) => {
-      const label = stationery.nama.toLowerCase();
+      const label = [stationery.id, stationery.nama].join('').toLowerCase();
       return label.includes(search.toLowerCase());
     },
     [search],

@@ -21,7 +21,10 @@ export default function ItinenaryItem(props: ItinenaryLiteModel) {
 
   return (
     <ListItem onClick={() => push(route)}>
-      <Flex direction="column">
+      <Flex direction="column" pos="relative" w="100%">
+        <Text fz={11} pos="absolute" top={0} right={0}>
+          {props.id}
+        </Text>
         <Title order={6}>{props.nama}</Title>
         <Text fz={11}>{label}</Text>
       </Flex>
