@@ -1,3 +1,4 @@
+import notification from 'common/helpers/notifications';
 import { saveAs } from 'file-saver';
 import React from 'react';
 import * as XLSX from 'xlsx';
@@ -36,6 +37,9 @@ export default function useJsonToExcel<T>(props: UseJsonToExcelProps<T>) {
 
       saveAs(blob, filename + EXCEL_EXTENSION);
     } catch (e) {
+      notification.error({
+        message: JSON.stringify(e),
+      });
       console.error(e);
     } finally {
       setIsLoading(false);
