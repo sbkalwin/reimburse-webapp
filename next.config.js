@@ -26,6 +26,31 @@ const nextConfig = withPWA({
       transform: '@phosphor-icons/react/{{member}}',
     },
   },
+  async headers() {
+    // https://github.com/vercel/next.js/issues/1791#issuecomment-805595853
+    return [
+      {
+        source: '/:all*(svg|jpg|png|webp)',
+        locale: false,
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/:all*(js)',
+        locale: false,
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, must-revalidate',
+          },
+        ],
+      },
+    ];
+  },
 });
 
 module.exports = nextConfig;

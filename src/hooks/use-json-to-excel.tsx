@@ -35,7 +35,7 @@ export default function useJsonToExcel<T>(props: UseJsonToExcelProps<T>) {
         type: EXCEL_TYPE,
       });
 
-      saveAs(blob, filename + EXCEL_EXTENSION);
+      window.open(URL.createObjectURL(blob));
     } catch (e) {
       notification.error({
         message: JSON.stringify(e),
@@ -44,7 +44,7 @@ export default function useJsonToExcel<T>(props: UseJsonToExcelProps<T>) {
     } finally {
       setIsLoading(false);
     }
-  }, [data, filename]);
+  }, [data]);
 
   return { onExport, isLoading };
 }

@@ -38,7 +38,7 @@ const ibmPlexSans = IBM_Plex_Sans({
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => <>{page}</>);
-  const { replace } = useRouter();
+  const { replace, prefetch } = useRouter();
   React.useEffect(() => {
     if (isWindowUndefined) return;
     const __next = document.getElementById('__next');
@@ -53,6 +53,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       replace(NavigationRoutes.onboarding);
     }
   }, [replace]);
+
+  React.useEffect(() => {
+    Object.keys(NavigationRoutes).map((key) => {
+      prefetch(NavigationRoutes[key]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
