@@ -1,8 +1,11 @@
-import { Card, SimpleGrid, Text } from '@mantine/core';
+import { Card, Flex, SimpleGrid, Text } from '@mantine/core';
 import { CheckCircle, UsersFour, XCircle } from '@phosphor-icons/react';
 import { EmployeeStatusEnum } from 'api-hooks/auth/model';
 import { useGetEmployees } from 'api-hooks/employee/query';
+import NavigationRoutes from 'components/common/side-navigation/navigations';
 import LoaderView from 'components/loader-view';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 export interface UsersStatisticProps {}
 
@@ -13,6 +16,19 @@ export default function UsersStatistic(props: UsersStatisticProps) {
 
   const queryGetEmployee = useGetEmployees();
 
+  const { push } = useRouter();
+
+  const onClickNavigation = React.useCallback(
+    (status: EmployeeStatusEnum | undefined) => () => {
+      push({
+        pathname: NavigationRoutes.users,
+        query: { status },
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   return (
     <LoaderView query={queryGetEmployee} isCompact>
       {(data) => {
@@ -22,20 +38,50 @@ export default function UsersStatistic(props: UsersStatisticProps) {
         return (
           <>
             <SimpleGrid cols={2}>
-              <Card withBorder>
-                <UsersFour size={36} />
-                <Text>Jumlah Karyawan</Text>
-                <Text>{all}</Text>
+              <Card
+                withBorder
+                style={{
+                  cursor: 'pointer',
+                }}
+                onClick={onClickNavigation(undefined)}
+              >
+                <Flex direction="column" justify="center" align="center">
+                  <UsersFour size={36} />
+                  <Text ta="center" fw={600} mt={8}>
+                    Jumlah Karyawan
+                  </Text>
+                  <Text>{all}</Text>
+                </Flex>
               </Card>
-              <Card withBorder>
-                <CheckCircle size={36} />
-                <Text>Karyawan Active</Text>
-                <Text>{active}</Text>
+              <Card
+                withBorder
+                style={{
+                  cursor: 'pointer',
+                }}
+                onClick={onClickNavigation(EmployeeStatusEnum.active)}
+              >
+                <Flex direction="column" justify="center" align="center">
+                  <CheckCircle size={36} />
+                  <Text ta="center" fw={600} mt={8}>
+                    Karyawan Active
+                  </Text>
+                  <Text>{active}</Text>
+                </Flex>
               </Card>
-              <Card withBorder>
-                <XCircle size={36} />
-                <Text>Karyawan Inactive</Text>
-                <Text>{inactive}</Text>
+              <Card
+                withBorder
+                style={{
+                  cursor: 'pointer',
+                }}
+                onClick={onClickNavigation(EmployeeStatusEnum.inactive)}
+              >
+                <Flex direction="column" justify="center" align="center">
+                  <XCircle size={36} />
+                  <Text ta="center" fw={600} mt={8}>
+                    Karyawan Inactive
+                  </Text>
+                  <Text>{inactive}</Text>
+                </Flex>
               </Card>
             </SimpleGrid>
           </>

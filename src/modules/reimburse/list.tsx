@@ -22,10 +22,20 @@ import React from 'react';
 
 import ReimburseItem from './components/reimburse-item';
 
+export enum ReimburseSegmentEnum {
+  all = 'all',
+  pending = 'pending',
+  rejected = 'rejected',
+  finished = 'finished',
+}
+
 export default function ReimburseList() {
-  const [segment, setSegment] = React.useState('all');
+  const { query, isReady } = useRouter();
+
+  const [segment, setSegment] = React.useState<string>(
+    ReimburseSegmentEnum.all,
+  );
   const { isAdmin, user } = useAuth();
-  const { query } = useRouter();
   const userId = query.id as string | undefined;
   const nip = user?.nip;
   const [tanggalMulai, setTanggalMulai] = React.useState<Date | null>(null);
@@ -49,7 +59,7 @@ export default function ReimburseList() {
   };
 
   const onSearchStatus = (reimburse: ReimburseLiteModel) => {
-    return segment === 'all' || reimburse.status === segment;
+    return segment === ReimburseSegmentEnum.all || reimburse.status === segment;
   };
 
   const queryGetReimburses = useGetReimburses({
@@ -59,6 +69,12 @@ export default function ReimburseList() {
       nip_pemohon: userId,
     },
   });
+
+  React.useEffect(() => {
+    if (!isReady) return;
+    const status = query?.status as string | undefined;
+    setSegment(status || ReimburseSegmentEnum.all);
+  }, [isReady, query?.status]);
 
   return (
     <Flex direction="column">
@@ -113,19 +129,19 @@ export default function ReimburseList() {
           onChange={setSegment}
           data={[
             {
-              value: 'all',
+              value: ReimburseSegmentEnum.all,
               label: 'Semua',
             },
             {
-              value: 'pending',
+              value: ReimburseSegmentEnum.pending,
               label: 'Pending',
             },
             {
-              value: 'rejected',
+              value: ReimburseSegmentEnum.rejected,
               label: 'Ditolak',
             },
             {
-              value: 'finished',
+              value: ReimburseSegmentEnum.finished,
               label: 'Diterima',
             },
           ]}

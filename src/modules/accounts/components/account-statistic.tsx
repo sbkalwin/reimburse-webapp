@@ -1,4 +1,4 @@
-import { Card, SimpleGrid, Text } from '@mantine/core';
+import { Card, Flex, SimpleGrid, Text } from '@mantine/core';
 import { FileMinus, FilePlus, FileText } from '@phosphor-icons/react';
 import {
   AccountDetailTypeEnum,
@@ -33,20 +33,32 @@ export default function AccountStatistic(props: AccountStatisticProps) {
         return (
           <>
             <SimpleGrid cols={2}>
-              <Card withBorder>
-                <FileText size={36} />
-                <Text>Total</Text>
-                <Text>Rp. {string2money(total)}</Text>
+              <Card>
+                <Flex direction="column" justify="center" align="center">
+                  <FileText size={36} />
+                  <Text ta="center" fw={600} mt={8}>
+                    Total
+                  </Text>
+                  <Text>Rp. {string2money(total)}</Text>
+                </Flex>
               </Card>
-              <Card withBorder>
-                <FilePlus size={36} />
-                <Text>Pemasukan</Text>
-                <Text>Rp. {string2money(income)}</Text>
+              <Card>
+                <Flex direction="column" justify="center" align="center">
+                  <FilePlus size={36} />
+                  <Text ta="center" fw={600} mt={8}>
+                    Pemasukan
+                  </Text>
+                  <Text>Rp. {string2money(income)}</Text>
+                </Flex>
               </Card>
-              <Card withBorder>
-                <FileMinus size={36} />
-                <Text>Pengeluaran</Text>
-                <Text>Rp. {string2money(outcome)}</Text>
+              <Card>
+                <Flex direction="column" justify="center" align="center">
+                  <FileMinus size={36} />
+                  <Text ta="center" fw={600} mt={8}>
+                    Pengeluaran
+                  </Text>
+                  <Text>Rp. {string2money(outcome)}</Text>
+                </Flex>
               </Card>
             </SimpleGrid>
           </>

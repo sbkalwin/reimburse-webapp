@@ -6,6 +6,7 @@ import colors from 'common/styles/colors';
 import NavigationRoutes from 'components/common/side-navigation/navigations';
 import LoaderView from 'components/loader-view';
 import { ListLayout } from 'modules/common/layout';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import UserItem from './components/user-item';
@@ -17,7 +18,9 @@ export function UserListLayout({ children }) {
     </ListLayout>
   );
 }
+
 export default function UserList() {
+  const { query, isReady } = useRouter();
   const [search, setSearch] = React.useState('');
   const [status, setStatus] = React.useState<string | null>(null);
   const [role, setRole] = React.useState<string | null>(null);
@@ -32,6 +35,11 @@ export default function UserList() {
   const queryGetEmployees = useGetEmployees({
     params: { status: status || undefined, role: role || undefined },
   });
+  React.useEffect(() => {
+    if (!isReady) return;
+    const status = query?.status as string | undefined;
+    setStatus(status || null);
+  }, [isReady, query?.status]);
 
   return (
     <Flex direction="column" mih="calc(100dvh - 70px)">
