@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Button, Card, Flex, Text } from '@mantine/core';
+import { ActionIcon, Button, Card, Flex } from '@mantine/core';
 import { Plus, Trash } from '@phosphor-icons/react';
 import { ReimburseTypeEnum } from 'api-hooks/reimburse/model';
 import { useFormState } from 'components/form';
@@ -102,8 +102,11 @@ export default function ReimburseDetailForm() {
                 placeholder="Masukkan Total"
                 label="Total"
               />
-              <Text>File:</Text>
-              <Box w={64} h={64} bg="gray" />
+              <Input
+                name={`${parentName}.file_url`}
+                label="File"
+                type="image"
+              />
             </Flex>
           </Card>
         );

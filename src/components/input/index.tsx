@@ -1,4 +1,5 @@
 import DateInputField, { DateInputFieldProps } from './date-input-field';
+import ImageInputField, { ImageInputFieldProps } from './image-input-field';
 import NumberInputField, { NumberInputFieldProps } from './number-input-field';
 import PasswordInputField, {
   PasswordInputFieldProps,
@@ -11,6 +12,7 @@ export type InputProps =
   | PasswordInputFieldProps
   | DateInputFieldProps
   | NumberInputFieldProps
+  | ImageInputFieldProps
   | SelectFieldProps;
 
 export default function Input(props: InputProps) {
@@ -23,6 +25,8 @@ export default function Input(props: InputProps) {
       return <PasswordInputField {...props} />;
     case 'number':
       return <NumberInputField {...props} />;
+    case 'image':
+      return <ImageInputField {...props} />;
     case 'text':
     case 'email':
     case 'tel':

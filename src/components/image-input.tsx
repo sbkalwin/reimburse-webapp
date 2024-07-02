@@ -1,19 +1,23 @@
-import { Button, FileButton } from '@mantine/core';
+import { ActionIcon, Button, FileButton, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Camera, Image } from '@phosphor-icons/react';
-import { isWindowUndefined } from 'common/helpers/string';
+import { Camera, FileImage } from '@phosphor-icons/react';
+import { dataURLtoBlob, isWindowUndefined } from 'common/helpers/string';
+import Image from 'next/image';
 import React from 'react';
 import { BottomSheet } from 'react-spring-bottom-sheet';
 
 import Webcam from './webcam';
 
-interface ImageInputProps {
+export interface ImageInputProps {
+  defaultSrc?: string;
   type: 'image';
-  onChange?: (value: string | null) => void;
+  onChange?: (value: File | null) => void;
   disabled?: boolean;
+  label?: string;
 }
 
 export default function ImageInput(props: ImageInputProps) {
+  const [src, setSrc] = React.useState(props.defaultSrc || undefined);
   const [isOpenBottomSheet, handleBottomSheet] = useDisclosure();
   const [isCameraDrawer, handleCameraDrawer] = useDisclosure();
 
@@ -26,10 +30,15 @@ export default function ImageInput(props: ImageInputProps) {
     (event: ProgressEvent<FileReader>) => {
       const result = event.target?.result;
       if (typeof result === 'string' || result === null) {
-        props.onChange?.(result);
-        return;
+        const convert = result
+          ? new File([result], `${Date.now()}.png`, {
+              type: 'image/png',
+              lastModified: new Date().getTime(),
+            })
+          : null;
+        props.onChange?.(convert);
+        setSrc(result || undefined);
       }
-      console.log(result);
     },
     [props],
   );
@@ -43,11 +52,19 @@ export default function ImageInput(props: ImageInputProps) {
   }, [onChangeFileReader, reader]);
 
   const onChangeFileButton = (file: File | null) => {
-    file && reader?.readAsDataURL(file);
+    props.onChange?.(file);
+    setSrc(file ? URL.createObjectURL(file) : undefined);
     handleBottomSheet.close();
   };
 
-  const onChangeWebcam = (file: string) => {};
+  const onChangeWebcam = (file: string) => {
+    const blob = dataURLtoBlob(file);
+    const result = new File([blob], `${Date.now()}.png`, {
+      type: 'image/png',
+    });
+    setSrc(URL.createObjectURL(result));
+    props.onChange?.(result);
+  };
 
   const coreComponent = !props.disabled && (
     <>
@@ -68,7 +85,7 @@ export default function ImageInput(props: ImageInputProps) {
                 size="lg"
                 variant="subtle"
                 fullWidth
-                leftSection={<Image size={24} />}
+                leftSection={<FileImage size={24} />}
               >
                 Photos
               </Button>
@@ -97,9 +114,40 @@ export default function ImageInput(props: ImageInputProps) {
     </>
   );
 
+  const labelComponent = props.label && <Text>{props.label}</Text>;
+
+  React.useEffect(() => {
+    if (props.disabled) {
+      setSrc(props.defaultSrc);
+    }
+  }, [props.defaultSrc, props.disabled]);
+
   return (
     <>
-      <Button onClick={handleBottomSheet.open}>Test</Button>
+      {labelComponent}
+      <ActionIcon
+        onClick={() => {
+          if (props.disabled) {
+          } else {
+            handleBottomSheet.open();
+          }
+        }}
+        variant="outline"
+        size={64}
+        color="gray"
+      >
+        {src ? (
+          <Image
+            alt="result"
+            width={64}
+            height={64}
+            src={src}
+            objectFit="cover"
+          />
+        ) : (
+          <FileImage size={64} />
+        )}
+      </ActionIcon>
       {coreComponent}
     </>
   );

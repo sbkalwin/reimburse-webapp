@@ -10,7 +10,7 @@ export const ReimburseDetailFormSchema = () =>
     id: Yup.string(),
     nama: Yup.string().default('').required(),
     deskripsi: Yup.string().default(''),
-    file_url: Yup.string().default(''),
+    file_url: Yup.mixed(),
     subtotal: Yup.number().default(0).required(),
     peralatan_kantor_id: Yup.string().nullable().default(''),
   });

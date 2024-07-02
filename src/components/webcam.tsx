@@ -48,6 +48,10 @@ export default function Webcam(props: WebcamProps) {
     props.onClose?.();
   };
 
+  React.useEffect(() => {
+    isOpen && setImage(undefined);
+  }, [isOpen]);
+
   const cameraActionIcons = (
     <>
       <ActionIcon size="xl" radius="50%" onClick={capture}>
@@ -132,7 +136,7 @@ export default function Webcam(props: WebcamProps) {
         />
       ) : (
         <RawWebcam
-          screenshotFormat="image/jpeg"
+          screenshotFormat="image/png"
           ref={webcamRef}
           forceScreenshotSourceSize
           videoConstraints={videoConstraints}
