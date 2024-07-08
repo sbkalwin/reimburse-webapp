@@ -30,6 +30,8 @@ export default function ReimburseView() {
                 notification.success({
                   message: result.message,
                 });
+
+                return result.data;
               }}
             />
           </>

@@ -4,6 +4,7 @@ import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
+import { PeralatanKantorResource } from '../../../../prisma/resources';
 
 const peralatanKantorSchema = Yup.object({
   nama: Yup.string().required(),
@@ -25,9 +26,7 @@ export default async function handler(
       where: {
         id,
       },
-      include: {
-        DetailPengembalian: true,
-      },
+      select: PeralatanKantorResource,
     });
 
     if (!currentPeralatanKantor) {
@@ -58,6 +57,7 @@ export default async function handler(
         where: {
           id,
         },
+        select: PeralatanKantorResource,
       });
 
       return response.status(200).json({

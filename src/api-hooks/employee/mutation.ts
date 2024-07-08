@@ -4,39 +4,56 @@ import { API_LIST, callApi } from 'common/helpers/client';
 
 import {
   EmployeeDeleteMutationInput,
+  EmployeeModel,
   EmployeeMutationInput,
   EmployeeUpdateMutationInput,
 } from './model';
 
 export function useCreateEmployee(
-  options?: UseMutationOptions<ApiResult<any>, ApiError, EmployeeMutationInput>,
+  options?: UseMutationOptions<
+    ApiResult<EmployeeModel>,
+    ApiError,
+    EmployeeMutationInput
+  >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, EmployeeMutationInput>({
-    mutationFn(data) {
-      return callApi({
-        url: API_LIST.Users,
-        data,
-        method: 'POST',
-      });
+  return useMutation<ApiResult<EmployeeModel>, ApiError, EmployeeMutationInput>(
+    {
+      mutationFn(data) {
+        return callApi(
+          {
+            url: API_LIST.Users,
+            data,
+            method: 'POST',
+          },
+          EmployeeModel,
+        );
+      },
+      ...options,
     },
-    ...options,
-  });
+  );
 }
 
 export function useUpdateEmployee(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<EmployeeModel>,
     ApiError,
     EmployeeUpdateMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, EmployeeUpdateMutationInput>({
+  return useMutation<
+    ApiResult<EmployeeModel>,
+    ApiError,
+    EmployeeUpdateMutationInput
+  >({
     mutationFn({ data, nip }) {
-      return callApi({
-        url: `${API_LIST.Users}/${nip}`,
-        data,
-        method: 'PUT',
-      });
+      return callApi(
+        {
+          url: `${API_LIST.Users}/${nip}`,
+          data,
+          method: 'PUT',
+        },
+        EmployeeModel,
+      );
     },
     ...options,
   });

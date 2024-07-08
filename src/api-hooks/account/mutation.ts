@@ -7,20 +7,28 @@ import {
   AccountDetailDeleteMutationInput,
   AccountDetailMutationInput,
   AccountDetailUpdateMutationInput,
+  AccountModel,
   AccountMutationInput,
   AccountUpdateMutationInput,
 } from './model';
 
 export function useCreateAccount(
-  options?: UseMutationOptions<ApiResult<any>, ApiError, AccountMutationInput>,
+  options?: UseMutationOptions<
+    ApiResult<AccountModel>,
+    ApiError,
+    AccountMutationInput
+  >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, AccountMutationInput>({
+  return useMutation<ApiResult<AccountModel>, ApiError, AccountMutationInput>({
     mutationFn(data) {
-      return callApi({
-        url: API_LIST.Accounts,
-        data,
-        method: 'POST',
-      });
+      return callApi(
+        {
+          url: API_LIST.Accounts,
+          data,
+          method: 'POST',
+        },
+        AccountModel,
+      );
     },
     ...options,
   });
@@ -28,18 +36,25 @@ export function useCreateAccount(
 
 export function useUpdateAccount(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<AccountModel>,
     ApiError,
     AccountUpdateMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, AccountUpdateMutationInput>({
+  return useMutation<
+    ApiResult<AccountModel>,
+    ApiError,
+    AccountUpdateMutationInput
+  >({
     mutationFn({ data, id }) {
-      return callApi({
-        url: `${API_LIST.Accounts}/${id}`,
-        data,
-        method: 'PUT',
-      });
+      return callApi(
+        {
+          url: `${API_LIST.Accounts}/${id}`,
+          data,
+          method: 'PUT',
+        },
+        AccountModel,
+      );
     },
     ...options,
   });

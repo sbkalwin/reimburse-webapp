@@ -143,6 +143,10 @@ export default function ImageInput(props: ImageInputProps) {
             height={64}
             src={src}
             objectFit="cover"
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null;
+              currentTarget.src = '/icon512_maskable.png';
+            }}
           />
         ) : (
           <FileImage size={64} />

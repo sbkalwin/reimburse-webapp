@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 export const ReimburseDetailFormSchema = () =>
   Yup.object({
     id: Yup.string(),
+    defaultSrc: Yup.string(),
     nama: Yup.string().default('').required(),
     deskripsi: Yup.string().default(''),
     file_url: Yup.mixed(),

@@ -39,6 +39,7 @@ export default async function handler(
           deskripsi: peralatanKantor.deskripsi,
           id,
         },
+        select: PeralatanKantorLiteResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(newAccount),

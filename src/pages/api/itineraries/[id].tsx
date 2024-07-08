@@ -59,6 +59,7 @@ export default async function handler(
         where: {
           id,
         },
+        select: PerjalananResource,
       });
 
       return response.status(200).json({

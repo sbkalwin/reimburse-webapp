@@ -4,7 +4,7 @@ import { generateId, middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
-import { PegawaiLiteResource } from '../../../../prisma/resources';
+import { TeamResource } from '../../../../prisma/resources';
 
 const teamSchema = Yup.object({
   nama: Yup.string().required(),
@@ -20,11 +20,7 @@ export default async function handler(
   try {
     if (request.method === 'GET') {
       const teams = await prisma.team.findMany({
-        include: {
-          Pegawai: {
-            select: PegawaiLiteResource,
-          },
-        },
+        select: TeamResource,
       });
       return response.status(200).json({ data: decamelizeKeys(teams) });
     }
@@ -41,6 +37,7 @@ export default async function handler(
           nipLeader: team.nip_leader,
           nama: team.nama,
         },
+        select: TeamResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(newTeam),

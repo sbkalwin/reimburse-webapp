@@ -4,24 +4,32 @@ import { API_LIST, callApi } from 'common/helpers/client';
 
 import {
   StationeryDeleteMutationInput,
+  StationeryModel,
   StationeryMutationInput,
   StationeryUpdateMutationInput,
 } from './model';
 
 export function useCreateStationery(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<StationeryModel>,
     ApiError,
     StationeryMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, StationeryMutationInput>({
+  return useMutation<
+    ApiResult<StationeryModel>,
+    ApiError,
+    StationeryMutationInput
+  >({
     mutationFn(data) {
-      return callApi({
-        url: API_LIST.Stationeries,
-        data,
-        method: 'POST',
-      });
+      return callApi(
+        {
+          url: API_LIST.Stationeries,
+          data,
+          method: 'POST',
+        },
+        StationeryModel,
+      );
     },
     ...options,
   });
@@ -29,18 +37,25 @@ export function useCreateStationery(
 
 export function useUpdateStationery(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<StationeryModel>,
     ApiError,
     StationeryUpdateMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, StationeryUpdateMutationInput>({
+  return useMutation<
+    ApiResult<StationeryModel>,
+    ApiError,
+    StationeryUpdateMutationInput
+  >({
     mutationFn({ data, id }) {
-      return callApi({
-        url: `${API_LIST.Stationeries}/${id}`,
-        data,
-        method: 'PUT',
-      });
+      return callApi(
+        {
+          url: `${API_LIST.Stationeries}/${id}`,
+          data,
+          method: 'PUT',
+        },
+        StationeryModel,
+      );
     },
     ...options,
   });

@@ -180,7 +180,6 @@ export type getReimburseDetailInput = {
 export type ReimburseDetailMutationInput = {
   nama: string;
   deskripsi: string;
-  file_url: string;
   subtotal: number;
   peralatan_kantor_id: string | null;
 };

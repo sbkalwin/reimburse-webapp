@@ -22,11 +22,14 @@ export function useLogin(
   return useMutation<ApiResult<TokenResultModel>, ApiError, loginMutationInput>(
     {
       mutationFn(data) {
-        return callApi({
-          url: `${API_LIST.Auth}/login`,
-          data,
-          method: 'POST',
-        });
+        return callApi(
+          {
+            url: `${API_LIST.Auth}/login`,
+            data,
+            method: 'POST',
+          },
+          TokenResultModel,
+        );
       },
       ...options,
     },

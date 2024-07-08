@@ -103,6 +103,7 @@ export default function ReimburseDetailForm() {
                 label="Total"
               />
               <Input
+                defaultSrc={field.defaultSrc}
                 name={`${parentName}.file_url`}
                 label="File"
                 type="image"

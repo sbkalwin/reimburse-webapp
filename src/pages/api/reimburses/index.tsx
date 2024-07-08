@@ -1,4 +1,5 @@
 import { ReimburseStatusEnum, ReimburseTypeEnum } from '@prisma/client';
+import { SUPABASE_STORAGE_ENDPOINT } from 'api/storage';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { generateId, getFilterDate, parseValidationError } from 'utils/server';
@@ -10,7 +11,6 @@ import { ReimburseLiteResource } from '../../../../prisma/resources';
 const reimburseDetailSchema = Yup.object({
   nama: Yup.string().default('').required(),
   deskripsi: Yup.string().default(''),
-  file_url: Yup.string().default(''),
   subtotal: Yup.number().default(0).required(),
   peralatan_kantor_id: Yup.string().nullable().default(''),
 });
@@ -82,7 +82,7 @@ export default async function handler(
         const detailId = generateId();
         return {
           deskripsi: detail.deskripsi,
-          fileUrl: detail.file_url,
+          fileUrl: `${SUPABASE_STORAGE_ENDPOINT}/${id}/${detailId}.png`,
           pengembalianId: id,
           nama: detail.nama,
           subtotal: detail.subtotal,
@@ -101,17 +101,27 @@ export default async function handler(
           deskripsi: pengembalian.deskripsi,
           perjalananId: pengembalian.perjalanan_id,
           nipPic: pengembalian.nip_pic,
+          DetailPengembalian: {
+            createMany: {
+              data: details.map((detail) => {
+                return {
+                  deskripsi: detail.deskripsi,
+                  fileUrl: detail.fileUrl,
+                  id: detail.id,
+                  jenis: detail.jenis,
+                  nama: detail.nama,
+                  subtotal: detail.subtotal,
+                  peralatanKantorId: detail.peralatanKantorId,
+                };
+              }),
+            },
+          },
         },
         select: ReimburseLiteResource,
       });
 
-      await prisma.detailPengembalian.createMany({
-        data: details,
-      });
       return response.status(200).json({
-        data: decamelizeKeys({
-          newReimburse,
-        }),
+        data: decamelizeKeys(newReimburse),
         message: 'Pengembalian berhasil Ditambah',
       });
     }

@@ -1,4 +1,5 @@
 import { ReimburseTypeEnum } from '@prisma/client';
+import { SUPABASE_STORAGE_ENDPOINT } from 'api/storage';
 import { decamelizeKeys } from 'humps';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { generateId, parseValidationError } from 'utils/server';
@@ -10,7 +11,6 @@ import { ReimburseResource } from '../../../../../prisma/resources';
 const reimburseDetailSchema = Yup.object({
   nama: Yup.string().default('').required(),
   deskripsi: Yup.string().default(''),
-  file_url: Yup.string().default(''),
   subtotal: Yup.number().default(0).required(),
   peralatan_kantor_id: Yup.string().nullable().default(''),
 });
@@ -78,7 +78,7 @@ export default async function handler(
         const detailId = generateId();
         return {
           deskripsi: detail.deskripsi,
-          fileUrl: detail.file_url,
+          fileUrl: `${SUPABASE_STORAGE_ENDPOINT}/${id}/${detailId}.png`,
           pengembalianId: id,
           nama: detail.nama,
           subtotal: detail.subtotal,
@@ -95,15 +95,26 @@ export default async function handler(
           nipPemohon: pengembalian.nip_pemohon,
           nipPic: pengembalian.nip_pic,
           perjalananId: pengembalian.perjalanan_id,
+          DetailPengembalian: {
+            createMany: {
+              data: details.map((detail) => {
+                return {
+                  deskripsi: detail.deskripsi,
+                  fileUrl: detail.fileUrl,
+                  id: detail.id,
+                  jenis: detail.jenis,
+                  nama: detail.nama,
+                  subtotal: detail.subtotal,
+                  peralatanKantorId: detail.peralatanKantorId,
+                };
+              }),
+            },
+          },
         },
         where: {
           id,
         },
         select: ReimburseResource,
-      });
-
-      await prisma.detailPengembalian.createMany({
-        data: details,
       });
 
       return response.status(200).json({

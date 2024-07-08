@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Check, X } from '@phosphor-icons/react';
+import { deleteFiles, uploadFile } from 'api/storage';
 import {
   ReimburseModel,
   ReimburseStatusEnum,
@@ -32,7 +33,7 @@ import ReimburseRejectFormDialog from './reimburse-reject-form-dialog';
 
 interface ReimburseFormProps {
   reimburse?: ReimburseModel;
-  onSubmit: (values: ReimburseFormType) => Promise<void>;
+  onSubmit: (values: ReimburseFormType) => Promise<ReimburseModel>;
 }
 
 export default function ReimburseForm(props: ReimburseFormProps) {
@@ -68,6 +69,7 @@ export default function ReimburseForm(props: ReimburseFormProps) {
           peralatan_kantor_id: detail.peralatanKantorId,
           deskripsi: detail.deskripsi,
           file_url: detail.fileUrl,
+          defaultSrc: detail.fileUrl,
           nama: detail.nama,
           subtotal: detail.subtotal,
           id: detail.id,
@@ -94,7 +96,20 @@ export default function ReimburseForm(props: ReimburseFormProps) {
   const onSubmit = React.useCallback(
     async (values: ReimburseFormType) => {
       try {
-        await props.onSubmit(values);
+        const result = await props.onSubmit(values);
+        console.log(result);
+        // upload file
+        if (reimburse?.id) {
+          await deleteFiles([`${reimburse.id}/*`]);
+        }
+        await values.details.map(async (detail, index) => {
+          if (detail.file_url instanceof File) {
+            uploadFile(
+              `${result.id}/${result?.detailPengembalian?.[index]?.id}.png`,
+              detail.file_url,
+            );
+          }
+        });
       } catch (e) {
         console.error(e);
         notification.error({
@@ -102,7 +117,7 @@ export default function ReimburseForm(props: ReimburseFormProps) {
         });
       }
     },
-    [props],
+    [props, reimburse?.id],
   );
 
   const isContribute = user?.nip === defaultValues.nip_pemohon;

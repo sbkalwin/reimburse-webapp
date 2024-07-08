@@ -10,7 +10,10 @@ import {
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
-import { PerjalananLiteResource } from '../../../../prisma/resources';
+import {
+  PerjalananLiteResource,
+  PerjalananResource,
+} from '../../../../prisma/resources';
 
 const perjalananSchema = Yup.object({
   nama: Yup.string().required(),
@@ -85,7 +88,7 @@ export default async function handler(
           tanggalMulai: getDate(perjalanan.tanggal_mulai),
           tanggalSelesai: getDate(perjalanan.tanggal_selesai),
         },
-        select: PerjalananLiteResource,
+        select: PerjalananResource,
       });
       return response.status(200).json({
         data: decamelizeKeys(newPerjalanan),

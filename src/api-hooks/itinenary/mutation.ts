@@ -4,24 +4,32 @@ import { API_LIST, callApi } from 'common/helpers/client';
 
 import {
   ItinenaryDeleteMutationInput,
+  ItinenaryModel,
   ItinenaryMutationInput,
   ItinenaryUpdateMutationInput,
 } from './model';
 
 export function useCreateItinenary(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<ItinenaryModel>,
     ApiError,
     ItinenaryMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, ItinenaryMutationInput>({
+  return useMutation<
+    ApiResult<ItinenaryModel>,
+    ApiError,
+    ItinenaryMutationInput
+  >({
     mutationFn(data) {
-      return callApi({
-        url: API_LIST.Itineraries,
-        data,
-        method: 'POST',
-      });
+      return callApi(
+        {
+          url: API_LIST.Itineraries,
+          data,
+          method: 'POST',
+        },
+        ItinenaryModel,
+      );
     },
     ...options,
   });
@@ -29,18 +37,25 @@ export function useCreateItinenary(
 
 export function useUpdateItinenary(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<ItinenaryModel>,
     ApiError,
     ItinenaryUpdateMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, ItinenaryUpdateMutationInput>({
+  return useMutation<
+    ApiResult<ItinenaryModel>,
+    ApiError,
+    ItinenaryUpdateMutationInput
+  >({
     mutationFn({ data, id }) {
-      return callApi({
-        url: `${API_LIST.Itineraries}/${id}`,
-        data,
-        method: 'PUT',
-      });
+      return callApi(
+        {
+          url: `${API_LIST.Itineraries}/${id}`,
+          data,
+          method: 'PUT',
+        },
+        ItinenaryModel,
+      );
     },
     ...options,
   });

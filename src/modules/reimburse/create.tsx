@@ -18,6 +18,8 @@ export default function ReimburseCreate() {
         notification.success({
           message: result.message,
         });
+
+        return result.data;
       }}
     />
   );

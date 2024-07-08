@@ -5,6 +5,7 @@ import { API_LIST, callApi } from 'common/helpers/client';
 import {
   ReimburseDeleteMutationInput,
   ReimburseFinishMutationInput,
+  ReimburseModel,
   ReimburseMutationInput,
   ReimburseRejectMutationInput,
   ReimburseUpdateMutationInput,
@@ -12,18 +13,25 @@ import {
 
 export function useCreateReimburse(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<ReimburseModel>,
     ApiError,
     ReimburseMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, ReimburseMutationInput>({
+  return useMutation<
+    ApiResult<ReimburseModel>,
+    ApiError,
+    ReimburseMutationInput
+  >({
     mutationFn(data) {
-      return callApi({
-        url: API_LIST.Reimburses,
-        data,
-        method: 'POST',
-      });
+      return callApi(
+        {
+          url: API_LIST.Reimburses,
+          data,
+          method: 'POST',
+        },
+        ReimburseModel,
+      );
     },
     ...options,
   });
@@ -31,18 +39,25 @@ export function useCreateReimburse(
 
 export function useUpdateReimburse(
   options?: UseMutationOptions<
-    ApiResult<any>,
+    ApiResult<ReimburseModel>,
     ApiError,
     ReimburseUpdateMutationInput
   >,
 ) {
-  return useMutation<ApiResult<any>, ApiError, ReimburseUpdateMutationInput>({
+  return useMutation<
+    ApiResult<ReimburseModel>,
+    ApiError,
+    ReimburseUpdateMutationInput
+  >({
     mutationFn({ data, id }) {
-      return callApi({
-        url: `${API_LIST.Reimburses}/${id}`,
-        data,
-        method: 'PUT',
-      });
+      return callApi(
+        {
+          url: `${API_LIST.Reimburses}/${id}`,
+          data,
+          method: 'PUT',
+        },
+        ReimburseModel,
+      );
     },
     ...options,
   });

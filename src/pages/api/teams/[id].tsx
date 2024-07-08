@@ -4,7 +4,7 @@ import { middleware, parseValidationError } from 'utils/server';
 import * as Yup from 'yup';
 
 import prisma from '../../../../prisma';
-import { PegawaiLiteResource } from '../../../../prisma/resources';
+import { TeamResource } from '../../../../prisma/resources';
 
 const teamSchema = Yup.object({
   nama: Yup.string().required(),
@@ -23,11 +23,7 @@ export default async function handler(
       where: {
         id,
       },
-      include: {
-        Pegawai: {
-          select: PegawaiLiteResource,
-        },
-      },
+      select: TeamResource,
     });
 
     if (!currentTeam) {
@@ -57,6 +53,7 @@ export default async function handler(
         where: {
           id,
         },
+        select: TeamResource,
       });
 
       return response.status(200).json({
