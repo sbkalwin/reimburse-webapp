@@ -25,17 +25,26 @@ export default function useJsonToExcel<T>(props: UseJsonToExcelProps<T>) {
       const workbook = XLSX.utils.book_new();
       //add sheet into file
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
+      const hasWebview = 'ReactNativeWebView' in window;
       const excelBuffer = XLSX.write(workbook, {
         bookType: 'xlsx',
-        type: 'array',
+        type: hasWebview ? 'base64' : 'array',
       });
+      if (hasWebview) {
+        const data = {
+          data:
+            'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' +
+            excelBuffer,
+          type: 'download',
+        };
+        (window as any).ReactNativeWebView.postMessage(JSON.stringify(data));
+      } else {
+        const blob = new Blob([excelBuffer], {
+          type: EXCEL_TYPE,
+        });
 
-      const blob = new Blob([excelBuffer], {
-        type: EXCEL_TYPE,
-      });
-
-      window.open(URL.createObjectURL(blob));
+        window.open(URL.createObjectURL(blob));
+      }
     } catch (e) {
       notification.error({
         message: JSON.stringify(e),
