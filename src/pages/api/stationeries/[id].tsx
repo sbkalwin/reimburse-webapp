@@ -35,7 +35,7 @@ export default async function handler(
         .json({ message: 'Peralatan Kantor tidak dapat ditemukan' });
     }
     if (request.method === 'GET') {
-      const { DetailPengembalian, ...rest } = currentPeralatanKantor;
+      const { ...rest } = currentPeralatanKantor;
       return response.status(200).json({ data: decamelizeKeys(rest) });
     }
     await middleware(request, response, true);
@@ -67,14 +67,6 @@ export default async function handler(
     }
 
     if (request.method === 'DELETE') {
-      const peralatanKantorLength =
-        currentPeralatanKantor.DetailPengembalian.length;
-
-      if (peralatanKantorLength) {
-        return response.status(400).json({
-          message: `Peralatan Kantor ini memiliki ${peralatanKantorLength} pengembalian, peralatan kantor ini tidak dapat dihapus`,
-        });
-      }
       await prisma.peralatanKantor.delete({ where: { id } });
       return response.status(200).json({
         message: 'Peralatan Kantor berhasil dihapus',
