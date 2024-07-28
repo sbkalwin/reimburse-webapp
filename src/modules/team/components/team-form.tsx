@@ -5,6 +5,7 @@ import notification from 'common/helpers/notifications';
 import Form from 'components/form';
 import Input from 'components/input';
 import { FormLayout } from 'modules/common/layout';
+import UserSelect from 'modules/select/user-select';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -53,14 +54,12 @@ export default function TeamForm(props: TeamFormProps) {
             name="nama"
             label="Nama Tim"
           />
-          <Input
+          <UserSelect
             searchable
-            type="select"
             placeholder="Masukkan Leader Tim"
             name="nip_leader"
             label="Leader Tim"
             clearable
-            data={[]}
           />
         </Flex>
       </FormLayout>
