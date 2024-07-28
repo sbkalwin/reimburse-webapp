@@ -164,7 +164,7 @@ export default function Home() {
 
   const employeeStatistics = isAdmin && (
     <>
-      <Title order={6}>Tes statisik</Title>
+      <Title order={6}>Statistik Karyawan</Title>
       <UsersStatistic />
     </>
   );
