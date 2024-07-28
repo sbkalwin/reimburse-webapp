@@ -70,8 +70,6 @@ export default function StationeryForm(props: StationeryFormProps) {
           />
           <Input type="number" name="harga" label="Harga" placeholder="Harga" />
         </Flex>
-        <Text mt={16}>File</Text>
-        <Box w={64} h={64} bg="gray" />
       </FormLayout>
     </Form>
   );

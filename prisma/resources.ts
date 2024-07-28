@@ -205,9 +205,6 @@ export const TeamResource = {
 };
 
 export const PeralatanKantorResource = {
-  DetailPengembalian: {
-    select: KasDetailLiteResource,
-  },
   fileUrl: true,
   harga: true,
   deskripsi: true,
