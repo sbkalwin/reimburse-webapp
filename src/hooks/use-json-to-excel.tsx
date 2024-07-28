@@ -1,5 +1,5 @@
 import notification from 'common/helpers/notifications';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 import React from 'react';
 import * as XLSX from 'xlsx';
 
@@ -11,11 +11,11 @@ export interface UseJsonToExcelProps<T> {
 const EXCEL_TYPE =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 
-const EXCEL_EXTENSION = '.xlsx';
+// const EXCEL_EXTENSION = '.xlsx';
 
 export default function useJsonToExcel<T>(props: UseJsonToExcelProps<T>) {
   const [isLoading, setIsLoading] = React.useState(false);
-  const { data, filename = 'data' } = props;
+  const { data } = props;
   const onExport = React.useCallback(async () => {
     try {
       setIsLoading(true);
